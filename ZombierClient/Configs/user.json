@@ -1,0 +1,87 @@
+{
+  "Data": {
+    "Player": {
+      "IdMeta": "id_player",
+      "IdUser": "id_player",
+      "IdSession": "id_player",
+      "ResourceTag": "player.ybot",
+      "Health": 100,
+      "MaxHealth": 100,
+      "Speed": 10.0,
+      "IdCurrentWeapon": "id_pistol"
+    },
+    "Weapons": {
+      "id_pistol": {
+        "AttackRange": 7.0,
+        "FireRateRPM": 18.0,
+        "IdProjectile": "id_meta_projectile_pistol",
+        "IdMeta": "id_pistol",
+        "IdUser": "id_pistol",
+        "IdSession": "id_pistol",
+        "ResourceTag": "pistol"
+      }
+    },
+    "Locations": {
+      "id_meta_location_0": {
+        "Levels": [
+          {
+            "IdMeta": "empty",
+            "IdUser": "empty",
+            "IdSession": "empty",
+            "ResourceTag": "location.0.level.0"
+          }
+        ],
+        "IdMeta": "id_meta_location_0",
+        "IdUser": "id_meta_location_0",
+        "IdSession": "id_meta_location_0",
+        "ResourceTag": ""
+      }
+    },
+    "Enemies": {}
+  },
+  "Session": {
+    "IdCurrentLocation": "id_meta_location_0",
+    "CurrentLevel": 0,
+    "Data": {
+      "Player": {
+        "IdMeta": "id_player",
+        "IdUser": "id_player",
+        "IdSession": "id_player",
+        "ResourceTag": "player.ybot",
+        "Health": 100,
+        "MaxHealth": 100,
+        "Speed": 10.0,
+        "IdCurrentWeapon": "id_pistol"
+      },
+      "Weapons": {
+        "id_pistol": {
+          "AttackRange": 7.0,
+          "FireRateRPM": 18.0,
+          "IdProjectile": "id_meta_projectile_pistol",
+          "IdMeta": "id_pistol",
+          "IdUser": "id_pistol",
+          "IdSession": "id_pistol",
+          "ResourceTag": "pistol"
+        }
+      },
+      "Locations": {
+        "id_meta_location_0": {
+          "Levels": [
+            {
+              "IdMeta": "empty",
+              "IdUser": "empty",
+              "IdSession": "empty",
+              "ResourceTag": "location.0.level.0"
+            }
+          ],
+          "IdMeta": "id_meta_location_0",
+          "IdUser": "id_meta_location_0",
+          "IdSession": "id_meta_location_0",
+          "ResourceTag": ""
+        }
+      },
+      "Enemies": {}
+    },
+    "Projectiles": {}
+  }
+}

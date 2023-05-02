@@ -6,14 +6,23 @@ using Zenject;
 
 public class LevelModel : MonoBehaviour
 {
-    public MarkerPlayerSpawnPoint PlayerSpawnPoint;
-    public NavMeshSurface Navmesh;
-    public EnemySpawnSO EnemySpawnSO;
-
     [Inject]
-    public void Construct(MarkerPlayerSpawnPoint playerSpawnPoint, NavMeshSurface navmesh)
+    public void Construct(NavMeshSurface navmesh, MarkerLevelExitPoint exitPoint)
     {
-        PlayerSpawnPoint = playerSpawnPoint;
         Navmesh = navmesh;
+        ExitPoint = exitPoint;
     }
+
+    // Injected
+    public NavMeshSurface Navmesh { get; private set; }
+    public MarkerLevelExitPoint ExitPoint { get; private set; }
+    // Properties
+    public EnemySpawnSO EnemySpawnSO
+    {
+        get => _enemySpawnSO;
+        private set => _enemySpawnSO = value;
+    }
+
+    // Private
+    [SerializeField] private EnemySpawnSO _enemySpawnSO;
 }

@@ -48,17 +48,19 @@ namespace Prototype
                 .FromComponentInNewPrefab(LevelPrefab)
                 .WithGameObjectName(LevelPrefab.gameObject.name)
                 .UnderTransform(GetMarker<MarkerLevel>)
-                .AsSingle();
-
-            Container.Bind<MarkerPlayerSpawnPoint>().FromComponentInChildren().AsSingle();
+                .AsSingle()
+                .OnInstantiated<LevelModel>(BuildNavmesh)
+                .NonLazy();
             Container.Bind<NavMeshSurface>().FromComponentInChildren().AsSingle();
+            Container.Bind<MarkerLevelExitPoint>().FromComponentInChildren().AsSingle();
 
             // Player
             Container.Bind<PlayerModel>()
                 .FromComponentInNewPrefab(PlayerPrefab)
                 .WithGameObjectName("Player")
                 .UnderTransform(GetMarker<MarkerEntities>)
-                .AsSingle();
+                .AsSingle()
+                .OnInstantiated<PlayerModel>(SetPlayerPositionToZero);
 
             Container.Bind<WeaponModel>().FromComponentInChildren().AsSingle();
             Container.Bind<TargetHandleModel>().FromComponentInChildren().AsSingle();
@@ -74,14 +76,15 @@ namespace Prototype
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>()
                 .FromFactory<PrefabFactory<EnemyView>>();
 
-            Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsSingle();
-            Container.Bind<MarkerView>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
+
 
             //// !Game entities
 
             //// Game controllers
 
-            Container.Bind<EnemySpawnController>().AsSingle();
+            Container.Bind<EnemySpawnController>().FromComponentInHierarchy().AsSingle();
 
             /// !GameControllers
         }
@@ -90,6 +93,19 @@ namespace Prototype
             where T : UnityEngine.Component
         {
             return transform.GetComponentInChildren<T>().transform;
+        }
+
+        private void BuildNavmesh(InjectContext context, LevelModel level)
+        {
+            if (level.Navmesh != null)
+            {
+                level.Navmesh.BuildNavMesh();
+            }
+        }
+
+        private void SetPlayerPositionToZero(InjectContext context, PlayerModel player)
+        {
+            player.transform.position = Vector3.zero;
         }
     }
 }

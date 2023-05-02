@@ -10,7 +10,7 @@ namespace Prototype.Model
         private GameplaySessionData _session;
         private WeaponModel _weaponModel;
         private MarkerDefaulTargetPoint _targetPoint;
-        private TargetHandle _targetHandle;
+        private TargetHandleModel _targetHandle;
 
         [SerializeField] private float _rotationSpeed = 9f;
         [SerializeField] private float _speed = 5.28f;
@@ -23,7 +23,7 @@ namespace Prototype.Model
             GameplaySessionData session,
             WeaponModel weaponModel,
             MarkerDefaulTargetPoint targetPoint,
-            TargetHandle targetModel)
+            TargetHandleModel targetModel)
         {
             _session = session;
             _weaponModel = weaponModel;
@@ -36,7 +36,7 @@ namespace Prototype.Model
 
         public WeaponModel WeaponModel => _weaponModel;
 
-        public TargetHandle TargetHandle => _targetHandle;
+        public TargetHandleModel TargetHandle => _targetHandle;
 
         public int Health
         {

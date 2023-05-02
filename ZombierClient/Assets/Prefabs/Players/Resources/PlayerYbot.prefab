@@ -86,8 +86,6 @@ GameObject:
   - component: {fileID: 5860778791831712980}
   - component: {fileID: 5860778791831712986}
   - component: {fileID: 5860778791831712981}
-  - component: {fileID: 7071245742754171327}
-  - component: {fileID: 6068863654880970548}
   m_Layer: 0
   m_Name: PlayerYbot
   m_TagString: Untagged
@@ -143,36 +141,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rotationSpeed: 9
   _speed: 5.28
---- !u!114 &7071245742754171327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5860778791831712983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _scriptableObjectInstallers: []
-  _monoInstallers:
-  - {fileID: 6068863654880970548}
-  _installerPrefabs: []
-  _autoRun: 1
-  _kernel: {fileID: 0}
---- !u!114 &6068863654880970548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5860778791831712983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14fd31c0ad2b84345a6c80d601872295, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5095879419988921717
 MonoBehaviour:
   m_ObjectHideFlags: 0

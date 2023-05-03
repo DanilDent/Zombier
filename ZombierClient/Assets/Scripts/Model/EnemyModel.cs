@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Prototype.SO;
+using Prototype.View;
+using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
 

@@ -1,5 +1,5 @@
 ﻿using Prototype.Data;
-using System.Linq;
+using Prototype.SO;
 using UnityEngine;
 using Zenject;
 
@@ -7,34 +7,55 @@ namespace Prototype.Model
 {
     public class WeaponModel : MonoBehaviour
     {
-        private GameplaySessionData _session;
+        // Public 
 
         [Inject]
-        public void Construct(GameplaySessionData session)
+        public void Construct(GameplaySessionData session, MarkerShootingPoint shootingPoint)
         {
             _session = session;
+            _shootingPoint = shootingPoint;
         }
-
-        [SerializeField] private IdData _id;
+        // Properties
         public IdData Id
         {
             get => _id;
             private set { _id = value; }
         }
-
         public float AttackRange
         {
             get
             {
-                var weapon = _session.Data.Weapons.FirstOrDefault(_ => _.IdSession.Equals(Id));
-                return weapon.AttackRange;
+                return _weaponSO.AttackRange;
             }
             set
             {
-                var weapon = _session.Data.Weapons.FirstOrDefault(_ => _.IdSession.Equals(Id));
-                weapon.AttackRange = value;
+                _weaponSO.AttackRange = value;
             }
         }
+        public int FireRateRPM
+        {
+            get
+            {
+                return _weaponSO.FireRateRPM;
+            }
+            set
+            {
+                _weaponSO.FireRateRPM = value;
+            }
+        }
+        public Transform ShootingPoint => _shootingPoint.transform;
+        public ProjectileModel ProjectilePrefab => _weaponSO.ProjectileSO.Prefab;
+
+        // Private
+
+        // Dependecies
+
+        // Injected
+        private GameplaySessionData _session;
+        private MarkerShootingPoint _shootingPoint;
+        //
+        [SerializeField] private WeaponSO _weaponSO;
+        [SerializeField] private IdData _id;
     }
 }
 

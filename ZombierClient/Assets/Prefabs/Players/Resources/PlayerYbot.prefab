@@ -211,6 +211,11 @@ PrefabInstance:
       propertyPath: _id.Value
       value: id_pistol
       objectReference: {fileID: 0}
+    - target: {fileID: 2795953256014539368, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_Name
+      value: View
+      objectReference: {fileID: 0}
     - target: {fileID: 3779633427251154433, guid: 81dfd6b65c04f7f4e900c13622b67044,
         type: 3}
       propertyPath: m_Name
@@ -281,10 +286,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7391479701284935895, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391479701284935895, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391479701284935895, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391479701284935895, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391479701284935895, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391479701284935895, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391479701284935895, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7626855777511329473, guid: 81dfd6b65c04f7f4e900c13622b67044,
         type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9188347731368478020, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_Name
+      value: Pistol
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81dfd6b65c04f7f4e900c13622b67044, type: 3}

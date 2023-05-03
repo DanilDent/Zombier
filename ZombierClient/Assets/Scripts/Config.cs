@@ -43,7 +43,7 @@ namespace Prototype
                 ResourceTag = TAG_PFAB_PISTOL,
                 //
                 AttackRange = 7f,
-                FireRateRPM = 18f,
+                FireRateRPM = 18,
                 IdProjectile = ID_PROJECTILE_PISTOL,
             });
 

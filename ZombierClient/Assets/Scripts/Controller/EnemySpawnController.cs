@@ -1,5 +1,6 @@
 using Prototype.Model;
 using Prototype.SO;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -20,10 +21,11 @@ namespace Prototype.Controller
         private LevelModel _level;
         private EnemyModel.Factory _enemyFactory;
         private PlayerModel _player;
+        [SerializeField] private List<EnemyModel> _enemies;
 
         // Minimal spawn enemy distance from player
         [SerializeField] private float _minDistanceFromPlayer = 10f;
-        [SerializeField] private float _randomPointRange = 10f;
+        [SerializeField] private float _navMeshSampleRange = 10f;
         [SerializeField] private float _maxSampleDistance = 10f;
         // Spawn enemies only outside this range from player
         [SerializeField] private float _allowedCenterPointRange;
@@ -38,7 +40,9 @@ namespace Prototype.Controller
 
         private void Update()
         {
+#if DEBUG
             DebugDrawSpawnPosition();
+#endif
         }
 
         private void SpawnEnemies()
@@ -55,8 +59,15 @@ namespace Prototype.Controller
 
                     newPosition.y = 0f;
                     enemy.transform.position = newPosition;
+                    enemy.Agent.Warp(newPosition);
+                    enemy.Agent.enabled = true;
+                    _enemies.Add(enemy);
 
                     --countLeftToSpawn;
+                }
+                else
+                {
+                    Debug.LogWarning("Can't find random position on navmesh surface");
                 }
             }
         }
@@ -65,7 +76,7 @@ namespace Prototype.Controller
         {
             Vector3 sampleCenter = _level.ExitPoint.transform.position + Random.insideUnitSphere * _allowedCenterPointRange;
             Vector3 point;
-            if (GetRandomPointOnNavmesh(sampleCenter, _randomPointRange, out point))
+            if (GetRandomPointOnNavmesh(sampleCenter, _navMeshSampleRange, out point))
             {
                 result = point;
                 return true;
@@ -76,7 +87,7 @@ namespace Prototype.Controller
 
         private bool GetRandomPointOnNavmesh(Vector3 center, float range, out Vector3 result)
         {
-            int maxIterations = 30;
+            int maxIterations = 100;
             for (int i = 0; i < maxIterations; i++)
             {
                 Vector3 randomPoint = center + Random.insideUnitSphere * range;

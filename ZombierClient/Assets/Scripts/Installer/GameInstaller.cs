@@ -78,7 +78,7 @@ namespace Prototype
 
             Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
-
+            Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
 
             //// !Game entities
 

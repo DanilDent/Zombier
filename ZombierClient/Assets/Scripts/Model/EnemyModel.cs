@@ -1,6 +1,7 @@
 ﻿using Prototype.SO;
 using Prototype.View;
 using UnityEngine;
+using UnityEngine.AI;
 using Zenject;
 
 namespace Prototype.Model
@@ -10,7 +11,35 @@ namespace Prototype.Model
     /// </summary>
     public class EnemyModel : MonoBehaviour
     {
+        // Public
         public class Factory : PlaceholderFactory<EnemySO, EnemyModel> { }
+
+        [Inject]
+        public void Construct(EnemySO SO, MarkerView gfx, EnemyView.Factory viewFactory, NavMeshAgent agent)
+        {
+            _viewParentTransform = gfx;
+            _viewFactory = viewFactory;
+            _agent = agent;
+
+            _health = SO.Health;
+            _speed = SO.Speed;
+
+            SetView(SO.EnemyViewPrefab);
+        }
+
+        public NavMeshAgent Agent
+        {
+            get
+            {
+                return _agent;
+            }
+            private set
+            {
+                _agent = value;
+            }
+        }
+
+        // Private
 
         // Dependencies 
 
@@ -21,18 +50,7 @@ namespace Prototype.Model
         // From DI container
         private MarkerView _viewParentTransform;
         private EnemyView.Factory _viewFactory;
-
-        [Inject]
-        public void Construct(EnemySO SO, MarkerView gfx, EnemyView.Factory viewFactory)
-        {
-            _viewParentTransform = gfx;
-            _viewFactory = viewFactory;
-
-            _health = SO.Health;
-            _speed = SO.Speed;
-
-            SetView(SO.EnemyViewPrefab);
-        }
+        private NavMeshAgent _agent;
 
         private void SetView(EnemyView viewPrefab)
         {

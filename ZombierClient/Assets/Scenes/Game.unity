@@ -1266,7 +1266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7471737b1fc3074ca7bb81b5ee12969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemies: []
   _minDistanceFromPlayer: 10
-  _randomPointRange: 10
+  _navMeshSampleRange: 10
   _maxSampleDistance: 10
   _allowedCenterPointRange: 0

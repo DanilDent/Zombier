@@ -10,11 +10,16 @@ namespace Prototype.Controller
         // Public
 
         [Inject]
-        public void Construct(PlayerModel player, List<EnemyModel> enemies, ProjectileModel.Factory projectileFactory)
+        public void Construct(
+            PlayerModel player,
+            List<EnemyModel> enemies,
+            ProjectileModel.Factory projectileFactory,
+            MarkerProjectiles markerProjectiles)
         {
             _player = player;
             _enemies = enemies;
             _projectileFactory = projectileFactory;
+            _markerProjectiles = markerProjectiles;
         }
 
         // Private
@@ -25,6 +30,7 @@ namespace Prototype.Controller
         private PlayerModel _player;
         private List<EnemyModel> _enemies;
         private ProjectileModel.Factory _projectileFactory;
+        private MarkerProjectiles _markerProjectiles;
         //
         private float _timer;
         private float _timerMax;
@@ -53,10 +59,12 @@ namespace Prototype.Controller
         {
             WeaponModel weapon = _player.WeaponModel;
             ProjectileModel projectile = _projectileFactory.Create(weapon.ProjectilePrefab);
+            projectile.transform.SetParent(_markerProjectiles.transform);
             projectile.transform.position = weapon.ShootingPoint.position;
             projectile.transform.rotation = weapon.ShootingPoint.rotation;
             projectile.Rigidbody.AddForce(projectile.transform.forward * projectile.Speed, ForceMode.Impulse);
-            Debug.Log("Shoot!");
+            float projectileLifeTime = 2f;
+            Destroy(projectile.gameObject, projectileLifeTime);
         }
     }
 }

@@ -69,6 +69,7 @@ namespace Prototype
             Container.Bind<MarkerDefaulTargetPoint>().FromComponentInChildren().AsSingle();
 
             // Weapons
+            Container.Bind<MarkerProjectiles>().FromComponentInHierarchy().AsSingle();
             Container.BindFactory<UnityEngine.Object, ProjectileModel, ProjectileModel.Factory>()
                 .FromFactory<PrefabFactory<ProjectileModel>>();
             Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();

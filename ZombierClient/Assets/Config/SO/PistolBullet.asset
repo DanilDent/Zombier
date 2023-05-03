@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PistolBullet
   m_EditorClassIdentifier: 
   Prefab: {fileID: 528507399612550897, guid: 801318762e01e004d9e1bc71bb6040f4, type: 3}
-  Speed: 100
+  Speed: 1
   Damage: 7

@@ -9,19 +9,31 @@ namespace Prototype.Controller
 {
     public class EnemySpawnController : MonoBehaviour
     {
+        // Public
+
         [Inject]
-        public void Construct(LevelModel level, EnemyModel.Factory enemyFactory, PlayerModel player)
+        public void Construct(
+            LevelModel level,
+            EnemyModel.Factory enemyFactory,
+            PlayerModel player,
+            List<EnemyModel> enemies)
         {
             _level = level;
             _enemyFactory = enemyFactory;
             _player = player;
+            _enemies = enemies;
         }
+
+        // Private
+
+        // Dependencies
 
         // Injected
         private LevelModel _level;
         private EnemyModel.Factory _enemyFactory;
         private PlayerModel _player;
         [SerializeField] private List<EnemyModel> _enemies;
+        //
 
         // Minimal spawn enemy distance from player
         [SerializeField] private float _minDistanceFromPlayer = 10f;

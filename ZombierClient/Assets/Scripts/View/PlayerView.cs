@@ -9,8 +9,7 @@ namespace Prototype.View
 {
     public class PlayerView : MonoBehaviour
     {
-        private Rig _aimRig;
-        private GameplayEventService _eventService;
+        // Public 
 
         [Inject]
         public void Construct(Rig aimRig, GameplayEventService eventService)
@@ -18,6 +17,15 @@ namespace Prototype.View
             _aimRig = aimRig;
             _eventService = eventService;
         }
+
+        // Private 
+
+        // Dependencies
+
+        // Injected
+        private Rig _aimRig;
+        private GameplayEventService _eventService;
+        //
 
         private enum State
         {
@@ -138,6 +146,8 @@ namespace Prototype.View
             float aimLayerWeight = _animator.GetLayerWeight(_aimLayerIndex);
             float aimMovementLayerWeight = _animator.GetLayerWeight(_aimMovementLayerIndex);
 
+            yield return null;
+
             while (!Mathf.Approximately(aimLayerWeight, targetValue) && !Mathf.Approximately(aimMovementLayerWeight, targetValue))
             {
                 aimLayerWeight = _animator.GetLayerWeight(_aimLayerIndex);
@@ -148,6 +158,9 @@ namespace Prototype.View
 
                 yield return null;
             }
+
+            _animator.SetLayerWeight(_aimLayerIndex, targetValue);
+            _animator.SetLayerWeight(_aimMovementLayerIndex, targetValue);
         }
     }
 }

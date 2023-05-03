@@ -5,6 +5,7 @@ using Prototype.Model;
 using Prototype.Service;
 using Prototype.SO;
 using Prototype.View;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
@@ -75,6 +76,8 @@ namespace Prototype
 
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>()
                 .FromFactory<PrefabFactory<EnemyView>>();
+
+            Container.Bind<List<EnemyModel>>().AsSingle();
 
             Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();

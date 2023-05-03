@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5860778790679441008}
   m_Layer: 0
-  m_Name: gfx
+  m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,8 +139,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef7103db01c39a34bb0465e30c503f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _targetHandle: {fileID: 0}
   _rotationSpeed: 9
   _speed: 5.28
+  _currentTarget: {fileID: 0}
 --- !u!114 &5095879419988921717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,6 +216,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: YBotView
       objectReference: {fileID: 0}
+    - target: {fileID: 4085500720554271223, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_Data.m_SourceObjects.m_Item0.transform
+      value: 
+      objectReference: {fileID: 2555412196113037302}
+    - target: {fileID: 4085500720895892893, guid: 81dfd6b65c04f7f4e900c13622b67044,
+        type: 3}
+      propertyPath: m_Data.m_SourceObjects.m_Item0.transform
+      value: 
+      objectReference: {fileID: 2555412196113037302}
     - target: {fileID: 4555430877140554939, guid: 81dfd6b65c04f7f4e900c13622b67044,
         type: 3}
       propertyPath: m_RootOrder

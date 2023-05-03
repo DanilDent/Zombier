@@ -12,20 +12,27 @@ namespace Prototype.Model
     public class EnemyModel : MonoBehaviour
     {
         // Public
-        public class Factory : PlaceholderFactory<EnemySO, EnemyModel> { }
 
         [Inject]
-        public void Construct(EnemySO SO, MarkerView gfx, EnemyView.Factory viewFactory, NavMeshAgent agent)
+        public void Construct(
+            EnemySO SO,
+            MarkerView gfx,
+            EnemyView.Factory viewFactory,
+            NavMeshAgent agent,
+            MarkerTargetPoint targetPoint)
         {
             _viewParentTransform = gfx;
             _viewFactory = viewFactory;
             _agent = agent;
+            _targetPoint = targetPoint;
 
             _health = SO.Health;
             _speed = SO.Speed;
 
             SetView(SO.EnemyViewPrefab);
         }
+
+        public class Factory : PlaceholderFactory<EnemySO, EnemyModel> { }
 
         public NavMeshAgent Agent
         {
@@ -38,19 +45,20 @@ namespace Prototype.Model
                 _agent = value;
             }
         }
+        public Transform TargetPoint => _targetPoint.transform;
 
         // Private
 
         // Dependencies 
 
-        // From factory
-        private int _health;
-        private int _speed;
-
-        // From DI container
+        // Injected
         private MarkerView _viewParentTransform;
         private EnemyView.Factory _viewFactory;
         private NavMeshAgent _agent;
+        private MarkerTargetPoint _targetPoint;
+        // From factory
+        private int _health;
+        private int _speed;
 
         private void SetView(EnemyView viewPrefab)
         {

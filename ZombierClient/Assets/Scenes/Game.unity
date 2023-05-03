@@ -773,6 +773,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a847ba772bb6b4eb4da1099ad2966a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1399500534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1399500535}
+  - component: {fileID: 1399500536}
+  m_Layer: 0
+  m_Name: PlayerAimController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1399500535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399500534}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1610636602}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1399500536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399500534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8547f69eb576b44953cbdacaa241a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies: []
+  _targetTranstiionMultiplier: 9
 --- !u!1 &1483634509
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,6 +880,7 @@ Transform:
   m_Children:
   - {fileID: 1668221830}
   - {fileID: 1873288018}
+  - {fileID: 1399500535}
   - {fileID: 2142516329}
   m_Father: {fileID: 84911809}
   m_RootOrder: 1
@@ -1253,7 +1299,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1610636602}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2142516330
 MonoBehaviour:
@@ -1268,9 +1314,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: []
-  _minDistanceFromPlayer: 10
-  _navMeshSampleRange: 10
-  _maxSampleDistance: 10
+  _minDistanceFromPlayer: 6
+  _navMeshSampleRange: 4
+  _maxSampleDistance: 3
   _allowedCenterPointRange: 0
 --- !u!114 &1541643205333545713
 MonoBehaviour:

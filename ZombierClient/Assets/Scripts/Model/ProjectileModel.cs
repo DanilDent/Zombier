@@ -1,4 +1,4 @@
-using Prototype.SO;
+using Prototype.Data;
 using UnityEngine;
 using Zenject;
 
@@ -17,7 +17,7 @@ namespace Prototype.Model
         public class Factory : PlaceholderFactory<UnityEngine.Object, ProjectileModel> { }
 
         public Rigidbody Rigidbody => _rigidbody;
-        public int Speed => _projectileSO.Speed;
+        public float Thrust => _projectileSO.Thrust;
 
         // Private
 
@@ -26,6 +26,11 @@ namespace Prototype.Model
         // Injected
         private Rigidbody _rigidbody;
         //
-        [SerializeField] private ProjectileSO _projectileSO;
+        [SerializeField] private ProjectileData _projectileSO;
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            Destroy(gameObject);
+        }
     }
 }

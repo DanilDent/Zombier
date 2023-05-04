@@ -1,7 +1,11 @@
-﻿using System;
+﻿using UnityEngine;
 
 namespace Prototype.Data
 {
-    [Serializable]
-    public class LevelData : BaseData { }
+    [CreateAssetMenu(fileName = "New Level Data", menuName = "Data/Level Data")]
+    public class LevelData : ScriptableObject
+    {
+        public LevelModel LevelPrefab;
+        public EnemySpawnData EnemySpawnData;
+    }
 }

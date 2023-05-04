@@ -1,4 +1,6 @@
 using Prototype.Model;
+using Prototype.Service;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -14,12 +16,14 @@ namespace Prototype.Controller
             PlayerModel player,
             List<EnemyModel> enemies,
             ProjectileModel.Factory projectileFactory,
-            MarkerProjectiles markerProjectiles)
+            MarkerProjectiles markerProjectiles,
+            GameplayEventService eventService)
         {
             _player = player;
             _enemies = enemies;
             _projectileFactory = projectileFactory;
             _markerProjectiles = markerProjectiles;
+            _eventService = eventService;
         }
 
         // Private
@@ -31,6 +35,7 @@ namespace Prototype.Controller
         private List<EnemyModel> _enemies;
         private ProjectileModel.Factory _projectileFactory;
         private MarkerProjectiles _markerProjectiles;
+        private GameplayEventService _eventService;
         //
         private float _timer;
         private float _timerMax;
@@ -42,28 +47,44 @@ namespace Prototype.Controller
             _timerMax = 1f / rps;
         }
 
-        private void FixedUpdate()
+        private void OnEnable()
+        {
+            _eventService.PlayerShootAnimationEvent += Shoot;
+        }
+
+        private void OnDisable()
+        {
+            _eventService.PlayerShootAnimationEvent -= Shoot;
+        }
+
+        private void Update()
         {
             if (_player.CurrentState == PlayerModel.State.Fight)
             {
                 _timer -= Time.deltaTime;
                 if (_timer < 0)
                 {
-                    Shoot();
+                    _eventService.OnPlayerShoot();
                     _timer = _timerMax;
                 }
             }
+            else
+            {
+                _timer = 0;
+            }
         }
 
-        private void Shoot()
+        private void Shoot(object sender, EventArgs e)
         {
             WeaponModel weapon = _player.WeaponModel;
             ProjectileModel projectile = _projectileFactory.Create(weapon.ProjectilePrefab);
             projectile.transform.SetParent(_markerProjectiles.transform);
-            projectile.transform.position = weapon.ShootingPoint.position;
-            projectile.transform.rotation = weapon.ShootingPoint.rotation;
-            projectile.Rigidbody.AddForce(projectile.transform.forward * projectile.Speed, ForceMode.Impulse);
-            float projectileLifeTime = 2f;
+            Vector3 shootDir = (_player.CurrentTarget.TargetPoint.position - weapon.WeaponEndPoint.position).normalized;
+            Quaternion rot = Quaternion.LookRotation(shootDir);
+            projectile.transform.position = weapon.WeaponEndPoint.position;
+            projectile.transform.rotation = rot;
+            projectile.Rigidbody.AddForce(shootDir * projectile.Thrust, ForceMode.Impulse);
+            float projectileLifeTime = 3f;
             Destroy(projectile.gameObject, projectileLifeTime);
         }
     }

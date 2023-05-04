@@ -1,4 +1,3 @@
-using Prototype.Data;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -17,16 +16,16 @@ namespace Prototype
             return comp;
         }
 
-        public static IEnumerator InvokeWithDelay(Action func, float sec)
+        public static IEnumerator InvokeWithDelay(Action action, float sec)
         {
             yield return new WaitForSeconds(sec);
-            func();
+            action();
         }
 
-        public static IEnumerator InvokeWithDelay(Action<IdData> func, IdData id, float sec)
+        public static IEnumerator InvokeWithDelay<T>(Action<T> action, T param, float sec)
         {
             yield return new WaitForSeconds(sec);
-            func(id);
+            action(param);
         }
     }
 

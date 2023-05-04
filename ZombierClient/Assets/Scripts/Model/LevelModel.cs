@@ -1,5 +1,5 @@
 using Prototype;
-using Prototype.SO;
+using Prototype.Data;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -7,8 +7,9 @@ using Zenject;
 public class LevelModel : MonoBehaviour
 {
     [Inject]
-    public void Construct(NavMeshSurface navmesh, MarkerLevelExitPoint exitPoint)
+    public void Construct(GameplaySessionData session, NavMeshSurface navmesh, MarkerLevelExitPoint exitPoint)
     {
+        _session = session;
         Navmesh = navmesh;
         ExitPoint = exitPoint;
     }
@@ -17,12 +18,12 @@ public class LevelModel : MonoBehaviour
     public NavMeshSurface Navmesh { get; private set; }
     public MarkerLevelExitPoint ExitPoint { get; private set; }
     // Properties
-    public EnemySpawnSO EnemySpawnSO
+    public EnemySpawnData EnemySpawnData
     {
-        get => _enemySpawnSO;
-        private set => _enemySpawnSO = value;
+        get => _session.Location.Levels[_session.CurrentLevelIndex].EnemySpawnData;
+        private set => _session.Location.Levels[_session.CurrentLevelIndex].EnemySpawnData = value;
     }
 
     // Private
-    [SerializeField] private EnemySpawnSO _enemySpawnSO;
+    private GameplaySessionData _session;
 }

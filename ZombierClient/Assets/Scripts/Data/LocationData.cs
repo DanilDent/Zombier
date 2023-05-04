@@ -1,9 +1,9 @@
-﻿using System;
+﻿using UnityEngine;
 
 namespace Prototype.Data
 {
-    [Serializable]
-    public class LocationData : BaseData
+    [CreateAssetMenu(fileName = "New Location Data", menuName = "Data/Location Data")]
+    public class LocationData : ScriptableObject
     {
         public LevelData[] Levels;
     }

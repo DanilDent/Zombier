@@ -1,4 +1,4 @@
-﻿using Prototype.SO;
+﻿using Prototype.Data;
 using Prototype.View;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,7 +15,7 @@ namespace Prototype.Model
 
         [Inject]
         public void Construct(
-            EnemySO SO,
+            EnemyData SO,
             MarkerView gfx,
             EnemyView.Factory viewFactory,
             NavMeshAgent agent,
@@ -32,7 +32,7 @@ namespace Prototype.Model
             SetView(SO.EnemyViewPrefab);
         }
 
-        public class Factory : PlaceholderFactory<EnemySO, EnemyModel> { }
+        public class Factory : PlaceholderFactory<EnemyData, EnemyModel> { }
 
         public NavMeshAgent Agent
         {

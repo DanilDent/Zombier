@@ -250,31 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7936db315c3f19145a17b1c52f8367d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _session:
-    IdCurrentLocation:
-      Value: 
-    CurrentStage: 0
-    Data:
-      Player:
-        IdMeta:
-          Value: 
-        IdUser:
-          Value: 
-        IdSession:
-          Value: 
-        ResourceTag: 
-        Health: 0
-        MaxHealth: 0
-        Speed: 0
-        IdCurrentWeapon:
-          Value: 
-      Weapons: []
-      Locations: []
-      Enemies: []
-  LevelPrefab: {fileID: 7936687985007792136, guid: 7ed5f2f34ba11ce45afcde6bfe81db09,
-    type: 3}
-  PlayerPrefab: {fileID: 5860778791831712981, guid: eaf5bb002bbd61549a21f5276edcf3ef,
-    type: 3}
+  _session: {fileID: 11400000, guid: a91cc4208b05708489c53eb9673c42eb, type: 2}
   EnemyPrefab: {fileID: 5157989920299459421, guid: f6413bf18c5396146ba010d82e6dffba,
     type: 3}
 --- !u!1 &312246234

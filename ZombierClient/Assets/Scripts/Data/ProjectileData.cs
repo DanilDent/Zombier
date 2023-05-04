@@ -1,13 +1,13 @@
-﻿using System;
+using Prototype.Model;
+using UnityEngine;
 
 namespace Prototype.Data
 {
-    [Serializable]
-    public class ProjectileData : BaseData
+    [CreateAssetMenu(fileName = "New Projectile Data", menuName = "Data/Projectile Data")]
+    public class ProjectileData : ScriptableObject
     {
-        public int Speed;
-        public int Damage;
-        //
-        public BaseData Sender;
+        public ProjectileModel Prefab;
+        public float Thrust = 3f;
+        public int Damage = 1;
     }
 }

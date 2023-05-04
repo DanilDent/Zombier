@@ -3,7 +3,6 @@ using Prototype.Controller;
 using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
-using Prototype.SO;
 using Prototype.View;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,18 +15,11 @@ namespace Prototype
     public class GameInstaller : MonoInstaller
     {
         [SerializeField] private GameplaySessionData _session;
-
-        [SerializeField] private LevelModel LevelPrefab;
-        [SerializeField] private PlayerModel PlayerPrefab;
         [SerializeField] private EnemyModel EnemyPrefab;
 
         public override void InstallBindings()
         {
-            Config.CreateGameMetaData(out var meta);
-            Config.CreateUserData(meta, out var user);
-            Config.CreateGameplaySessionData(user, out _session);
-
-            // Game config
+            // Config
             Container.Bind<GameplaySessionData>().FromInstance(_session).AsSingle();
 
             // Camera
@@ -36,7 +28,6 @@ namespace Prototype
 
             // UI 
             Container.Bind<FloatingJoystick>().FromComponentInHierarchy().AsSingle();
-            Container.Bind<GameplayHudUIView>().FromComponentInHierarchy().AsSingle();
 
             // Services
             Container.Bind<GameplayInputService>().AsSingle();
@@ -46,8 +37,7 @@ namespace Prototype
 
             // Level
             Container.Bind<LevelModel>()
-                .FromComponentInNewPrefab(LevelPrefab)
-                .WithGameObjectName(LevelPrefab.gameObject.name)
+                .FromComponentInNewPrefab(_session.Location.Levels[_session.CurrentLevelIndex].LevelPrefab)
                 .UnderTransform(GetMarker<MarkerLevel>)
                 .AsSingle()
                 .OnInstantiated<LevelModel>(BuildNavmesh)
@@ -57,7 +47,7 @@ namespace Prototype
 
             // Player
             Container.Bind<PlayerModel>()
-                .FromComponentInNewPrefab(PlayerPrefab)
+                .FromComponentInNewPrefab(_session.Player.PlayerPrefab)
                 .WithGameObjectName("Player")
                 .UnderTransform(GetMarker<MarkerEntities>)
                 .AsSingle()
@@ -73,13 +63,13 @@ namespace Prototype
             Container.BindFactory<UnityEngine.Object, ProjectileModel, ProjectileModel.Factory>()
                 .FromFactory<PrefabFactory<ProjectileModel>>();
             Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
-            Container.Bind<MarkerShootingPoint>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerWeaponEndPoint>().FromComponentInChildren().AsTransient();
 
             // Enemy
-            Container.BindFactory<EnemySO, EnemyModel, EnemyModel.Factory>()
+            Container.BindFactory<Data.EnemyData, EnemyModel, EnemyModel.Factory>()
                 .FromComponentInNewPrefab(EnemyPrefab)
                 .WithGameObjectName("Enemy")
-                .UnderTransform(GetMarker<MarkerEnemies>);
+                .UnderTransform(this.GetMarker<MarkerEnemies>);
 
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>()
                 .FromFactory<PrefabFactory<EnemyView>>();
@@ -95,6 +85,10 @@ namespace Prototype
             //// Game controllers
 
             Container.Bind<EnemySpawnController>().FromComponentInHierarchy().AsSingle();
+
+            ////////////
+            Container.Bind<MonoObjectPool<ProjectileModel>>().AsSingle();
+            ////////////
 
             /// !GameControllers
         }

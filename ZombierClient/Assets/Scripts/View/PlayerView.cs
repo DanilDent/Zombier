@@ -18,6 +18,11 @@ namespace Prototype.View
             _eventService = eventService;
         }
 
+        public void OnPlayerShootAnimationEvent()
+        {
+            _eventService.OnPlayerShootAnimationEvent();
+        }
+
         // Private 
 
         // Dependencies
@@ -70,6 +75,7 @@ namespace Prototype.View
             _eventService.PlayerMoved += HandleMovementAnimations;
             _eventService.PlayerStartFight += HandleNoAimToAimTransition;
             _eventService.PlayerStopFight += HandleAimToNoAimTransition;
+            _eventService.PlayerShoot += HandleShootAnimation;
         }
 
         private void OnDisable()
@@ -77,6 +83,7 @@ namespace Prototype.View
             _eventService.PlayerMoved -= HandleMovementAnimations;
             _eventService.PlayerStartFight -= HandleNoAimToAimTransition;
             _eventService.PlayerStopFight -= HandleAimToNoAimTransition;
+            _eventService.PlayerShoot -= HandleShootAnimation;
         }
 
         private void HandleMovementAnimations(object sender, GameplayEventService.PlayerMovedEventArgs e)
@@ -111,7 +118,7 @@ namespace Prototype.View
             SetAimingRigAndLayersWeight(targetWeight);
         }
 
-        private void OnShoot()
+        private void HandleShootAnimation(object sender, EventArgs e)
         {
             _animator.SetTrigger(_shootTriggerHash);
         }

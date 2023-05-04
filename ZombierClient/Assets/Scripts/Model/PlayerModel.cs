@@ -29,32 +29,22 @@ namespace Prototype.Model
             Death,
         };
 
-        public IdData Id { get; private set; }
         public WeaponModel WeaponModel => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
-        public int Health
-        {
-            get => _session.Data.Player.Health;
-            set => _session.Data.Player.Health = value;
-        }
+
         public float Speed
         {
             get => _speed;
             set
             {
                 _speed = value;
-                _session.Data.Player.Speed = _speed;
+                _session.Player.Speed = _speed;
             }
         }
         public float RotationSpeed => _rotationSpeed;
         public State CurrentState { get; set; }
         public EnemyModel CurrentTarget { get => _currentTarget; set => _currentTarget = value; }
-
-        public bool IsAlive()
-        {
-            return Health > 0;
-        }
 
         // Private 
 

@@ -1,14 +1,13 @@
-﻿using System;
+﻿using UnityEngine;
 
 namespace Prototype.Data
 {
-    [Serializable]
-    public sealed class GameplaySessionData
+    [CreateAssetMenu(fileName = "New Gameplay Session Data", menuName = "Data/Gameplay Session Data")]
+    public class GameplaySessionData : ScriptableObject
     {
-        public IdData IdCurrentLocation;
-        public int CurrentStage;
-        // Shared data
-        public SharedData Data;
+        public int CurrentLevelIndex;
+
+        public PlayerData Player;
+        public LocationData Location;
     }
 }
-

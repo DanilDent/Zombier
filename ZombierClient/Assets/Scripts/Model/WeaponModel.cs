@@ -1,6 +1,4 @@
-﻿using Prototype.Data;
-using Prototype.SO;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace Prototype.Model
@@ -10,17 +8,13 @@ namespace Prototype.Model
         // Public 
 
         [Inject]
-        public void Construct(GameplaySessionData session, MarkerShootingPoint shootingPoint)
+        public void Construct(MarkerWeaponEndPoint shootingPoint)
         {
-            _session = session;
             _shootingPoint = shootingPoint;
         }
+
         // Properties
-        public IdData Id
-        {
-            get => _id;
-            private set { _id = value; }
-        }
+
         public float AttackRange
         {
             get
@@ -43,19 +37,17 @@ namespace Prototype.Model
                 _weaponSO.FireRateRPM = value;
             }
         }
-        public Transform ShootingPoint => _shootingPoint.transform;
-        public ProjectileModel ProjectilePrefab => _weaponSO.ProjectileSO.Prefab;
+        public Transform WeaponEndPoint => _shootingPoint.transform;
+        public ProjectileModel ProjectilePrefab => _weaponSO.ProjectileData.Prefab;
 
         // Private
 
         // Dependecies
 
         // Injected
-        private GameplaySessionData _session;
-        private MarkerShootingPoint _shootingPoint;
+        private MarkerWeaponEndPoint _shootingPoint;
         //
-        [SerializeField] private WeaponSO _weaponSO;
-        [SerializeField] private IdData _id;
+        [SerializeField] private Data.WeaponData _weaponSO;
     }
 }
 

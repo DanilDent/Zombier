@@ -1,5 +1,5 @@
+using Prototype.Data;
 using Prototype.Model;
-using Prototype.SO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -59,14 +59,14 @@ namespace Prototype.Controller
 
         private void SpawnEnemies()
         {
-            int countLeftToSpawn = Random.Range(_level.EnemySpawnSO.MinEnemyCount, _level.EnemySpawnSO.MaxEnemyCount + 1);
+            int countLeftToSpawn = Random.Range(_level.EnemySpawnData.MinEnemyCount, _level.EnemySpawnData.MaxEnemyCount + 1);
 
             while (countLeftToSpawn > 0)
             {
                 if (GetRandomPointOnNavmeshDistantFromPlayer(out var newPosition))
                 {
-                    int randomIndex = Random.Range(0, _level.EnemySpawnSO.Enemies.Count);
-                    EnemySO enemySO = _level.EnemySpawnSO.Enemies[randomIndex];
+                    int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
+                    EnemyData enemySO = _level.EnemySpawnData.Enemies[randomIndex];
                     EnemyModel enemy = _enemyFactory.Create(enemySO);
 
                     newPosition.y = 0f;

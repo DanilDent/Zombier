@@ -1,13 +1,15 @@
-using System;
+﻿using Prototype.Model;
+using UnityEngine;
 
 namespace Prototype.Data
 {
-    [Serializable]
-    public class PlayerData : BaseData
+    [CreateAssetMenu(fileName = "New Player Data", menuName = "Data/Player Data")]
+    public class PlayerData : ScriptableObject
     {
+        public PlayerModel PlayerPrefab;
         public int Health;
         public int MaxHealth;
         public float Speed;
-        public IdData IdCurrentWeapon;
+        public WeaponData Weapon;
     }
 }

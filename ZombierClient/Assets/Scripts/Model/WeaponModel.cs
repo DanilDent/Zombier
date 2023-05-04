@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Prototype.Data;
+using UnityEngine;
 using Zenject;
 
 namespace Prototype.Model
@@ -19,26 +20,28 @@ namespace Prototype.Model
         {
             get
             {
-                return _weaponSO.AttackRange;
+                return _weaponData.AttackRange;
             }
             set
             {
-                _weaponSO.AttackRange = value;
+                _weaponData.AttackRange = value;
             }
         }
         public int FireRateRPM
         {
             get
             {
-                return _weaponSO.FireRateRPM;
+                return _weaponData.FireRateRPM;
             }
             set
             {
-                _weaponSO.FireRateRPM = value;
+                _weaponData.FireRateRPM = value;
             }
         }
         public Transform WeaponEndPoint => _shootingPoint.transform;
-        public ProjectileModel ProjectilePrefab => _weaponSO.ProjectileData.Prefab;
+        public ProjectileModel ProjectilePrefab => _weaponData.ProjectileData.Prefab;
+        public float Thrust => _weaponData.Thrust;
+        public float Recoil => _weaponData.Recoil;
 
         // Private
 
@@ -47,7 +50,7 @@ namespace Prototype.Model
         // Injected
         private MarkerWeaponEndPoint _shootingPoint;
         //
-        [SerializeField] private Data.WeaponData _weaponSO;
+        [SerializeField] private WeaponData _weaponData;
     }
 }
 

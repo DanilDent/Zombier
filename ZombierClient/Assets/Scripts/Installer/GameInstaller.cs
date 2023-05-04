@@ -2,6 +2,7 @@ using Cinemachine;
 using Prototype.Controller;
 using Prototype.Data;
 using Prototype.Model;
+using Prototype.ObjectPool;
 using Prototype.Service;
 using Prototype.View;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace Prototype
     public class GameInstaller : MonoInstaller
     {
         [SerializeField] private GameplaySessionData _session;
+        //
+        [SerializeField] private int _projectilePoolSize = 10;
         [SerializeField] private EnemyModel EnemyPrefab;
 
         public override void InstallBindings()
@@ -60,8 +63,23 @@ namespace Prototype
 
             // Weapons
             Container.Bind<MarkerProjectiles>().FromComponentInHierarchy().AsSingle();
-            Container.BindFactory<UnityEngine.Object, ProjectileModel, ProjectileModel.Factory>()
+
+            Container.BindFactory<UnityEngine.Object, ProjectileModel, PoolObjectFactory<ProjectileModel>>()
                 .FromFactory<PrefabFactory<ProjectileModel>>();
+
+            Container.Bind<MonoObjectPool<ProjectileModel>>()
+                .AsSingle()
+                .OnInstantiated((ctx, obj) =>
+                {
+                    if (obj is MonoObjectPool<ProjectileModel> pool)
+                    {
+                        var prefab = _session.Player.Weapon.ProjectileData.Prefab;
+                        var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
+                        pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                    }
+                })
+                .NonLazy();
+
             Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerWeaponEndPoint>().FromComponentInChildren().AsTransient();
 
@@ -85,10 +103,6 @@ namespace Prototype
             //// Game controllers
 
             Container.Bind<EnemySpawnController>().FromComponentInHierarchy().AsSingle();
-
-            ////////////
-            Container.Bind<MonoObjectPool<ProjectileModel>>().AsSingle();
-            ////////////
 
             /// !GameControllers
         }

@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _session: {fileID: 11400000, guid: a91cc4208b05708489c53eb9673c42eb, type: 2}
+  _projectilePoolSize: 10
   EnemyPrefab: {fileID: 5157989920299459421, guid: f6413bf18c5396146ba010d82e6dffba,
     type: 3}
 --- !u!1 &312246234

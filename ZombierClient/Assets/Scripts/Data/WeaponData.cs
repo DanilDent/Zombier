@@ -7,6 +7,8 @@ namespace Prototype.Data
     {
         public int FireRateRPM;
         public float AttackRange;
+        public float Thrust = 3f;
+        public float Recoil = 0.1f;
         public ProjectileData ProjectileData;
     }
 }

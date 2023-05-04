@@ -7,7 +7,6 @@ namespace Prototype.Data
     public class ProjectileData : ScriptableObject
     {
         public ProjectileModel Prefab;
-        public float Thrust = 3f;
         public int Damage = 1;
     }
 }

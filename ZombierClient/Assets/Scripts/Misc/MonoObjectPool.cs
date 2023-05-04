@@ -1,67 +1,95 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class MonoObjectPool<T>
-    where T : MonoBehaviour
+namespace Prototype.ObjectPool
 {
-    private T _prefab;
-    private Queue<T> _queue;
-    private Transform _container;
-
-    public MonoObjectPool(T prefab, Transform container)
+    public class MonoObjectPool<T>
+    where T : PoolObject
     {
-        _prefab = prefab;
-        _container = container;
-    }
+        private PoolObjectFactory<T> _factory;
+        private Queue<T> _queue;
+        private Transform _transformContainer;
 
-    public MonoObjectPool(T prefab, Transform container, int count)
-    {
-        _queue = new Queue<T>();
-        _prefab = prefab;
-        _container = container;
-
-        for (int i = 0; i < count; ++i)
+        [Inject]
+        public MonoObjectPool(PoolObjectFactory<T> factory)
         {
-            T instance = Instantiate();
+            _factory = factory;
+
+            _queue = new Queue<T>();
+        }
+
+        public void Initialize(T prefab, int count, Transform transformContainer)
+        {
+            _transformContainer = transformContainer;
+
+            for (int i = 0; i < count; ++i)
+            {
+                T instance = Instantiate(prefab);
+                instance.gameObject.SetActive(false);
+                _queue.Enqueue(instance);
+            }
+        }
+
+        public T Create(T prefab)
+        {
+            T instance;
+            if (_queue.Count > 0)
+            {
+                instance = _queue.Dequeue();
+            }
+            else
+            {
+                instance = Instantiate(prefab);
+            }
+
+            instance.gameObject.SetActive(true);
+            return instance;
+        }
+
+        public T Create(T prefab, Vector3 position, Quaternion rotation)
+        {
+            T instance;
+            if (_queue.Count > 0)
+            {
+                instance = _queue.Dequeue();
+            }
+            else
+            {
+                instance = Instantiate(prefab);
+            }
+
+            instance.transform.position = position;
+            instance.transform.rotation = rotation;
+            instance.gameObject.SetActive(true);
+            return instance;
+        }
+
+        public void Destroy(T instance)
+        {
+            if (!instance.gameObject.activeInHierarchy)
+                return;
+
+            instance.gameObject.SetActive(false);
             _queue.Enqueue(instance);
         }
-    }
 
-    public T Create(Vector3 position, Quaternion rotation)
-    {
-        T instance;
-        if (_queue.Count > 0)
+        public IEnumerator Destroy(T instance, float sec)
         {
-            instance = _queue.Dequeue();
-        }
-        else
-        {
-            instance = Instantiate();
+            if (!instance.gameObject.activeInHierarchy)
+                yield break;
+
+            yield return new WaitForSeconds(sec);
+            Destroy(instance);
         }
 
-        instance.gameObject.SetActive(true);
-        instance.transform.position = position;
-        instance.transform.rotation = rotation;
-        return instance;
-    }
-
-    public void Destroy(T instance)
-    {
-        instance.gameObject.SetActive(false);
-        _queue.Enqueue(instance);
-    }
-
-    public IEnumerator Destroy(T instance, float sec)
-    {
-        yield return new WaitForSeconds(sec);
-        Destroy(instance);
-    }
-
-    private T Instantiate()
-    {
-        T instance = GameObject.Instantiate<T>(_prefab, _container);
-        instance.gameObject.SetActive(false);
-        return instance;
+        private T Instantiate(T prefab)
+        {
+            T instance = _factory.Create(prefab);
+            instance.transform.SetParent(_transformContainer);
+            instance.gameObject.SetActive(false);
+            return instance;
+        }
     }
 }

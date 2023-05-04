@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e81823000e49d4347b418407194d47c7, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  FireRateRPM: 10000
+  FireRateRPM: 100
   AttackRange: 10
   Thrust: 3
-  Recoil: 40
+  Recoil: 5
   ProjectileData: {fileID: 11400000, guid: 7c6e8c6526ce2d24bbe77d0dc787ea70, type: 2}

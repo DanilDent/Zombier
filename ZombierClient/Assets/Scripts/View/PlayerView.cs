@@ -12,10 +12,10 @@ namespace Prototype.View
         // Public 
 
         [Inject]
-        public void Construct(Rig aimRig, GameplayEventService eventService)
+        public void Construct(GameplayEventService eventService, Rig aimRig)
         {
-            _aimRig = aimRig;
             _eventService = eventService;
+            _aimRig = aimRig;
         }
 
         public void OnPlayerShootAnimationEvent()
@@ -28,8 +28,8 @@ namespace Prototype.View
         // Dependencies
 
         // Injected
-        private Rig _aimRig;
         private GameplayEventService _eventService;
+        private Rig _aimRig;
         //
 
         private enum State

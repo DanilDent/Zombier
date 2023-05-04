@@ -98,6 +98,9 @@ namespace Prototype
             Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
             Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
 
+            // VFX
+            Container.Bind<ParticleSystem>().FromComponentsInChildren().AsTransient();
+
             //// !Game entities
 
             //// Game controllers

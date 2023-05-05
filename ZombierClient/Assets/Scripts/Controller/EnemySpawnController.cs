@@ -1,5 +1,6 @@
 using Prototype.Data;
 using Prototype.Model;
+using Prototype.Service;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,12 +17,14 @@ namespace Prototype.Controller
             LevelModel level,
             EnemyModel.Factory enemyFactory,
             PlayerModel player,
-            List<EnemyModel> enemies)
+            List<EnemyModel> enemies,
+            GameplayEventService eventService)
         {
             _level = level;
             _enemyFactory = enemyFactory;
             _player = player;
             _enemies = enemies;
+            _eventService = eventService;
         }
 
         // Private
@@ -29,6 +32,7 @@ namespace Prototype.Controller
         // Dependencies
 
         // Injected
+        GameplayEventService _eventService;
         private LevelModel _level;
         private EnemyModel.Factory _enemyFactory;
         private PlayerModel _player;
@@ -48,6 +52,16 @@ namespace Prototype.Controller
             _allowedCenterPointRange = distancePlayerToExit - _minDistanceFromPlayer - _maxSampleDistance;
 
             SpawnEnemies();
+        }
+
+        private void OnEnable()
+        {
+            _eventService.Death += DespawnEnemy;
+        }
+
+        private void OnDisable()
+        {
+            _eventService.Death -= DespawnEnemy;
         }
 
         private void Update()
@@ -112,6 +126,18 @@ namespace Prototype.Controller
             }
             result = Vector3.zero;
             return false;
+        }
+
+        private void DespawnEnemy(object sender, GameplayEventService.DeathEventArgs e)
+        {
+            if (e.Entity is EnemyModel cast)
+            {
+                _enemies.Remove(cast);
+                cast.GetComponent<Collider>().enabled = false;
+                cast.Agent.enabled = false;
+                float destroyDelay = 1f;
+                Destroy(cast.gameObject, destroyDelay);
+            }
         }
 
         // Debug 

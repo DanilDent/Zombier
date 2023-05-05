@@ -43,6 +43,11 @@ public class DealDamageController : MonoBehaviour
 
         defender.Health -= sumDmg;
 
+        if (defender.Health < 0f || Mathf.Approximately(defender.Health, 0f))
+        {
+            _eventService.OnDeath(new GameplayEventService.DeathEventArgs { Entity = defender });
+        }
+
         Debug.Log($"{defender}'s Health: {defender.Health}");
     }
 }

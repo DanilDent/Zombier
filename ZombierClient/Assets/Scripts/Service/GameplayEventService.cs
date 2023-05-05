@@ -15,6 +15,7 @@ namespace Prototype.Service
         public event EventHandler PlayerShootAnimationEvent;
 
         public event EventHandler<DamagedEventArgs> Damaged;
+        public event EventHandler<DeathEventArgs> Death;
         #endregion
 
         #region EventArgs
@@ -27,6 +28,11 @@ namespace Prototype.Service
         {
             public IDamaging Attacker;
             public IDamageable Defender;
+        }
+
+        public class DeathEventArgs : EventArgs
+        {
+            public IDamageable Entity;
         }
 
         #endregion
@@ -65,6 +71,11 @@ namespace Prototype.Service
         public void OnDamaged(DamagedEventArgs e)
         {
             Damaged?.Invoke(this, e);
+        }
+
+        public void OnDeath(DeathEventArgs e)
+        {
+            Death?.Invoke(this, e);
         }
         #endregion
     }

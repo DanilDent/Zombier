@@ -1,5 +1,6 @@
 ﻿using Prototype.Data;
 using Prototype.View;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -19,7 +20,8 @@ namespace Prototype.Model
             MarkerView gfx,
             EnemyView.Factory viewFactory,
             NavMeshAgent agent,
-            MarkerTargetPoint targetPoint)
+            MarkerTargetPoint targetPoint,
+            List<EnemyModel> enemyContainer)
         {
             _viewParentTransform = gfx;
             _viewFactory = viewFactory;

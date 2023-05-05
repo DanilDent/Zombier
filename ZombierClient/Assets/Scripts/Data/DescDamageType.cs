@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Prototype.Data
 {
     [Serializable]
-    public struct DescDamageType
+    public struct DescDamageType : IEquatable<DescDamageType>
     {
         public enum DamageType
         {
@@ -37,6 +37,43 @@ namespace Prototype.Data
             }
 
             throw new Exception($"Trying to sum damage type {a.Type} with {b.Type}");
+        }
+
+        public bool Equals(DescDamageType other)
+        {
+            return
+                this.Type == other.Type &&
+                this.Value == other.Value &&
+                this.Chance == other.Chance;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (obj is DescDamageType cast)
+                return Equals(cast);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 10007;
+            hash = hash * 15377 + (int)Type.GetHashCode();
+            hash = hash * 15377 + (int)Value.GetHashCode();
+            hash = hash * 15377 + (int)Chance.GetHashCode();
+
+            return hash;
+        }
+
+        public static bool operator ==(DescDamageType t1, DescDamageType t2)
+        {
+            return t1.Equals(t2);
+        }
+
+        public static bool operator !=(DescDamageType t1, DescDamageType t2)
+        {
+            return !t1.Equals(t2);
         }
     }
 }

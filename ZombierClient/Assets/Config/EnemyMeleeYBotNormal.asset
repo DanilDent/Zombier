@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f0a8717dd4f7634a88f3365e2451701, type: 3}
-  m_Name: EnemySimpleBlue
+  m_Name: EnemyMeleeYBotNormal
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -75,7 +75,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  EnemyViewPrefab: {fileID: 7538150455746848350, guid: f9c661616fc409c4d8717131ebbea742,
-    type: 3}
-  Health: 5
-  Speed: 10
+  Prefab: {fileID: 2831307518515285957, guid: bb9a1bd7c6a8eef4c88da472d6a14e76, type: 3}
+  Health: 60
+  Speed: 1

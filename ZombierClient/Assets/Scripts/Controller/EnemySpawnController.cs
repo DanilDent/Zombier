@@ -80,8 +80,8 @@ namespace Prototype.Controller
                 if (GetRandomPointOnNavmeshDistantFromPlayer(out var newPosition))
                 {
                     int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
-                    EnemyData enemySO = _level.EnemySpawnData.Enemies[randomIndex];
-                    EnemyModel enemy = _enemyFactory.Create(enemySO);
+                    EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
+                    EnemyModel enemy = _enemyFactory.Create(enemyData.Prefab, enemyData);
 
                     newPosition.y = 0f;
                     enemy.transform.position = newPosition;
@@ -133,7 +133,6 @@ namespace Prototype.Controller
             if (e.Entity is EnemyModel cast)
             {
                 _enemies.Remove(cast);
-                cast.GetComponent<Collider>().enabled = false;
                 cast.Agent.enabled = false;
                 float destroyDelay = 1f;
                 Destroy(cast.gameObject, destroyDelay);

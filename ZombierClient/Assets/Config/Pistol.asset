@@ -49,7 +49,7 @@ MonoBehaviour:
       Entry: 8
       Data: 
   FireRateRPM: 100
-  AttackRange: 10
-  Thrust: 3
-  Recoil: 5
+  AttackRange: 8
+  Thrust: 1
+  Recoil: 3
   ProjectileData: {fileID: 11400000, guid: 7c6e8c6526ce2d24bbe77d0dc787ea70, type: 2}

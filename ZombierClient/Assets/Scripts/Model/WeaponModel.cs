@@ -9,8 +9,9 @@ namespace Prototype.Model
         // Public 
 
         [Inject]
-        public void Construct(MarkerWeaponEndPoint shootingPoint)
+        public void Construct(GameplaySessionData session, MarkerWeaponEndPoint shootingPoint)
         {
+            _session = session;
             _shootingPoint = shootingPoint;
         }
 
@@ -48,9 +49,10 @@ namespace Prototype.Model
         // Dependecies
 
         // Injected
+        private GameplaySessionData _session;
         private MarkerWeaponEndPoint _shootingPoint;
         //
-        [SerializeField] private WeaponData _weaponData;
+        private WeaponData _weaponData;
     }
 }
 

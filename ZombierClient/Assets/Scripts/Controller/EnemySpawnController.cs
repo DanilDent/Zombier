@@ -85,6 +85,7 @@ namespace Prototype.Controller
 
                     newPosition.y = 0f;
                     enemy.transform.position = newPosition;
+                    enemy.transform.rotation = Quaternion.Euler(0f, Random.Range(-180f, 180f), 0f);
                     enemy.Agent.Warp(newPosition);
                     enemy.Agent.enabled = true;
                     _enemies.Add(enemy);

@@ -34,15 +34,16 @@ namespace Prototype.Controller
         private Vector3 _currentMovement;
         private IEnumerator _targetTransitionCoroutine = null;
         [SerializeField] private float _targetTranstiionMultiplier = 9f;
+        private float _stateUpdateRate = 0.1f;
 
 
 
         private void Update()
         {
-            UpdatePlayerState();
+            StartCoroutine(UpdatePlayerState());
         }
 
-        private void UpdatePlayerState()
+        private IEnumerator UpdatePlayerState()
         {
             EnemyModel currentTarget = _player.CurrentTarget;
             if (TryFindClosestEnemy(_player, out EnemyModel enemy))
@@ -106,6 +107,8 @@ namespace Prototype.Controller
                     _eventService.OnPlayerStopFight();
                 }
             }
+
+            yield return new WaitForSeconds(_stateUpdateRate);
         }
 
         private bool TryFindClosestEnemy(in PlayerModel playerModel, out EnemyModel value)

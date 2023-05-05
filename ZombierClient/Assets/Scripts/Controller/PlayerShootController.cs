@@ -83,6 +83,7 @@ namespace Prototype.Controller
                 Quaternion rot = Quaternion.LookRotation(shootDir);
 
                 ProjectileModel projectile = _projectilePool.Create(weapon.ProjectilePrefab, weapon.WeaponEndPoint.position, rot);
+                projectile.Sender = _player;
 
                 projectile.Rigidbody.AddForce(shootDir * weapon.Thrust, ForceMode.Impulse);
 

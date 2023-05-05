@@ -7,15 +7,15 @@ using Zenject;
 namespace Prototype.Model
 {
     /// <summary>
-    /// Stores enemy non-view related game data
+    /// Stores enemy non-view related gameplay runtime data
     /// </summary>
-    public class EnemyModel : MonoBehaviour
+    public class EnemyModel : MonoBehaviour, IDamageable
     {
         // Public
 
         [Inject]
         public void Construct(
-            EnemyData SO,
+            EnemyData enemyData,
             MarkerView gfx,
             EnemyView.Factory viewFactory,
             NavMeshAgent agent,
@@ -26,10 +26,8 @@ namespace Prototype.Model
             _agent = agent;
             _targetPoint = targetPoint;
 
-            _health = SO.Health;
-            _speed = SO.Speed;
-
-            SetView(SO.EnemyViewPrefab);
+            _data = Instantiate(enemyData);
+            SetView(enemyData.EnemyViewPrefab);
         }
 
         public class Factory : PlaceholderFactory<EnemyData, EnemyModel> { }
@@ -45,6 +43,11 @@ namespace Prototype.Model
                 _agent = value;
             }
         }
+
+        // IDamageable
+        public float Health { get => _data.Health; set => _data.Health = value; }
+        public DescDamage Resists { get => _data.Resists; }
+        //
         public Transform TargetPoint => _targetPoint.transform;
 
         // Private
@@ -57,8 +60,7 @@ namespace Prototype.Model
         private NavMeshAgent _agent;
         private MarkerTargetPoint _targetPoint;
         // From factory
-        private int _health;
-        private int _speed;
+        private EnemyData _data;
 
         private void SetView(EnemyView viewPrefab)
         {

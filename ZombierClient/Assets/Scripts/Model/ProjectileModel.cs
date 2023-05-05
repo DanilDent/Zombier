@@ -1,5 +1,6 @@
 using Prototype.Data;
 using Prototype.ObjectPool;
+using Prototype.Service;
 using UnityEngine;
 using Zenject;
 
@@ -10,12 +11,14 @@ namespace Prototype.Model
         // Public
 
         [Inject]
-        public void Construct(MonoObjectPool<ProjectileModel> pool, Rigidbody rigidbody)
+        public void Construct(GameplayEventService eventService, MonoObjectPool<ProjectileModel> pool, Rigidbody rigidbody)
         {
+            _eventService = eventService;
             _pool = pool;
             _rigidbody = rigidbody;
         }
 
+        public IDamaging Sender { get; set; }
         public Rigidbody Rigidbody => _rigidbody;
 
         // Private
@@ -23,6 +26,7 @@ namespace Prototype.Model
         // Dependencies
 
         // Injected
+        private GameplayEventService _eventService;
         private MonoObjectPool<ProjectileModel> _pool;
         private Rigidbody _rigidbody;
         //
@@ -30,6 +34,10 @@ namespace Prototype.Model
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (collision.gameObject.TryGetComponent<IDamageable>(out var target))
+            {
+                _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs { Attacker = Sender, Defender = target });
+            }
             _pool.Destroy(this);
         }
 

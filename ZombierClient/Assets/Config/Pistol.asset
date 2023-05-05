@@ -12,6 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e81823000e49d4347b418407194d47c7, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: Damage
+      Entry: 7
+      Data: 0|Prototype.Data.DescDamage, Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: Prototype.Data.DescDamageType, Assembly-CSharp
+    - Name: Type
+      Entry: 3
+      Data: 0
+    - Name: Value
+      Entry: 4
+      Data: 10
+    - Name: Chance
+      Entry: 4
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   FireRateRPM: 100
   AttackRange: 10
   Thrust: 3

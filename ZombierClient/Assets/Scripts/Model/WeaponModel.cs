@@ -11,7 +11,7 @@ namespace Prototype.Model
         [Inject]
         public void Construct(GameplaySessionData session, MarkerWeaponEndPoint shootingPoint)
         {
-            _session = session;
+            _weaponData = session.Player.Weapon;
             _shootingPoint = shootingPoint;
         }
 
@@ -49,7 +49,6 @@ namespace Prototype.Model
         // Dependecies
 
         // Injected
-        private GameplaySessionData _session;
         private MarkerWeaponEndPoint _shootingPoint;
         //
         private WeaponData _weaponData;

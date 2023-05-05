@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.Model;
+using System;
 using UnityEngine;
 
 namespace Prototype.Service
@@ -12,6 +13,8 @@ namespace Prototype.Service
         public event EventHandler<PlayerMovedEventArgs> PlayerMoved;
         public event EventHandler PlayerShoot;
         public event EventHandler PlayerShootAnimationEvent;
+
+        public event EventHandler<DamagedEventArgs> Damaged;
         #endregion
 
         #region EventArgs
@@ -19,6 +22,13 @@ namespace Prototype.Service
         {
             public Vector3 Movement;
         }
+
+        public class DamagedEventArgs : EventArgs
+        {
+            public IDamaging Attacker;
+            public IDamageable Defender;
+        }
+
         #endregion
 
         #region Invokers
@@ -50,6 +60,11 @@ namespace Prototype.Service
         public void OnPlayerShootAnimationEvent()
         {
             PlayerShootAnimationEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnDamaged(DamagedEventArgs e)
+        {
+            Damaged?.Invoke(this, e);
         }
         #endregion
     }

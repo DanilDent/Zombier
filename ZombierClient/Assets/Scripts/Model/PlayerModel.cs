@@ -5,7 +5,7 @@ using Zenject;
 namespace Prototype.Model
 {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerModel : MonoBehaviour
+    public class PlayerModel : MonoBehaviour, IDamaging
     {
         // Public
 
@@ -16,10 +16,13 @@ namespace Prototype.Model
             MarkerDefaulTargetPoint targetPoint,
             TargetHandleModel targetHandle)
         {
-            _session = session;
+            _data = session.Player;
             _weaponModel = weaponModel;
             _targetPoint = targetPoint;
             _targetHandle = targetHandle;
+
+            _damage = new DescDamage();
+            RecalcDamage();
         }
 
         public enum State
@@ -29,18 +32,19 @@ namespace Prototype.Model
             Death,
         };
 
+        // IDamaging
+        public DescDamage Damage => _damage;
+        public float CritChance { get => _data.CritChance; set => _data.CritChance = value; }
+        public float CritMultiplier { get => _data.CritMultiplier; set => _data.CritMultiplier = value; }
+        // !IDamaging
+
         public WeaponModel WeaponModel => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
-
         public float Speed
         {
-            get => _speed;
-            set
-            {
-                _speed = value;
-                _session.Player.Speed = _speed;
-            }
+            get => _data.Speed;
+            set => _data.Speed = value;
         }
         public float RotationSpeed => _rotationSpeed;
         public State CurrentState { get; set; }
@@ -51,14 +55,27 @@ namespace Prototype.Model
         // Dependencies
 
         // Injected
-        private GameplaySessionData _session;
         private WeaponModel _weaponModel;
         private MarkerDefaulTargetPoint _targetPoint;
         [SerializeField] private TargetHandleModel _targetHandle;
         //
+        [SerializeField] private PlayerData _data;
         [SerializeField] private float _rotationSpeed = 9f;
-        [SerializeField] private float _speed = 5.28f;
         [SerializeField] private EnemyModel _currentTarget;
+        private DescDamage _damage;
+
+        private void RecalcDamage()
+        {
+            foreach (DescDamageType dmg in _data.Weapon.Damage)
+            {
+                if (_damage.FindIndex(_ => _.Type == dmg.Type) == -1)
+                {
+                    _damage.Add(new DescDamageType(dmg.Type));
+                }
+
+                _damage[dmg.Type] += dmg;
+            }
+        }
     }
 }
 

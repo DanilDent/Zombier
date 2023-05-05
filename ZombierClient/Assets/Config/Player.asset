@@ -12,9 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cd7654f8bfabf64eadd175069a75177, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: Damage
+      Entry: 7
+      Data: 0|Prototype.Data.DescDamage, Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: Prototype.Data.DescDamageType, Assembly-CSharp
+    - Name: Type
+      Entry: 3
+      Data: 0
+    - Name: Value
+      Entry: 4
+      Data: 0
+    - Name: Chance
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   PlayerPrefab: {fileID: 5860778791831712981, guid: eaf5bb002bbd61549a21f5276edcf3ef,
     type: 3}
   Health: 100
   MaxHealth: 100
   Speed: 5.28
+  CritChance: 0
+  CritMultiplier: 1
   Weapon: {fileID: 11400000, guid: 3bd8745d607e42046a47ff64e1d77733, type: 2}

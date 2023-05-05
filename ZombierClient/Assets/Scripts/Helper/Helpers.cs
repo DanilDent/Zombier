@@ -27,6 +27,12 @@ namespace Prototype
             yield return new WaitForSeconds(sec);
             action(param);
         }
+
+        public static bool TryRandom(float probability)
+        {
+            probability = Mathf.Clamp01(probability);
+            return UnityEngine.Random.Range(0f, 1f) < probability;
+        }
     }
 
 }

@@ -12,6 +12,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f0a8717dd4f7634a88f3365e2451701, type: 3}
   m_Name: EnemySimpleBlack
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: Damage
+      Entry: 7
+      Data: 0|Prototype.Data.DescDamage, Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: Prototype.Data.DescDamageType, Assembly-CSharp
+    - Name: Type
+      Entry: 3
+      Data: 0
+    - Name: Value
+      Entry: 4
+      Data: 0
+    - Name: Chance
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Resists
+      Entry: 7
+      Data: 1|Prototype.Data.DescDamage, Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: Prototype.Data.DescDamageType, Assembly-CSharp
+    - Name: Type
+      Entry: 3
+      Data: 0
+    - Name: Value
+      Entry: 4
+      Data: 0
+    - Name: Chance
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   EnemyViewPrefab: {fileID: -8571644202280182767, guid: 089f7b8db5537ef4d813d26c89ed5b3f,
     type: 3}
   Health: 100

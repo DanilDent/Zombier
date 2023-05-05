@@ -53,6 +53,6 @@ MonoBehaviour:
   Health: 100
   MaxHealth: 100
   Speed: 5.28
-  CritChance: 1
-  CritMultiplier: 2
+  CritChance: 0
+  CritMultiplier: 1
   Weapon: {fileID: 11400000, guid: 3bd8745d607e42046a47ff64e1d77733, type: 2}

@@ -4,7 +4,7 @@ using Zenject;
 namespace Prototype.Factory
 {
     public class UnderTransformPrefabFactory<P1, T> : IFactory<UnityEngine.Object, P1, T>
-where T : Component
+    where T : Component
     {
         private readonly DiContainer _container;
         private readonly Transform _transform;

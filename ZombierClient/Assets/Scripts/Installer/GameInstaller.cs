@@ -1,6 +1,7 @@
 using Cinemachine;
 using Prototype.Controller;
 using Prototype.Data;
+using Prototype.Factory;
 using Prototype.Model;
 using Prototype.ObjectPool;
 using Prototype.Service;

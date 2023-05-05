@@ -17,7 +17,6 @@ namespace Prototype
         [SerializeField] private GameplaySessionData _session;
         //
         [SerializeField] private int _projectilePoolSize = 10;
-        [SerializeField] private EnemyModel EnemyPrefab;
 
         public override void InstallBindings()
         {

@@ -5,7 +5,7 @@ namespace Prototype.Data
     [Serializable]
     public struct IdData : IEquatable<IdData>
     {
-        private readonly string _value;
+        public static readonly IdData Empty = new IdData();
 
         public IdData(string value)
         {
@@ -47,5 +47,7 @@ namespace Prototype.Data
         {
             return !t1.Equals(t2);
         }
+
+        private readonly string _value;
     }
 }

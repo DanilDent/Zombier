@@ -1,10 +1,10 @@
 using Cinemachine;
 using Prototype.Controller;
 using Prototype.Data;
-using Prototype.Factory;
 using Prototype.Model;
 using Prototype.ObjectPool;
 using Prototype.Service;
+using Prototype.View;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -83,16 +83,16 @@ namespace Prototype
             Container.Bind<MarkerWeaponEndPoint>().FromComponentInChildren().AsTransient();
 
             // Enemy
-            //Container.BindFactory<Data.EnemyData, EnemyModel, EnemyModel.Factory>()
-            //    .FromComponentInNewPrefab(EnemyPrefab)
-            //    .WithGameObjectName("Enemy")
-            //    .UnderTransform(this.GetMarker<MarkerEnemies>);
+            //Container.BindFactory<UnityEngine.Object, EnemyData, EnemyModel, EnemyModel.Factory>()
+            //    .FromFactory<UnderTransformPrefabFactory<EnemyData, EnemyModel>>();
 
-            Container.Bind<Transform>().FromMethod(() => GetMarker<MarkerEnemies>())
-                .WhenInjectedInto<UnderTransformPrefabFactory<EnemyData, EnemyModel>>();
+            Container.BindFactory<EnemyData, EnemyModel, EnemyModel.Factory>()
+                .FromSubContainerResolve()
+                .ByNewPrefabInstaller<EnemyInstaller>(_session.EnemyPrefab)
+                .UnderTransform(GetMarker<MarkerEnemies>());
 
-            Container.BindFactory<UnityEngine.Object, EnemyData, EnemyModel, EnemyModel.Factory>()
-                .FromFactory<UnderTransformPrefabFactory<EnemyData, EnemyModel>>();
+            Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>().
+                FromFactory<PrefabFactory<EnemyView>>();
 
             Container.Bind<List<EnemyModel>>().AsSingle();
 

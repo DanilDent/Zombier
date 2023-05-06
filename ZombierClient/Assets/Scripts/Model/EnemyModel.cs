@@ -14,21 +14,22 @@ namespace Prototype.Model
 
         [Inject]
         public void Construct(
-            EnemyData enemyData,
+            IdData id,
+            EnemyData dataTemplate,
             NavMeshAgent agent,
             CharacterController characterController,
             MarkerTargetPoint targetPoint)
         {
+            _id = id;
+            _data = Instantiate(dataTemplate);
             _agent = agent;
             _characterController = characterController;
             _targetPoint = targetPoint;
-
-            _data = Instantiate(enemyData);
         }
 
-        public class Factory : PlaceholderFactory<UnityEngine.Object, EnemyData, EnemyModel> { }
+        public class Factory : PlaceholderFactory<EnemyData, EnemyModel> { }
 
-
+        public IdData Id => _id;
         // IDamageable
         public float Health { get => _data.Health; set => _data.Health = value; }
         public DescDamage Resists { get => _data.Resists; }
@@ -54,6 +55,7 @@ namespace Prototype.Model
         // Dependencies 
 
         // Injected
+        [SerializeField] private IdData _id;
         private NavMeshAgent _agent;
         private CharacterController _characterController;
         private MarkerTargetPoint _targetPoint;

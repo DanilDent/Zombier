@@ -1,4 +1,5 @@
-﻿using Prototype.Model;
+﻿using Prototype.Data;
+using Prototype.Model;
 using System;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace Prototype.Service
 
         public event EventHandler<DamagedEventArgs> Damaged;
         public event EventHandler<DeathEventArgs> Death;
+
+        public event EventHandler<EnemyMovedEventArgs> EnemyMoved;
         #endregion
 
         #region EventArgs
@@ -33,6 +36,12 @@ namespace Prototype.Service
         public class DeathEventArgs : EventArgs
         {
             public IDamageable Entity;
+        }
+
+        public class EnemyMovedEventArgs : EventArgs
+        {
+            public IdData Id;
+            public float Value;
         }
 
         #endregion
@@ -76,6 +85,11 @@ namespace Prototype.Service
         public void OnDeath(DeathEventArgs e)
         {
             Death?.Invoke(this, e);
+        }
+
+        public void OnEnemyMoved(EnemyMovedEventArgs e)
+        {
+            EnemyMoved?.Invoke(this, e);
         }
         #endregion
     }

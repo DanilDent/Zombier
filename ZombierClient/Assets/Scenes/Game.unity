@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chaseRange: 15
-  _chaseDestinationUpdateRate: 0.1
+  _destUpdateRate: 0.1
 --- !u!1 &312246234
 GameObject:
   m_ObjectHideFlags: 3

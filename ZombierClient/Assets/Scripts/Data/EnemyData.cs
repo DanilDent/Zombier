@@ -1,4 +1,4 @@
-using Prototype.Model;
+using Prototype.View;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
@@ -9,7 +9,7 @@ namespace Prototype.Data
     [CreateAssetMenu(fileName = "New Enemy Data", menuName = "Data/Enemy Data")]
     public class EnemyData : SerializedScriptableObject
     {
-        public EnemyModel Prefab;
+        public EnemyView ViewPrefab;
         public float Health;
         public float Speed;
         [NonSerialized] [OdinSerialize] public DescDamage Damage;

@@ -81,7 +81,7 @@ namespace Prototype.Controller
                 {
                     int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
                     EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
-                    EnemyModel enemy = _enemyFactory.Create(enemyData.Prefab, enemyData);
+                    EnemyModel enemy = _enemyFactory.Create(enemyData);
 
                     newPosition.y = 0f;
                     enemy.transform.position = newPosition;

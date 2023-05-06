@@ -1,4 +1,5 @@
 using Prototype.Model;
+using Prototype.Service;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -9,14 +10,16 @@ namespace Prototype.Controller
     {
         // Public
         [Inject]
-        public void Construct(List<EnemyModel> enemies)
+        public void Construct(GameplayEventService eventService, List<EnemyModel> enemies)
         {
+            _eventService = eventService;
             _enemies = enemies;
         }
 
         // Private
 
         // Injected
+        private GameplayEventService _eventService;
         private List<EnemyModel> _enemies;
         //
 
@@ -86,6 +89,8 @@ namespace Prototype.Controller
             {
                 enemy.Agent.nextPosition = enemy.transform.position;
             }
+
+            _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.Speed });
         }
 
         private void HandleRotation(EnemyModel enemy)

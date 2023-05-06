@@ -75,7 +75,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  Prefab: {fileID: 2831307518515285957, guid: dfbc9cf63a1a7704a9bdfeed6fdcee62, type: 3}
-  Health: 30
+  ViewPrefab: {fileID: -8276695298805817224, guid: 244cf74535f897142ac354fc1d729f59,
+    type: 3}
+  Health: 25
   Speed: 1
   Weapon: {fileID: 11400000, guid: 2e88d6b536e361348b1adedcee10bf0f, type: 2}

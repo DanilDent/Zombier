@@ -81,7 +81,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_UseGeometry: 1
+  m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 6b0af205ba04a6347af8a1b7b6c7ac1a, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 7e50822becccad449b89ccfbde817be5, type: 2}
 --- !u!1 &1789431420863646114
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,7 +211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01c979a770d5264488fd21c702b2d126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySpawnSO: {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}
 --- !u!1001 &4712255151889545123
 PrefabInstance:
   m_ObjectHideFlags: 0

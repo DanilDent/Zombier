@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chaseRange: 15
-  _destUpdateRate: 0.05
+  _destUpdateRate: 0.02
 --- !u!1 &312246234
 GameObject:
   m_ObjectHideFlags: 3
@@ -586,6 +586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a595974352890c4385a8b6347f9c6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _obstacleAvoidanceRadius: 1
+  _stoppingDistance: 1.2
 --- !u!1 &769690159
 GameObject:
   m_ObjectHideFlags: 0

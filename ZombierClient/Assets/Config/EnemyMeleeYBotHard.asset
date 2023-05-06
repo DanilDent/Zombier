@@ -78,5 +78,5 @@ MonoBehaviour:
   ViewPrefab: {fileID: 228341025769442741, guid: 2174f0c704c23a24aadbef65e733d343,
     type: 3}
   Health: 100
-  Speed: 1.1
+  Speed: 1.5
   Weapon: {fileID: 11400000, guid: 2e88d6b536e361348b1adedcee10bf0f, type: 2}

@@ -22,6 +22,8 @@ namespace Prototype.Controller
         private GameplayEventService _eventService;
         private List<EnemyModel> _enemies;
         //
+        [SerializeField] private float _obstacleAvoidanceRadius = 1f;
+        [SerializeField] private float _stoppingDistance = 1.2f;
 
         private void Start()
         {
@@ -37,6 +39,8 @@ namespace Prototype.Controller
         {
             foreach (var enemy in _enemies)
             {
+                enemy.Agent.stoppingDistance = _stoppingDistance;
+                enemy.Agent.radius = _obstacleAvoidanceRadius;
                 UpdateEnemy(enemy);
             }
         }

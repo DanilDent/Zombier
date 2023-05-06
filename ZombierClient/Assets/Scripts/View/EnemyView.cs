@@ -34,7 +34,7 @@ namespace Prototype.View
 
         private void HandleMovementAnimation(object sender, GameplayEventService.EnemyMovedEventArgs e)
         {
-            if (e.Id.Value.Equals(_id.Value))
+            if (e.Id.Value.Equals(_id._value))
             {
                 _animator.SetFloat("Velocity", e.Value);
             }

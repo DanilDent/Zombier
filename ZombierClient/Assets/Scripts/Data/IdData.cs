@@ -3,8 +3,49 @@
 namespace Prototype.Data
 {
     [Serializable]
-    public struct IdData
+    public struct IdData : IEquatable<IdData>
     {
-        public string Value;
+        private readonly string _value;
+
+        public IdData(string value)
+        {
+            _value = value;
+        }
+
+        public IdData(IdData other)
+        {
+            _value = other._value;
+        }
+
+        public bool Equals(IdData other)
+        {
+            return _value.Equals(other._value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (obj is IdData cast)
+                return Equals(cast);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 10007;
+            hash = hash * 15377 + _value.GetHashCode();
+            return hash;
+        }
+
+        public static bool operator ==(IdData t1, IdData t2)
+        {
+            return t1.Equals(t2);
+        }
+
+        public static bool operator !=(IdData t1, IdData t2)
+        {
+            return !t1.Equals(t2);
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace Prototype.Service
     {
         public static IdData GetNewId()
         {
-            return new IdData { Value = Guid.NewGuid().ToString() };
+            return new IdData { _value = Guid.NewGuid().ToString() };
         }
     }
 }

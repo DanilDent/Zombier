@@ -32,11 +32,11 @@ namespace Prototype.Model
         {
             get
             {
-                return _weaponData.FireRateRPM;
+                return _weaponData.AttackRateRPM;
             }
             set
             {
-                _weaponData.FireRateRPM = value;
+                _weaponData.AttackRateRPM = value;
             }
         }
         public Transform WeaponEndPoint => _shootingPoint.transform;

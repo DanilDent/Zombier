@@ -78,3 +78,4 @@ MonoBehaviour:
   Prefab: {fileID: 2831307518515285957, guid: 4d3075de9d84c234f83bf0ed3992bfdb, type: 3}
   Health: 100
   Speed: 1
+  Weapon: {fileID: 11400000, guid: 2e88d6b536e361348b1adedcee10bf0f, type: 2}

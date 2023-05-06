@@ -14,5 +14,6 @@ namespace Prototype.Data
         public float Speed;
         [NonSerialized] [OdinSerialize] public DescDamage Damage;
         [NonSerialized] [OdinSerialize] public DescDamage Resists;
+        public WeaponData Weapon;
     }
 }

@@ -33,82 +33,85 @@ namespace Prototype.Controller
         //
         private Vector3 _currentMovement;
         private IEnumerator _targetTransitionCoroutine = null;
+        private IEnumerator _updateStateCoroutine = null;
         [SerializeField] private float _targetTranstiionMultiplier = 9f;
-        private float _stateUpdateRate = 0.1f;
+        [SerializeField] private float _stateUpdateRate = 0.1f;
 
 
-
-        private void Update()
+        private void Start()
         {
             StartCoroutine(UpdatePlayerState());
         }
 
         private IEnumerator UpdatePlayerState()
         {
-            EnemyModel currentTarget = _player.CurrentTarget;
-            if (TryFindClosestEnemy(_player, out EnemyModel enemy))
+            while (true)
             {
-                // Found at least one closest enemy 
-                if (currentTarget == enemy)
+                EnemyModel currentTarget = _player.CurrentTarget;
+                if (TryFindClosestEnemy(_player, out EnemyModel enemy))
                 {
-                    // Target has not changed
-                    if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                    // Found at least one closest enemy 
+                    if (currentTarget == enemy)
                     {
-                        // Target is still in attack range
+                        // Target has not changed
+                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                        {
+                            // Target is still in attack range
+                        }
+                        else
+                        {
+                            // Target is not in attack range anymore
+                            _player.CurrentState = PlayerModel.State.NoFight;
+                            UpdateCurrentTarget(null);
+                            _eventService.OnPlayerStopFight();
+                        }
+                    }
+                    else if (currentTarget == null)
+                    {
+                        // Player does not have a target yet
+                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                        {
+                            // Enemy is in range of current weapon
+                            _player.CurrentState = PlayerModel.State.Fight;
+                            UpdateCurrentTarget(enemy);
+                            _eventService.OnPlayerStartFight();
+                        }
+                        else
+                        {
+                            // Enemy is not in range of current weapon
+                        }
                     }
                     else
                     {
-                        // Target is not in attack range anymore
-                        _player.CurrentState = PlayerModel.State.NoFight;
-                        UpdateCurrentTarget(null);
-                        _eventService.OnPlayerStopFight();
-                    }
-                }
-                else if (currentTarget == null)
-                {
-                    // Player does not have a target yet
-                    if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
-                    {
-                        // Enemy is in range of current weapon
-                        _player.CurrentState = PlayerModel.State.Fight;
-                        UpdateCurrentTarget(enemy);
-                        _eventService.OnPlayerStartFight();
-                    }
-                    else
-                    {
-                        // Enemy is not in range of current weapon
+                        // Player has other target
+                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                        {
+                            // Enemy is in range of current weapon
+                            UpdateCurrentTarget(enemy);
+                        }
+                        else
+                        {
+                            // Enemy is not in range of current weapon
+                            _player.CurrentState = PlayerModel.State.NoFight;
+                            UpdateCurrentTarget(null);
+                            _eventService.OnPlayerStopFight();
+                        }
                     }
                 }
                 else
                 {
-                    // Player has other target
-                    if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                    // No enemies on the level
+                    if (currentTarget != null)
                     {
-                        // Enemy is in range of current weapon
-                        UpdateCurrentTarget(enemy);
-                    }
-                    else
-                    {
-                        // Enemy is not in range of current weapon
+                        // Current target is invalid
                         _player.CurrentState = PlayerModel.State.NoFight;
                         UpdateCurrentTarget(null);
                         _eventService.OnPlayerStopFight();
                     }
                 }
-            }
-            else
-            {
-                // No enemies on the level
-                if (currentTarget != null)
-                {
-                    // Current target is invalid
-                    _player.CurrentState = PlayerModel.State.NoFight;
-                    UpdateCurrentTarget(null);
-                    _eventService.OnPlayerStopFight();
-                }
-            }
 
-            yield return new WaitForSeconds(_stateUpdateRate);
+                yield return new WaitForSeconds(_stateUpdateRate);
+            }
         }
 
         private bool TryFindClosestEnemy(in PlayerModel playerModel, out EnemyModel value)

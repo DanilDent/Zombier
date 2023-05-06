@@ -8,7 +8,7 @@ namespace Prototype.Data
     [CreateAssetMenu(fileName = "New Weapon Data", menuName = "Data/Weapon Data")]
     public class WeaponData : SerializedScriptableObject
     {
-        public int FireRateRPM;
+        public int AttackRateRPM;
         public float AttackRange;
         public float Thrust = 3f;
         public float Recoil = 0.1f;

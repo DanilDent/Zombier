@@ -48,6 +48,6 @@ public class DealDamageController : MonoBehaviour
             _eventService.OnDeath(new GameplayEventService.DeathEventArgs { Entity = defender });
         }
 
-        Debug.Log($"{defender}'s Health: {defender.Health}");
+        //Debug.Log($"{defender}'s Health: {defender.Health}");
     }
 }

@@ -105,11 +105,10 @@ namespace Prototype
 
             //// !Game entities
 
-            //// Game controllers
+            // Unity components
+            Container.Bind<Animator>().FromComponentInChildren().AsTransient();
+            Container.Bind<CharacterController>().FromComponentInChildren().AsTransient();
 
-            Container.Bind<EnemySpawnController>().FromComponentInHierarchy().AsSingle();
-
-            ////!GameControllers
         }
 
         private Transform GetMarker<T>(InjectContext context)

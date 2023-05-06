@@ -48,13 +48,15 @@ namespace Prototype.Controller
             HandleAcceleration(enemy);
             HandleMovement(enemy);
             HandleRotation(enemy);
+
+            _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.Speed });
         }
 
         private void HandlePathFindingInput(EnemyModel enemy)
         {
             enemy.CurrentMovement = new Vector3(enemy.Agent.desiredVelocity.x, 0f, enemy.Agent.desiredVelocity.z);
-            float deadInputZone = 1e-2f;
-            if (enemy.CurrentMovement.magnitude < deadInputZone)
+            float epsilon = 1e-2f;
+            if (enemy.CurrentMovement.magnitude < epsilon)
             {
                 enemy.CurrentMovement = Vector3.zero;
             }
@@ -82,21 +84,21 @@ namespace Prototype.Controller
 
         private void HandleMovement(EnemyModel enemy)
         {
-            enemy.CharacterController.Move(enemy.CurrentMovement * enemy.CurrentSpeed * Time.deltaTime);
-
-            float epsilon = 1e-2f;
-            if (Vector3.Distance(enemy.Agent.nextPosition, enemy.transform.position) > epsilon)
+            if (enemy.Agent.remainingDistance > enemy.Agent.stoppingDistance)
             {
-                enemy.Agent.nextPosition = enemy.transform.position;
-            }
+                enemy.CharacterController.Move(enemy.CurrentMovement * enemy.CurrentSpeed * Time.deltaTime);
 
-            _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.Speed });
+                float epsilon = 1e-2f;
+                if (Vector3.Distance(enemy.Agent.nextPosition, enemy.transform.position) > epsilon)
+                {
+                    enemy.Agent.nextPosition = enemy.transform.position;
+                }
+            }
         }
 
         private void HandleRotation(EnemyModel enemy)
         {
-            Vector3 positionToLookAt = (enemy.Agent.destination - enemy.transform.position).normalized;
-            positionToLookAt.y = 0;
+            Vector3 positionToLookAt = new Vector3(enemy.CurrentMovement.x, 0f, enemy.CurrentMovement.z);
 
             if (positionToLookAt != Vector3.zero)
             {

@@ -18,6 +18,15 @@ namespace Prototype.View
         public class Factory : PlaceholderFactory<UnityEngine.Object, EnemyView> { }
 
 
+        private void Start()
+        {
+            _velocityHash = Animator.StringToHash("Velocity");
+
+            float offset = Random.Range(0f, 1f);
+            int layers = 0;
+            _animator.Play(START_STATE_NAME, layers, offset);
+        }
+
         private void OnEnable()
         {
             _eventService.EnemyMoved += HandleMovementAnimation;
@@ -28,15 +37,20 @@ namespace Prototype.View
             _eventService.EnemyMoved -= HandleMovementAnimation;
         }
 
-        [SerializeField] private IdData _id;
+        private const string START_STATE_NAME = "Base Layer.Locomotion";
+
+        // Injected
+        private IdData _id;
         private GameplayEventService _eventService;
         private Animator _animator;
+        //
+        private int _velocityHash;
 
         private void HandleMovementAnimation(object sender, GameplayEventService.EnemyMovedEventArgs e)
         {
             if (_id == e.Id)
             {
-                _animator.SetFloat("Velocity", e.Value);
+                _animator.SetFloat(_velocityHash, e.Value);
             }
         }
     }

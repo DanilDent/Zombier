@@ -281,7 +281,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1610636602}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &225224272
 MonoBehaviour:
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chaseRange: 15
-  _destUpdateRate: 0.1
+  _destUpdateRate: 0.05
 --- !u!1 &312246234
 GameObject:
   m_ObjectHideFlags: 3
@@ -1033,9 +1033,9 @@ Transform:
   - {fileID: 1873288018}
   - {fileID: 1399500535}
   - {fileID: 522683215}
-  - {fileID: 2142516329}
-  - {fileID: 755684305}
   - {fileID: 225224271}
+  - {fileID: 755684305}
+  - {fileID: 2142516329}
   - {fileID: 2050763977}
   m_Father: {fileID: 84911809}
   m_RootOrder: 1
@@ -1497,7 +1497,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1610636602}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2142516330
 MonoBehaviour:
@@ -1512,7 +1512,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: []
-  _minDistanceFromPlayer: 6
+  _minDistanceFromPlayer: 10
   _navMeshSampleRange: 4
   _maxSampleDistance: 3
   _allowedCenterPointRange: 0

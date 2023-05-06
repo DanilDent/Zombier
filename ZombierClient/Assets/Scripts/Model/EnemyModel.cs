@@ -55,7 +55,7 @@ namespace Prototype.Model
         // Dependencies 
 
         // Injected
-        [SerializeField] private IdData _id;
+        private IdData _id;
         private NavMeshAgent _agent;
         private CharacterController _characterController;
         private MarkerTargetPoint _targetPoint;

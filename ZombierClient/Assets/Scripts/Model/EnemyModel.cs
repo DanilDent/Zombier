@@ -17,37 +17,39 @@ namespace Prototype.Model
             IdData id,
             EnemyData dataTemplate,
             NavMeshAgent agent,
-            CharacterController characterController,
+            Rigidbody rigidbody,
             MarkerTargetPoint targetPoint)
         {
             _id = id;
             _data = Instantiate(dataTemplate);
             _agent = agent;
-            _characterController = characterController;
+            _rigidbody = rigidbody;
             _targetPoint = targetPoint;
         }
 
-        public class Factory : PlaceholderFactory<EnemyData, EnemyModel> { }
+        public class Factory : PlaceholderFactory<IdData, EnemyData, EnemyModel> { }
 
         public IdData Id => _id;
         // IDamageable
         public float Health { get => _data.Health; set => _data.Health = value; }
         public DescDamage Resists { get => _data.Resists; }
         //
-        public float Speed => _data.Speed;
+        public float MaxSpeed => _data.MaxSpeed;
         public float AttackRange => _data.Weapon.AttackRange;
         // Gameplay properties
-        public CharacterController CharacterController => _characterController;
         public NavMeshAgent Agent => _agent;
+        public Rigidbody Rigidbody => _rigidbody;
         public Transform TargetPoint => _targetPoint.transform;
         public float RotationMultiplier => _rotationMultiplier;
         public float Acceleration => _acceleration;
         public float Deceleration => _deceleration;
         public Vector3 CurrentMovement { get; set; }
         public float CurrentSpeed { get; set; }
+        public float MovingForce { get; set; }
+        public float StoppingForce { get; set; }
         public bool IsMoving()
         {
-            return CurrentMovement.x != 0 || CurrentMovement.z != 0;
+            return CurrentMovement.magnitude > 0;
         }
 
         // Private
@@ -57,7 +59,7 @@ namespace Prototype.Model
         // Injected
         private IdData _id;
         private NavMeshAgent _agent;
-        private CharacterController _characterController;
+        private Rigidbody _rigidbody;
         private MarkerTargetPoint _targetPoint;
         // From factory
         private EnemyData _data;

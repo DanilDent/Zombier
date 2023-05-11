@@ -67,7 +67,7 @@ namespace Prototype.Controller
         private void Update()
         {
 #if DEBUG
-            DebugDrawSpawnPosition();
+            //DebugDrawSpawnPosition();
 #endif
         }
 
@@ -81,7 +81,9 @@ namespace Prototype.Controller
                 {
                     int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
                     EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
-                    EnemyModel enemy = _enemyFactory.Create(enemyData);
+                    IdData id = IdProviderService.GetNewId();
+                    EnemyModel enemy = _enemyFactory.Create(id, enemyData);
+                    enemy.gameObject.name = $"Enemy#{id.ToString()}";
 
                     newPosition.y = 0f;
                     enemy.transform.position = newPosition;

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f0a8717dd4f7634a88f3365e2451701, type: 3}
-  m_Name: EnemyMeleeYBotHard
+  m_Name: EnemyMeleeYBot
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -75,8 +75,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  ViewPrefab: {fileID: 228341025769442741, guid: 2174f0c704c23a24aadbef65e733d343,
+  ViewPrefab: {fileID: -2526527607130301274, guid: 9b9ad4d1919c8f9489b9dd0a9ca2b167,
     type: 3}
-  Health: 100
-  Speed: 1.5
+  Health: 75
+  MaxSpeed: 1.8
   Weapon: {fileID: 11400000, guid: 2e88d6b536e361348b1adedcee10bf0f, type: 2}

@@ -11,7 +11,7 @@ namespace Prototype.Data
     {
         public EnemyView ViewPrefab;
         public float Health;
-        public float Speed;
+        public float MaxSpeed;
         [NonSerialized] [OdinSerialize] public DescDamage Damage;
         [NonSerialized] [OdinSerialize] public DescDamage Resists;
         public WeaponData Weapon;

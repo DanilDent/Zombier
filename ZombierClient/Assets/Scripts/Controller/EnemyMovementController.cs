@@ -23,7 +23,6 @@ namespace Prototype.Controller
         private List<EnemyModel> _enemies;
         //
         [SerializeField] private float _obstacleAvoidanceRadius = 1f;
-        [SerializeField] private float _stoppingDistance = 1.2f;
 
         private void Start()
         {
@@ -32,14 +31,17 @@ namespace Prototype.Controller
                 enemy.Agent.updatePosition = false;
                 enemy.Agent.updateRotation = false;
                 enemy.Agent.updateUpAxis = false;
+
+                enemy.MovingForce = enemy.Acceleration * enemy.Rigidbody.mass;
+                enemy.StoppingForce = enemy.Deceleration * enemy.Rigidbody.mass;
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             foreach (var enemy in _enemies)
             {
-                enemy.Agent.stoppingDistance = _stoppingDistance;
+                enemy.Agent.stoppingDistance = enemy.AttackRange;
                 enemy.Agent.radius = _obstacleAvoidanceRadius;
                 UpdateEnemy(enemy);
             }
@@ -47,65 +49,75 @@ namespace Prototype.Controller
 
         private void UpdateEnemy(EnemyModel enemy)
         {
-            HandlePathFindingInput(enemy);
-            HandleGravity(enemy);
-            HandleAcceleration(enemy);
-            HandleMovement(enemy);
-            HandleRotation(enemy);
+            SyncAgentWithTransform(enemy);
 
-            _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.Speed });
+            HandlePathFindingInput(enemy);
+            HandleRotation(enemy);
+            HandleMovement(enemy);
+
+            //_eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.MaxSpeed });
+        }
+
+        private void SyncAgentWithTransform(EnemyModel enemy)
+        {
+            float epsilon = 1e-2f;
+            if (Vector3.Distance(enemy.Agent.nextPosition, enemy.transform.position) > epsilon)
+            {
+                enemy.Agent.nextPosition = enemy.transform.position;
+            }
         }
 
         private void HandlePathFindingInput(EnemyModel enemy)
         {
-            enemy.CurrentMovement = new Vector3(enemy.Agent.desiredVelocity.x, 0f, enemy.Agent.desiredVelocity.z);
-            float epsilon = 1e-2f;
-            if (enemy.CurrentMovement.magnitude < epsilon)
+            enemy.CurrentMovement = new Vector3(enemy.Agent.desiredVelocity.normalized.x, 0f, enemy.Agent.desiredVelocity.normalized.z);
+
+            if (Vector3.Distance(enemy.transform.position, enemy.Agent.destination) < enemy.Agent.stoppingDistance)
             {
                 enemy.CurrentMovement = Vector3.zero;
             }
-        }
 
-        private void HandleGravity(EnemyModel enemy)
-        {
-            float gravity = -9.8f;
-            enemy.CurrentMovement = new Vector3(enemy.CurrentMovement.x, gravity, enemy.CurrentMovement.z);
-        }
-
-        private void HandleAcceleration(EnemyModel enemy)
-        {
-            if (enemy.IsMoving())
-            {
-                enemy.CurrentSpeed += enemy.Acceleration * Time.deltaTime;
-            }
-            else if (enemy.CurrentSpeed > 0)
-            {
-                enemy.CurrentSpeed -= enemy.Deceleration * Time.deltaTime;
-            }
-
-            enemy.CurrentSpeed = Mathf.Clamp(enemy.CurrentSpeed, 0f, enemy.Speed);
+            //Debug.DrawRay(enemy.transform.position + Vector3.up * 0.5f, enemy.CurrentMovement * 10f, Color.cyan, 1f);
         }
 
         private void HandleMovement(EnemyModel enemy)
         {
-            if (enemy.Agent.remainingDistance > enemy.Agent.stoppingDistance)
+            if (enemy.IsMoving())
             {
-                enemy.CharacterController.Move(enemy.CurrentMovement * enemy.CurrentSpeed * Time.deltaTime);
+                float movingForce = enemy.MovingForce;
 
-                float epsilon = 1e-2f;
-                if (Vector3.Distance(enemy.Agent.nextPosition, enemy.transform.position) > epsilon)
+                Vector3 localVelocity = enemy.transform.InverseTransformDirection(enemy.Rigidbody.velocity);
+                float totalAccelerationTillMax = enemy.MaxSpeed - Mathf.Max(0f, localVelocity.z);
+                float deltaAccelerationMax = (enemy.MovingForce / enemy.Rigidbody.mass) * Time.fixedDeltaTime;
+
+                if (deltaAccelerationMax > totalAccelerationTillMax)
                 {
-                    enemy.Agent.nextPosition = enemy.transform.position;
+                    movingForce = (enemy.Rigidbody.mass * totalAccelerationTillMax) / Time.fixedDeltaTime;
                 }
+
+                enemy.Rigidbody.AddForce(enemy.transform.forward * movingForce, ForceMode.Force);
+                enemy.CurrentSpeed += (movingForce / enemy.Rigidbody.mass) * Time.fixedDeltaTime;
+                enemy.CurrentSpeed = Mathf.Clamp(enemy.CurrentSpeed, 0f, enemy.MaxSpeed);
+
+                Debug.DrawRay(enemy.transform.position + Vector3.up * 0.5f, enemy.Rigidbody.velocity, Color.green, 1f);
+            }
+            else if (enemy.CurrentSpeed > 0)
+            {
+                enemy.CurrentSpeed -= (enemy.StoppingForce / enemy.Rigidbody.mass) * Time.fixedDeltaTime;
+                enemy.CurrentSpeed = Mathf.Clamp(enemy.CurrentSpeed, 0f, enemy.MaxSpeed);
             }
         }
 
         private void HandleRotation(EnemyModel enemy)
         {
-            Vector3 positionToLookAt = new Vector3(enemy.CurrentMovement.x, 0f, enemy.CurrentMovement.z);
+            Vector3 positionToLookAt = new Vector3(enemy.CurrentMovement.x, 0f, enemy.CurrentMovement.z).normalized;
 
-            if (positionToLookAt != Vector3.zero)
+            if (enemy.IsMoving() && positionToLookAt != Vector3.zero)
             {
+                Vector3 velocityLocalZ = new Vector3(0f, 0f, Mathf.Max(0f, enemy.transform.InverseTransformDirection(enemy.Rigidbody.velocity).z));
+                Vector3 velocityZ = enemy.transform.TransformDirection(velocityLocalZ);
+                Vector3 newVelocityZ = Vector3.Slerp(velocityZ, positionToLookAt, enemy.RotationMultiplier * Time.deltaTime);
+                enemy.Rigidbody.velocity = newVelocityZ + (enemy.Rigidbody.velocity - velocityZ);
+
                 Quaternion currentRotation = enemy.transform.rotation;
                 Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
                 enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.deltaTime);

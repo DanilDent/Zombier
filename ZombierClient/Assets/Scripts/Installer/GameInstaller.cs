@@ -79,14 +79,10 @@ namespace Prototype
                 })
                 .NonLazy();
 
-            Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerWeaponEndPoint>().FromComponentInChildren().AsTransient();
 
             // Enemy
-            //Container.BindFactory<UnityEngine.Object, EnemyData, EnemyModel, EnemyModel.Factory>()
-            //    .FromFactory<UnderTransformPrefabFactory<EnemyData, EnemyModel>>();
-
-            Container.BindFactory<EnemyData, EnemyModel, EnemyModel.Factory>()
+            Container.BindFactory<IdData, EnemyData, EnemyModel, EnemyModel.Factory>()
                 .FromSubContainerResolve()
                 .ByNewPrefabInstaller<EnemyInstaller>(_session.EnemyPrefab)
                 .UnderTransform(GetMarker<MarkerEnemies>());
@@ -108,6 +104,7 @@ namespace Prototype
             // Unity components
             Container.Bind<Animator>().FromComponentInChildren().AsTransient();
             Container.Bind<CharacterController>().FromComponentInChildren().AsTransient();
+            Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
 
         }
 

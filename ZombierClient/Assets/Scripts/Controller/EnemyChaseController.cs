@@ -43,6 +43,8 @@ namespace Prototype.Controller
                     {
                         enemy.Agent.SetDestination(enemy.transform.position);
                     }
+
+                    Debug.DrawRay(enemy.Agent.destination, Vector3.up * 2f, Color.red, _destUpdateRate);
                 }
 
                 yield return new WaitForSeconds(_destUpdateRate);

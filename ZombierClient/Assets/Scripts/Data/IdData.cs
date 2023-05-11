@@ -33,6 +33,12 @@ namespace Prototype.Data
 
         public override int GetHashCode()
         {
+            // This check is for Zenject dry run validation
+            if (_value == null)
+            {
+                _value = String.Empty;
+            }
+
             int hash = 10007;
             hash = hash * 15377 + _value.GetHashCode();
             return hash;
@@ -48,6 +54,11 @@ namespace Prototype.Data
             return !t1.Equals(t2);
         }
 
-        private readonly string _value;
+        public override string ToString()
+        {
+            return _value;
+        }
+
+        private string _value;
     }
 }

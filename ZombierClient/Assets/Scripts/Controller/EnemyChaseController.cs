@@ -1,4 +1,5 @@
 using Prototype.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,15 +36,51 @@ namespace Prototype.Controller
             {
                 foreach (var enemy in _enemies)
                 {
-                    if (Vector3.Distance(enemy.transform.position, _player.transform.position) < _chaseRange)
+                    switch (enemy.CurrentState)
                     {
-                        enemy.Agent.SetDestination(_player.transform.position);
-                    }
-                    else
-                    {
-                        enemy.Agent.SetDestination(enemy.transform.position);
-                    }
+                        case EnemyModel.State.Idle:
+                            // Enemy is waiting
+                            if (Vector3.Distance(enemy.transform.position, _player.transform.position) < _chaseRange)
+                            {
+                                // Enemy first detected player in chase range
+                                enemy.Agent.SetDestination(_player.transform.position);
+                                enemy.CurrentState = EnemyModel.State.Chase;
+                            }
+                            break;
+                        case EnemyModel.State.Chase:
+                            // Enemy is chasing
+                            if (Vector3.Distance(enemy.transform.position, _player.transform.position) < _chaseRange)
+                            {
+                                // Enemy continues chasing the player
+                                enemy.Agent.SetDestination(_player.transform.position);
+                            }
+                            else if (Vector3.Distance(enemy.transform.position, _player.transform.position) > _chaseRange)
+                            {
+                                // Player leaved chase range
+                                enemy.Agent.SetDestination(enemy.transform.position);
+                                enemy.CurrentState = EnemyModel.State.Idle;
+                            }
 
+                            if (Vector3.Distance(enemy.transform.position, _player.transform.position) < enemy.AttackRange)
+                            {
+                                // Player is in attack range 
+                                enemy.CurrentState = EnemyModel.State.Attack;
+                            }
+                            break;
+                        case EnemyModel.State.Attack:
+                            // Enemy is attacking
+                            if (Vector3.Distance(enemy.transform.position, _player.transform.position) > enemy.AttackRange)
+                            {
+                                // Player leaved attack range
+                                enemy.CurrentState = EnemyModel.State.Chase;
+                            }
+                            break;
+                        case EnemyModel.State.Dead:
+                            // Enemy is dead
+                            break;
+                        default:
+                            throw new NotImplementedException($"Enemy {enemy} is in unknown state {enemy.CurrentState}");
+                    }
                     Debug.DrawRay(enemy.Agent.destination, Vector3.up * 2f, Color.red, _destUpdateRate);
                 }
 

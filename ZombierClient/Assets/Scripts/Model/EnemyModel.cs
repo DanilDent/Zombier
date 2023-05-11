@@ -29,6 +29,14 @@ namespace Prototype.Model
 
         public class Factory : PlaceholderFactory<IdData, EnemyData, EnemyModel> { }
 
+        public enum State
+        {
+            Idle = 0,
+            Chase,
+            Attack,
+            Dead,
+        };
+
         public IdData Id => _id;
         // IDamageable
         public float Health { get => _data.Health; set => _data.Health = value; }
@@ -37,6 +45,7 @@ namespace Prototype.Model
         public float MaxSpeed => _data.MaxSpeed;
         public float AttackRange => _data.Weapon.AttackRange;
         // Gameplay properties
+        public State CurrentState { get; set; }
         public NavMeshAgent Agent => _agent;
         public Rigidbody Rigidbody => _rigidbody;
         public Transform TargetPoint => _targetPoint.transform;

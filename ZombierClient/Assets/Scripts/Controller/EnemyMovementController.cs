@@ -1,5 +1,6 @@
 using Prototype.Model;
 using Prototype.Service;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -10,10 +11,11 @@ namespace Prototype.Controller
     {
         // Public
         [Inject]
-        public void Construct(GameplayEventService eventService, List<EnemyModel> enemies)
+        public void Construct(GameplayEventService eventService, List<EnemyModel> enemies, PlayerModel player)
         {
             _eventService = eventService;
             _enemies = enemies;
+            _player = player;
         }
 
         // Private
@@ -21,6 +23,7 @@ namespace Prototype.Controller
         // Injected
         private GameplayEventService _eventService;
         private List<EnemyModel> _enemies;
+        private PlayerModel _player;
         //
         [SerializeField] private float _obstacleAvoidanceRadius = 1f;
 
@@ -50,9 +53,28 @@ namespace Prototype.Controller
         private void UpdateEnemy(EnemyModel enemy)
         {
             SyncAgentWithTransform(enemy);
-
             HandlePathFindingInput(enemy);
-            HandleRotation(enemy);
+
+            switch (enemy.CurrentState)
+            {
+                case EnemyModel.State.Idle:
+                    // Enemy is waiting
+                    break;
+                case EnemyModel.State.Chase:
+                    // Enemy is chasing
+                    HandleRotationNoFight(enemy);
+                    break;
+                case EnemyModel.State.Attack:
+                    // Enemy is attacking
+                    HandleRotationFight(enemy);
+                    break;
+                case EnemyModel.State.Dead:
+                    // Enemy is dead
+                    break;
+                default:
+                    throw new NotImplementedException($"Enemy {enemy} is in unknown state {enemy.CurrentState}");
+            }
+
             HandleMovement(enemy);
 
             //_eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.MaxSpeed });
@@ -107,7 +129,7 @@ namespace Prototype.Controller
             }
         }
 
-        private void HandleRotation(EnemyModel enemy)
+        private void HandleRotationNoFight(EnemyModel enemy)
         {
             Vector3 positionToLookAt = new Vector3(enemy.CurrentMovement.x, 0f, enemy.CurrentMovement.z).normalized;
 
@@ -122,6 +144,23 @@ namespace Prototype.Controller
                 Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
                 enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.deltaTime);
             }
+        }
+
+        private void HandleRotationFight(EnemyModel enemy)
+        {
+            if (_player == null)
+                return;
+
+            Vector3 lookDireciton = _player.transform.position - enemy.transform.position;
+            lookDireciton = lookDireciton.normalized;
+
+            Vector3 postitionToLookAt = lookDireciton;
+            postitionToLookAt.y = 0;
+
+            Quaternion currentRotation = enemy.transform.rotation;
+            Quaternion targetRotation = Quaternion.LookRotation(postitionToLookAt);
+
+            enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.deltaTime);
         }
     }
 

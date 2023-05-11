@@ -1,4 +1,3 @@
-using Prototype.Data;
 using Prototype.ObjectPool;
 using Prototype.Service;
 using UnityEngine;
@@ -30,8 +29,6 @@ namespace Prototype.Model
         private MonoObjectPool<ProjectileModel> _pool;
         private Rigidbody _rigidbody;
         //
-        [SerializeField] private ProjectileData _projectileSO;
-
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out var target))

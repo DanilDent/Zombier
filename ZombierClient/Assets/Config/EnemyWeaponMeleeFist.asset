@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f0a8717dd4f7634a88f3365e2451701, type: 3}
-  m_Name: EnemyMeleeYBot
+  m_Script: {fileID: 11500000, guid: e81823000e49d4347b418407194d47c7, type: 3}
+  m_Name: EnemyWeaponMeleeFist
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -35,38 +35,11 @@ MonoBehaviour:
       Data: 0
     - Name: Value
       Entry: 4
-      Data: 0
+      Data: 5
     - Name: Chance
       Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: Resists
-      Entry: 7
-      Data: 1|Prototype.Data.DescDamage, Assembly-CSharp
-    - Name: 
-      Entry: 12
       Data: 1
     - Name: 
-      Entry: 7
-      Data: Prototype.Data.DescDamageType, Assembly-CSharp
-    - Name: Type
-      Entry: 3
-      Data: 0
-    - Name: Value
-      Entry: 4
-      Data: 0
-    - Name: Chance
-      Entry: 4
-      Data: 0
-    - Name: 
       Entry: 8
       Data: 
     - Name: 
@@ -75,8 +48,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  ViewPrefab: {fileID: 5222615015262736570, guid: 9b9ad4d1919c8f9489b9dd0a9ca2b167,
-    type: 3}
-  Health: 75
-  MaxSpeed: 1.8
-  Weapon: {fileID: 11400000, guid: 2e88d6b536e361348b1adedcee10bf0f, type: 2}
+  AttackRateRPM: 5
+  AttackRange: 1.8
+  Thrust: 0
+  Recoil: 0
+  ProjectileData: {fileID: 0}

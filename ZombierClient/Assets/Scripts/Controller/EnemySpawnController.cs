@@ -1,10 +1,13 @@
 using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
+
+using Random = UnityEngine.Random;
 
 namespace Prototype.Controller
 {
@@ -83,7 +86,9 @@ namespace Prototype.Controller
                     EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
                     IdData id = IdProviderService.GetNewId();
                     EnemyModel enemy = _enemyFactory.Create(id, enemyData);
-                    enemy.gameObject.name = $"Enemy#{id.ToString()}";
+                    string idStr = id.ToString();
+                    int nCharsToDisplay = 8;
+                    enemy.gameObject.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}";
 
                     newPosition.y = 0f;
                     enemy.transform.position = newPosition;

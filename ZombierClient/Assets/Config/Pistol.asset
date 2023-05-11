@@ -48,8 +48,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  AttackRateRPM: 20
+  AttackRateRPM: 75
   AttackRange: 8
-  Thrust: 1
+  Thrust: 200
   Recoil: 3
   ProjectileData: {fileID: 11400000, guid: 7c6e8c6526ce2d24bbe77d0dc787ea70, type: 2}

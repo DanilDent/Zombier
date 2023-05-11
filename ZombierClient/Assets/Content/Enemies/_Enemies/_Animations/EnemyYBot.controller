@@ -45,19 +45,19 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: bb31149c6d94bae4a890c5dfdddcec02, type: 2}
-    m_Threshold: 0.5
+    m_Threshold: 1
     m_Position: {x: 0, y: 1}
     m_TimeScale: 4.05
     m_CycleOffset: 0
     m_DirectBlendParameter: Velocity
     m_Mirror: 0
-  m_BlendParameter: VelocityX
-  m_BlendParameterY: VelocityZ
+  m_BlendParameter: Velocity
+  m_BlendParameterY: Velocity
   m_MinThreshold: 0
-  m_MaxThreshold: 0.5
+  m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
-  m_BlendType: 2
+  m_BlendType: 0
 --- !u!1101 &-7757147511178906594
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -343,14 +343,6 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 0111da6e96b2ea340a16441b85e593e2, type: 2}
-    m_Threshold: -0.5
-    m_Position: {x: 0, y: -0.5}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Velocity
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 4de94d1f2af12684896c27c5e6586775, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
@@ -360,35 +352,19 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: bb31149c6d94bae4a890c5dfdddcec02, type: 2}
-    m_Threshold: 0.5
+    m_Threshold: 1
     m_Position: {x: 0, y: 1}
     m_TimeScale: 4.05
     m_CycleOffset: 0
     m_DirectBlendParameter: Velocity
     m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 6414ad0842a77254eb74718e34e35b26, type: 2}
-    m_Threshold: 1
-    m_Position: {x: -0.5, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Velocity
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 9d1dcec2602357d47af3d23aa69afe9f, type: 2}
-    m_Threshold: 1.5
-    m_Position: {x: 0.5, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Velocity
-    m_Mirror: 0
-  m_BlendParameter: VelocityX
-  m_BlendParameterY: VelocityZ
-  m_MinThreshold: -0.5
-  m_MaxThreshold: 1.5
+  m_BlendParameter: Velocity
+  m_BlendParameterY: Velocity
+  m_MinThreshold: 0
+  m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
-  m_BlendType: 2
+  m_BlendType: 0
 --- !u!1102 &-3121604236925506096
 AnimatorState:
   serializedVersion: 6
@@ -533,13 +509,7 @@ AnimatorController:
   m_Name: EnemyYBot
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: VelocityX
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: VelocityZ
+  - m_Name: Velocity
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0

@@ -22,6 +22,9 @@ namespace Prototype.View
         private void Start()
         {
             _velocityHash = Animator.StringToHash("Velocity");
+            _hitDirXHash = Animator.StringToHash("HitDirX");
+            _hitDirZHash = Animator.StringToHash("HitDirZ");
+            _hitTriggerHash = Animator.StringToHash("HitTrigger");
 
             float offset = Random.Range(0f, 1f);
             foreach (var fullStateName in _startStateNames)
@@ -35,11 +38,13 @@ namespace Prototype.View
         private void OnEnable()
         {
             _eventService.EnemyMoved += HandleMovementAnimation;
+            _eventService.EnemyHit += HandleHitAnimation;
         }
 
         private void OnDisable()
         {
             _eventService.EnemyMoved -= HandleMovementAnimation;
+            _eventService.EnemyHit -= HandleHitAnimation;
         }
 
         [SerializeField] private List<string> _startStateNames;
@@ -50,12 +55,33 @@ namespace Prototype.View
         private Animator _animator;
         //
         private int _velocityHash;
+        private int _hitDirXHash;
+        private int _hitDirZHash;
+        private int _hitTriggerHash;
 
         private void HandleMovementAnimation(object sender, GameplayEventService.EnemyMovedEventArgs e)
         {
             if (_id == e.Id)
             {
                 _animator.SetFloat(_velocityHash, e.Value);
+            }
+        }
+
+        private void HandleHitAnimation(object sender, GameplayEventService.EnemyHitEventArgs e)
+        {
+            if (_id == e.EntityId)
+            {
+                Vector3 localHitDir = transform.InverseTransformDirection(e.HitDirection);
+
+                float hitDirX = localHitDir.x;
+                float hitDirZ = localHitDir.z;
+
+                hitDirX = Mathf.Clamp(hitDirX, -1f, 1f);
+                hitDirZ = Mathf.Clamp(hitDirZ, -1f, 0f);
+
+                _animator.SetFloat(_hitDirXHash, hitDirX);
+                _animator.SetFloat(_hitDirZHash, hitDirZ);
+                _animator.SetTrigger(_hitTriggerHash);
             }
         }
     }

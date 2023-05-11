@@ -19,6 +19,7 @@ namespace Prototype.Service
         public event EventHandler<DeathEventArgs> Death;
 
         public event EventHandler<EnemyMovedEventArgs> EnemyMoved;
+        public event EventHandler<EnemyHitEventArgs> EnemyHit;
         #endregion
 
         #region EventArgs
@@ -42,6 +43,12 @@ namespace Prototype.Service
         {
             public IdData Id;
             public float Value;
+        }
+
+        public class EnemyHitEventArgs : EventArgs
+        {
+            public IdData EntityId;
+            public Vector3 HitDirection;
         }
 
         #endregion
@@ -90,6 +97,11 @@ namespace Prototype.Service
         public void OnEnemyMoved(EnemyMovedEventArgs e)
         {
             EnemyMoved?.Invoke(this, e);
+        }
+
+        public void OnEnemyHit(EnemyHitEventArgs e)
+        {
+            EnemyHit?.Invoke(this, e);
         }
         #endregion
     }

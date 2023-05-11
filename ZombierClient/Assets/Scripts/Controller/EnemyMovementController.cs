@@ -77,7 +77,7 @@ namespace Prototype.Controller
 
             HandleMovement(enemy);
 
-            //_eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.MaxSpeed });
+            _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.MaxSpeed });
         }
 
         private void SyncAgentWithTransform(EnemyModel enemy)

@@ -31,9 +31,14 @@ namespace Prototype.Model
         //
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.TryGetComponent<IDamageable>(out var target))
+            if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
             {
-                _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs { Attacker = Sender, Defender = target });
+                _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs { Attacker = Sender, Defender = damageable });
+
+                if (damageable is EnemyModel cast)
+                {
+                    _eventService.OnEnemyHit(new GameplayEventService.EnemyHitEventArgs { EntityId = cast.Id, HitDirection = _rigidbody.velocity });
+                }
             }
             _pool.Destroy(this);
         }

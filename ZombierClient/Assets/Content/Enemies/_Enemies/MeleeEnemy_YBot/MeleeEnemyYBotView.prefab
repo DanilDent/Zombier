@@ -2378,3 +2378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb239487a61403d49a080fbbc8644575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startStateNames:
+  - Bottom.Locomotion
+  - Top.Locomotion

@@ -1,5 +1,6 @@
 using Prototype.Data;
 using Prototype.Service;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -23,8 +24,12 @@ namespace Prototype.View
             _velocityHash = Animator.StringToHash("Velocity");
 
             float offset = Random.Range(0f, 1f);
-            int layers = 0;
-            _animator.Play(START_STATE_NAME, layers, offset);
+            foreach (var fullStateName in _startStateNames)
+            {
+                string layerName = fullStateName.Substring(0, fullStateName.IndexOf('.'));
+                int layerIndex = _animator.GetLayerIndex(layerName);
+                _animator.Play(fullStateName, layerIndex, offset);
+            }
         }
 
         private void OnEnable()
@@ -37,7 +42,7 @@ namespace Prototype.View
             _eventService.EnemyMoved -= HandleMovementAnimation;
         }
 
-        private const string START_STATE_NAME = "Base Layer.Locomotion";
+        [SerializeField] private List<string> _startStateNames;
 
         // Injected
         private IdData _id;

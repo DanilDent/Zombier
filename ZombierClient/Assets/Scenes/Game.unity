@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _session: {fileID: 11400000, guid: a91cc4208b05708489c53eb9673c42eb, type: 2}
-  _projectilePoolSize: 100
+  _projectilePoolSize: 20
 --- !u!1 &225224270
 GameObject:
   m_ObjectHideFlags: 0

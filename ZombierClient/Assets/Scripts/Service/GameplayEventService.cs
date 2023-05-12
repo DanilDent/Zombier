@@ -8,6 +8,7 @@ namespace Prototype.Service
     public class GameplayEventService
     {
         #region Events
+
         public event EventHandler PlayerStartFight;
         public event EventHandler PlayerStopFight;
         public event EventHandler PlayerDeath;
@@ -20,9 +21,13 @@ namespace Prototype.Service
 
         public event EventHandler<EnemyMovedEventArgs> EnemyMoved;
         public event EventHandler<EnemyHitEventArgs> EnemyHit;
+        public event EventHandler<EnemyAttackEventArgs> EnemyAttack;
+        public event EventHandler<EnemyAttackAnimationEventArgs> EnemyAttackAnimationEvent;
+
         #endregion
 
         #region EventArgs
+
         public class PlayerMovedEventArgs : EventArgs
         {
             public Vector3 Movement;
@@ -51,9 +56,20 @@ namespace Prototype.Service
             public Vector3 HitDirection;
         }
 
+        public class EnemyAttackEventArgs : EventArgs
+        {
+            public IdData EntityId;
+        }
+
+        public class EnemyAttackAnimationEventArgs : EventArgs
+        {
+
+        }
+
         #endregion
 
         #region Invokers
+
         public void OnPlayerStartFight()
         {
             PlayerStartFight?.Invoke(this, EventArgs.Empty);
@@ -103,6 +119,17 @@ namespace Prototype.Service
         {
             EnemyHit?.Invoke(this, e);
         }
+
+        public void OnEnemyAttack(EnemyAttackEventArgs e)
+        {
+            EnemyAttack?.Invoke(this, e);
+        }
+
+        public void OnEnemyAttackAnimationEvent(EnemyAttackAnimationEventArgs e)
+        {
+            EnemyAttackAnimationEvent?.Invoke(this, e);
+        }
+
         #endregion
     }
 }

@@ -80,3 +80,5 @@ MonoBehaviour:
   Health: 50
   MaxSpeed: 1.8
   Weapon: {fileID: 11400000, guid: cce01ccfc419c9a4a80eb9cd09ddb572, type: 2}
+  AttackStrategies:
+  - Type: 1

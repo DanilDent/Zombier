@@ -5,7 +5,7 @@ using Zenject;
 namespace Prototype.Model
 {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerModel : MonoBehaviour, IDamaging
+    public class PlayerModel : MonoBehaviour, IDamaging, IDamageable
     {
         // Public
 
@@ -38,13 +38,18 @@ namespace Prototype.Model
         public float CritMultiplier { get => _data.CritMultiplier; set => _data.CritMultiplier = value; }
         // !IDamaging
 
+        // IDamageable
+        public float Health { get => _data.Health; set => _data.Health = value; }
+        public DescDamage Resists => _data.Resists;
+        // !IDamageable
+
         public WeaponModel WeaponModel => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
         public float Speed
         {
-            get => _data.Speed;
-            set => _data.Speed = value;
+            get => _data.MaxSpeed;
+            set => _data.MaxSpeed = value;
         }
         public float RotationSpeed => _rotationSpeed;
         public State CurrentState { get; set; }

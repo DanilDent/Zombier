@@ -90,11 +90,13 @@ namespace Prototype
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>().
                 FromFactory<PrefabFactory<EnemyView>>();
 
+            Container.BindFactory<EnemyModel, MeleeAttackStrategy, MeleeAttackStrategy.Factory>();
+            Container.BindFactory<EnemyModel, RangeAttackStrategy, RangeAttackStrategy.Factory>();
+            Container.BindFactory<DescAttackStrategy.StrategyType, EnemyModel, IAttackStrategy, AttackStrategyFactory>()
+                .FromFactory<AttackStrategyByStrategyTypeFactory>();
+
             Container.Bind<List<EnemyModel>>().AsSingle();
 
-            Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
-            Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
-            Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
 
             // VFX
             Container.Bind<ParticleSystem>().FromComponentsInChildren().AsTransient();
@@ -105,7 +107,9 @@ namespace Prototype
             Container.Bind<Animator>().FromComponentInChildren().AsTransient();
             Container.Bind<CharacterController>().FromComponentInChildren().AsTransient();
             Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
-
+            Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
         }
 
         private Transform GetMarker<T>(InjectContext context)

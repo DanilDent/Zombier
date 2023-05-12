@@ -10,12 +10,16 @@ namespace Prototype.Data
     public class PlayerData : SerializedScriptableObject
     {
         public PlayerModel PlayerPrefab;
-        public int Health;
-        public int MaxHealth;
-        public float Speed;
+        public float MaxSpeed;
+
         [NonSerialized] [OdinSerialize] public DescDamage Damage;
         public float CritChance;
         public float CritMultiplier;
+
+        public float Health;
+        public float MaxHealth;
+        [NonSerialized] [OdinSerialize] public DescDamage Resists;
+
         public WeaponData Weapon;
     }
 }

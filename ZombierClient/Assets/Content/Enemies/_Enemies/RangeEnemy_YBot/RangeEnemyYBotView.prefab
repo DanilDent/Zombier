@@ -2379,5 +2379,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startStateNames:
-  - Bottom.Locomotion
-  - Top.Locomotion
+  - Base Layer.Locomotion

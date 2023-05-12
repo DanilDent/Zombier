@@ -1,4 +1,5 @@
 using Prototype.Data;
+using Prototype.Model;
 using Prototype.Service;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,11 @@ namespace Prototype.View
             _animator.SetLayerWeight(_hitLayerIndex, 0f);
         }
 
+        public void OnDeathAnimationEvent()
+        {
+            _eventService.OnDeathAnimationEvent(new GameplayEventService.DeathAnimationEventArgs { EntityId = _id });
+        }
+
         // Private
 
         private void Start()
@@ -43,6 +49,7 @@ namespace Prototype.View
             _hitTriggerHash = Animator.StringToHash("HitTrigger");
             _attackTriggersHashes.Add(Animator.StringToHash("Attack0Trigger"));
             _attackTriggersHashes.Add(Animator.StringToHash("Attack1Trigger"));
+            _deathTrigger = Animator.StringToHash("DeathTrigger");
 
             float offset = Random.Range(0f, 1f);
             foreach (var fullStateName in _startStateNames)
@@ -58,6 +65,7 @@ namespace Prototype.View
             _eventService.EnemyMoved += HandleMovementAnimation;
             _eventService.EnemyHit += HandleHitAnimation;
             _eventService.EnemyAttack += HandleEnemyAttackAnimation;
+            _eventService.Death += HandleDeathAnimaiton;
         }
 
         private void OnDisable()
@@ -65,6 +73,7 @@ namespace Prototype.View
             _eventService.EnemyMoved -= HandleMovementAnimation;
             _eventService.EnemyHit -= HandleHitAnimation;
             _eventService.EnemyAttack -= HandleEnemyAttackAnimation;
+            _eventService.Death -= HandleDeathAnimaiton;
         }
 
         [SerializeField] private List<string> _startStateNames;
@@ -79,6 +88,7 @@ namespace Prototype.View
         private int _hitDirZHash;
         private int _hitTriggerHash;
         private List<int> _attackTriggersHashes;
+        private int _deathTrigger;
         private int _hitLayerIndex;
 
         private void HandleMovementAnimation(object sender, GameplayEventService.EnemyMovedEventArgs e)
@@ -114,6 +124,14 @@ namespace Prototype.View
             {
                 int attackTriggerHash = _attackTriggersHashes[Random.Range(0, _attackTriggersHashes.Count)];
                 _animator.SetTrigger(attackTriggerHash);
+            }
+        }
+
+        private void HandleDeathAnimaiton(object sender, GameplayEventService.DeathEventArgs e)
+        {
+            if (e.Entity is EnemyModel cast && _id == cast.Id)
+            {
+                _animator.SetTrigger(_deathTrigger);
             }
         }
     }

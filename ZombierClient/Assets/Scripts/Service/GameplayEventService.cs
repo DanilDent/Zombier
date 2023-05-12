@@ -18,6 +18,7 @@ namespace Prototype.Service
 
         public event EventHandler<DamagedEventArgs> Damaged;
         public event EventHandler<DeathEventArgs> Death;
+        public event EventHandler<DeathAnimationEventArgs> DeathAnimationEvent;
 
         public event EventHandler<EnemyMovedEventArgs> EnemyMoved;
         public event EventHandler<EnemyHitEventArgs> EnemyHit;
@@ -42,6 +43,11 @@ namespace Prototype.Service
         public class DeathEventArgs : EventArgs
         {
             public IDamageable Entity;
+        }
+
+        public class DeathAnimationEventArgs : EventArgs
+        {
+            public IdData EntityId;
         }
 
         public class EnemyMovedEventArgs : EventArgs
@@ -108,6 +114,11 @@ namespace Prototype.Service
         public void OnDeath(DeathEventArgs e)
         {
             Death?.Invoke(this, e);
+        }
+
+        public void OnDeathAnimationEvent(DeathAnimationEventArgs e)
+        {
+            DeathAnimationEvent?.Invoke(this, e);
         }
 
         public void OnEnemyMoved(EnemyMovedEventArgs e)

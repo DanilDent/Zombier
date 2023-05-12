@@ -35,7 +35,7 @@ MonoBehaviour:
       Data: 0
     - Name: Value
       Entry: 4
-      Data: 0
+      Data: 25
     - Name: Chance
       Entry: 4
       Data: 1
@@ -48,8 +48,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  AttackRateRPM: 5
-  AttackRange: 8
+  AttackRateRPM: 100
+  AttackRange: 10
   Thrust: 200
   Recoil: 3
   ProjectileData: {fileID: 11400000, guid: 7c6e8c6526ce2d24bbe77d0dc787ea70, type: 2}

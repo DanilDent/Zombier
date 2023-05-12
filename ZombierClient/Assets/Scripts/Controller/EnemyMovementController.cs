@@ -53,7 +53,6 @@ namespace Prototype.Controller
         private void UpdateEnemy(EnemyModel enemy)
         {
             SyncAgentWithTransform(enemy);
-            HandlePathFindingInput(enemy);
 
             switch (enemy.CurrentState)
             {
@@ -62,11 +61,15 @@ namespace Prototype.Controller
                     break;
                 case EnemyModel.State.Chase:
                     // Enemy is chasing
+                    HandlePathFindingInput(enemy);
                     HandleRotationNoFight(enemy);
+                    HandleMovement(enemy);
                     break;
                 case EnemyModel.State.Attack:
                     // Enemy is attacking
+                    HandlePathFindingInput(enemy);
                     HandleRotationFight(enemy);
+                    HandleMovement(enemy);
                     break;
                 case EnemyModel.State.Dead:
                     // Enemy is dead
@@ -74,8 +77,6 @@ namespace Prototype.Controller
                 default:
                     throw new NotImplementedException($"Enemy {enemy} is in unknown state {enemy.CurrentState}");
             }
-
-            HandleMovement(enemy);
 
             _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.MaxSpeed });
         }

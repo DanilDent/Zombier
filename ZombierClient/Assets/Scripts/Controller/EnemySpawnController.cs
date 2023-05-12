@@ -3,6 +3,7 @@ using Prototype.Model;
 using Prototype.Service;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -40,6 +41,7 @@ namespace Prototype.Controller
         private EnemyModel.Factory _enemyFactory;
         private PlayerModel _player;
         [SerializeField] private List<EnemyModel> _enemies;
+        private List<EnemyModel> _enemiesToDestroy;
         //
 
         // Minimal spawn enemy distance from player
@@ -53,18 +55,22 @@ namespace Prototype.Controller
         {
             float distancePlayerToExit = Vector3.Distance(_player.transform.position, _level.ExitPoint.transform.position);
             _allowedCenterPointRange = distancePlayerToExit - _minDistanceFromPlayer - _maxSampleDistance;
+
+            _enemiesToDestroy = new List<EnemyModel>();
         }
 
         private void OnEnable()
         {
-            _eventService.Death += DespawnEnemy;
+            _eventService.Death += HandleDeath;
+            _eventService.DeathAnimationEvent += HandleDeathAnimationEvent;
 
             SpawnEnemies();
         }
 
         private void OnDisable()
         {
-            _eventService.Death -= DespawnEnemy;
+            _eventService.Death -= HandleDeath;
+            _eventService.DeathAnimationEvent -= HandleDeathAnimationEvent;
         }
 
         private void Update()
@@ -137,15 +143,24 @@ namespace Prototype.Controller
             return false;
         }
 
-        private void DespawnEnemy(object sender, GameplayEventService.DeathEventArgs e)
+        private void HandleDeath(object sender, GameplayEventService.DeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast)
             {
                 _enemies.Remove(cast);
                 cast.Agent.enabled = false;
-                float destroyDelay = 1f;
-                Destroy(cast.gameObject, destroyDelay);
+                cast.Rigidbody.velocity = Vector3.zero;
+                cast.Rigidbody.useGravity = false;
+                cast.GetComponent<Collider>().enabled = false;
+                _enemiesToDestroy.Add(cast);
             }
+        }
+
+        private void HandleDeathAnimationEvent(object sender, GameplayEventService.DeathAnimationEventArgs e)
+        {
+            EnemyModel toDestroy = _enemiesToDestroy.FirstOrDefault(_ => _.Id == e.EntityId);
+            float destroyDelay = 1f;
+            Destroy(toDestroy.gameObject, destroyDelay);
         }
 
         // Debug 

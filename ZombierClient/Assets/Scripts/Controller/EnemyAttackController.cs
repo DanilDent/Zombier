@@ -196,7 +196,8 @@ namespace Prototype.Controller
             EnemyProjectileModel projectile = _projectilePool.Create(_enemy.ProjectilePrefab, _enemy.ShootingPoint.position, rot);
             projectile.Sender = _enemy;
 
-            projectile.Rigidbody.AddForce(shootDir * _enemy.Thrust, ForceMode.Impulse);
+            float randomThrustMultiplier = 1.5f;
+            projectile.Rigidbody.AddForce(shootDir * Random.Range(_enemy.Thrust, _enemy.Thrust * randomThrustMultiplier), ForceMode.Impulse);
             float torqueMultiplier = 1000f;
             projectile.Rigidbody.AddTorque(Random.insideUnitSphere * torqueMultiplier);
         }

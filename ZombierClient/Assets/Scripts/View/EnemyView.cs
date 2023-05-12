@@ -33,7 +33,7 @@ namespace Prototype.View
 
         public void OnDeathAnimationEvent()
         {
-            _eventService.OnDeathAnimationEvent(new GameplayEventService.DeathAnimationEventArgs { EntityId = _id });
+            _eventService.OnEnemyDeathAnimationEvent(new GameplayEventService.EnemyDeathAnimationEventArgs { EntityId = _id });
         }
 
         // Private
@@ -65,7 +65,7 @@ namespace Prototype.View
             _eventService.EnemyMoved += HandleMovementAnimation;
             _eventService.EnemyHit += HandleHitAnimation;
             _eventService.EnemyAttack += HandleEnemyAttackAnimation;
-            _eventService.Death += HandleDeathAnimaiton;
+            _eventService.EnemyDeath += HandleDeathAnimaiton;
         }
 
         private void OnDisable()
@@ -73,7 +73,7 @@ namespace Prototype.View
             _eventService.EnemyMoved -= HandleMovementAnimation;
             _eventService.EnemyHit -= HandleHitAnimation;
             _eventService.EnemyAttack -= HandleEnemyAttackAnimation;
-            _eventService.Death -= HandleDeathAnimaiton;
+            _eventService.EnemyDeath -= HandleDeathAnimaiton;
         }
 
         [SerializeField] private List<string> _startStateNames;
@@ -127,7 +127,7 @@ namespace Prototype.View
             }
         }
 
-        private void HandleDeathAnimaiton(object sender, GameplayEventService.DeathEventArgs e)
+        private void HandleDeathAnimaiton(object sender, GameplayEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast && _id == cast.Id)
             {

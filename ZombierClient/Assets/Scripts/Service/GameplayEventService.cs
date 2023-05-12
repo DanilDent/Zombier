@@ -17,8 +17,9 @@ namespace Prototype.Service
         public event EventHandler PlayerShootAnimationEvent;
 
         public event EventHandler<DamagedEventArgs> Damaged;
-        public event EventHandler<DeathEventArgs> Death;
-        public event EventHandler<DeathAnimationEventArgs> DeathAnimationEvent;
+        public event EventHandler<EnemyDeathEventArgs> EnemyDeath;
+        public event EventHandler<EnemyDeathEventArgs> EnemyDeathInstant;
+        public event EventHandler<EnemyDeathAnimationEventArgs> EnemyDeathAnimationEvent;
 
         public event EventHandler<EnemyMovedEventArgs> EnemyMoved;
         public event EventHandler<EnemyHitEventArgs> EnemyHit;
@@ -40,12 +41,12 @@ namespace Prototype.Service
             public IDamageable Defender;
         }
 
-        public class DeathEventArgs : EventArgs
+        public class EnemyDeathEventArgs : EventArgs
         {
             public IDamageable Entity;
         }
 
-        public class DeathAnimationEventArgs : EventArgs
+        public class EnemyDeathAnimationEventArgs : EventArgs
         {
             public IdData EntityId;
         }
@@ -112,14 +113,19 @@ namespace Prototype.Service
             Damaged?.Invoke(this, e);
         }
 
-        public void OnDeath(DeathEventArgs e)
+        public void OnEnemyDeath(EnemyDeathEventArgs e)
         {
-            Death?.Invoke(this, e);
+            EnemyDeath?.Invoke(this, e);
         }
 
-        public void OnDeathAnimationEvent(DeathAnimationEventArgs e)
+        public void OnEnemyDeathAnimationEvent(EnemyDeathAnimationEventArgs e)
         {
-            DeathAnimationEvent?.Invoke(this, e);
+            EnemyDeathAnimationEvent?.Invoke(this, e);
+        }
+
+        public void OnEnemyDeathInstant(EnemyDeathEventArgs e)
+        {
+            EnemyDeathInstant?.Invoke(this, e);
         }
 
         public void OnEnemyMoved(EnemyMovedEventArgs e)

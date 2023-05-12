@@ -1,4 +1,5 @@
-﻿using Prototype.ObjectPool;
+﻿using Prototype.Model;
+using Prototype.ObjectPool;
 using Prototype.Service;
 using Prototype.View;
 using UnityEngine;
@@ -11,10 +12,14 @@ namespace Prototype.Controller
         // Public
 
         [Inject]
-        public void Construct(GameplayEventService eventService, MonoObjectPool<HitBloodSplashVFXView> hitVFXPool)
+        public void Construct(
+            GameplayEventService eventService,
+            MonoObjectPool<HitBloodSplashVFXView> hitVFXPool,
+            MonoObjectPool<DeathBloodSplashVFXView> deathVFXPool)
         {
             _eventService = eventService;
             _hitVFXPool = hitVFXPool;
+            _deathVFXPool = deathVFXPool;
         }
 
         // Private
@@ -22,21 +27,34 @@ namespace Prototype.Controller
         // Injected
         private GameplayEventService _eventService;
         private MonoObjectPool<HitBloodSplashVFXView> _hitVFXPool;
+        private MonoObjectPool<DeathBloodSplashVFXView> _deathVFXPool;
 
         private void OnEnable()
         {
             _eventService.EnemyHit += HandleHitVFX;
+            _eventService.EnemyDeathInstant += HandleDeathVFX;
         }
 
         private void OnDisable()
         {
             _eventService.EnemyHit -= HandleHitVFX;
+            _eventService.EnemyDeathInstant -= HandleDeathVFX;
         }
 
         private void HandleHitVFX(object sender, GameplayEventService.EnemyHitEventArgs e)
         {
-            HitBloodSplashVFXView instance = _hitVFXPool.Create(e.HitPosition + Vector3.up * Random.Range(-0.5f, 0.5f), Quaternion.identity);
+            HitBloodSplashVFXView instance = _hitVFXPool.Create(e.HitPosition + Vector3.up * Random.Range(-0.2f, 0.2f), Quaternion.identity);
             StartCoroutine(_hitVFXPool.Destroy(instance, instance.Duration));
+        }
+
+        private void HandleDeathVFX(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        {
+            if (e.Entity is EnemyModel cast)
+            {
+                float enemyHeight = 1f;
+                DeathBloodSplashVFXView instance = _deathVFXPool.Create(cast.transform.position + Vector3.up * enemyHeight * 0.5f, Quaternion.identity);
+                StartCoroutine(_deathVFXPool.Destroy(instance, instance.Duration));
+            }
         }
     }
 }

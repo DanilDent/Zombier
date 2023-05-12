@@ -61,16 +61,18 @@ namespace Prototype.Controller
 
         private void OnEnable()
         {
-            _eventService.Death += HandleDeath;
-            _eventService.DeathAnimationEvent += HandleDeathAnimationEvent;
+            _eventService.EnemyDeath += HandleDeath;
+            _eventService.EnemyDeathAnimationEvent += HandleDeathAnimationEvent;
+            _eventService.EnemyDeathInstant += HandleDeathInstant;
 
             SpawnEnemies();
         }
 
         private void OnDisable()
         {
-            _eventService.Death -= HandleDeath;
-            _eventService.DeathAnimationEvent -= HandleDeathAnimationEvent;
+            _eventService.EnemyDeath -= HandleDeath;
+            _eventService.EnemyDeathAnimationEvent -= HandleDeathAnimationEvent;
+            _eventService.EnemyDeathInstant -= HandleDeathInstant;
         }
 
         private void Update()
@@ -143,7 +145,7 @@ namespace Prototype.Controller
             return false;
         }
 
-        private void HandleDeath(object sender, GameplayEventService.DeathEventArgs e)
+        private void HandleDeath(object sender, GameplayEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast)
             {
@@ -156,7 +158,20 @@ namespace Prototype.Controller
             }
         }
 
-        private void HandleDeathAnimationEvent(object sender, GameplayEventService.DeathAnimationEventArgs e)
+        private void HandleDeathInstant(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        {
+            if (e.Entity is EnemyModel cast)
+            {
+                _enemies.Remove(cast);
+                cast.Agent.enabled = false;
+                cast.Rigidbody.velocity = Vector3.zero;
+                cast.Rigidbody.useGravity = false;
+                cast.GetComponent<Collider>().enabled = false;
+                Destroy(cast.gameObject, 0.1f);
+            }
+        }
+
+        private void HandleDeathAnimationEvent(object sender, GameplayEventService.EnemyDeathAnimationEventArgs e)
         {
             EnemyModel toDestroy = _enemiesToDestroy.FirstOrDefault(_ => _.Id == e.EntityId);
             float destroyDelay = 1f;

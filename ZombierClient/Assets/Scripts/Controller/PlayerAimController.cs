@@ -37,7 +37,6 @@ namespace Prototype.Controller
         [SerializeField] private float _targetTranstiionMultiplier = 9f;
         [SerializeField] private float _stateUpdateRate = 0.1f;
 
-
         private void Start()
         {
             StartCoroutine(UpdatePlayerState());

@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Prototype.View
 {
-    public class MuzzleFlashView : MonoBehaviour
+    public class MuzzleFlashVFXView : MonoBehaviour
     {
         [Inject]
         public void Construct(GameplayEventService eventService, List<ParticleSystem> particleSystems)

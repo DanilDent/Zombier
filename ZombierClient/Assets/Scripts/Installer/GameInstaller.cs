@@ -24,6 +24,17 @@ namespace Prototype
             // Config
             Container.Bind<GameplaySessionData>().FromInstance(_session).AsSingle();
 
+            // Unity components
+            Container.Bind<Animator>().FromComponentInChildren().AsTransient();
+            Container.Bind<CharacterController>().FromComponentInChildren().AsTransient();
+            Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
+            Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerShootingPointPlayer>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerGround>().FromComponentInHierarchy().AsCached();
+            // !Unity components
+
             // Camera
             Container.Bind<CinemachineVirtualCamera>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesTo<CameraController>().AsSingle();
@@ -113,17 +124,36 @@ namespace Prototype
 
             // VFX
             Container.Bind<ParticleSystem>().FromComponentsInChildren().AsTransient();
+            Container.BindFactory<UnityEngine.Object, HitBloodSplashVFXView, PoolObjectFactory<HitBloodSplashVFXView>>()
+                .FromFactory<PrefabFactory<HitBloodSplashVFXView>>();
+            Container.BindFactory<UnityEngine.Object, DeathBloodSplashVFXView, PoolObjectFactory<DeathBloodSplashVFXView>>()
+                .FromFactory<PrefabFactory<DeathBloodSplashVFXView>>();
+            Container.Bind<MonoObjectPool<HitBloodSplashVFXView>>()
+                .AsSingle()
+                .OnInstantiated((ctx, obj) =>
+                {
+                    if (obj is MonoObjectPool<HitBloodSplashVFXView> pool)
+                    {
+                        var prefab = _session.HitVFXPrefab;
+                        var tranfromContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
+                        pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                    }
+                })
+                .NonLazy();
+            Container.Bind<MonoObjectPool<DeathBloodSplashVFXView>>()
+               .AsSingle()
+               .OnInstantiated((ctx, obj) =>
+               {
+                   if (obj is MonoObjectPool<DeathBloodSplashVFXView> pool)
+                   {
+                       var prefab = _session.DeathVFXPrefab;
+                       var tranfromContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
+                       pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                   }
+               })
+               .NonLazy();
 
             //// !Game entities
-
-            // Unity components
-            Container.Bind<Animator>().FromComponentInChildren().AsTransient();
-            Container.Bind<CharacterController>().FromComponentInChildren().AsTransient();
-            Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
-            Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
-            Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
-            Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
-            Container.Bind<MarkerShootingPointPlayer>().FromComponentInChildren().AsTransient();
         }
 
         private Transform GetMarker<T>(InjectContext context)

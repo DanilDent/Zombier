@@ -1,4 +1,5 @@
 ﻿using Prototype.Model;
+using Prototype.View;
 using UnityEngine;
 
 namespace Prototype.Data
@@ -12,5 +13,7 @@ namespace Prototype.Data
         public LocationData Location;
         public EnemyModel EnemyPrefab;
         public EnemyProjectileModel EnemyProjectilePrefab;
+        public HitBloodSplashVFXView HitVFXPrefab;
+        public DeathBloodSplashVFXView DeathVFXPrefab;
     }
 }

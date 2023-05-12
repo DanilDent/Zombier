@@ -11,6 +11,7 @@ namespace Prototype.ObjectPool
         private PoolObjectFactory<T> _factory;
         private Queue<T> _queue;
         private Transform _transformContainer;
+        private T _prefab;
 
         [Inject]
         public MonoObjectPool(PoolObjectFactory<T> factory)
@@ -22,6 +23,7 @@ namespace Prototype.ObjectPool
 
         public void Initialize(T prefab, int count, Transform transformContainer)
         {
+            _prefab = prefab;
             _transformContainer = transformContainer;
 
             for (int i = 0; i < count; ++i)
@@ -30,6 +32,16 @@ namespace Prototype.ObjectPool
                 instance.gameObject.SetActive(false);
                 _queue.Enqueue(instance);
             }
+        }
+
+        public T Create()
+        {
+            return Create(_prefab);
+        }
+
+        public T Create(Vector3 position, Quaternion rotation)
+        {
+            return Create(_prefab, position, rotation);
         }
 
         public T Create(T prefab)

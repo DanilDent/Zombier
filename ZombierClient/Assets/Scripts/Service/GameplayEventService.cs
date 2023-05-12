@@ -60,6 +60,7 @@ namespace Prototype.Service
         {
             public IdData EntityId;
             public Vector3 HitDirection;
+            public Vector3 HitPosition;
         }
 
         public class EnemyAttackEventArgs : EventArgs

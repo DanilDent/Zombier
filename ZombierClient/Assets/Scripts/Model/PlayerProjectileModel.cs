@@ -29,7 +29,12 @@ namespace Prototype.Model
 
                 if (damageable is EnemyModel cast)
                 {
-                    _eventService.OnEnemyHit(new GameplayEventService.EnemyHitEventArgs { EntityId = cast.Id, HitDirection = _rigidbody.velocity });
+                    _eventService.OnEnemyHit(new GameplayEventService.EnemyHitEventArgs
+                    {
+                        EntityId = cast.Id,
+                        HitDirection = _rigidbody.velocity,
+                        HitPosition = transform.position
+                    });
                 }
             }
             _pool.Destroy(this);

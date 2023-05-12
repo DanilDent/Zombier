@@ -19,3 +19,7 @@ MonoBehaviour:
     type: 3}
   EnemyProjectilePrefab: {fileID: 4399411131317001658, guid: 859f4d5677b0b474c9cc85d33a878119,
     type: 3}
+  HitVFXPrefab: {fileID: 4372032879626012399, guid: 9836c17714a58f7479e7069c00e52f5b,
+    type: 3}
+  DeathVFXPrefab: {fileID: 1595422084901427750, guid: 08b22b4bf284aed4a8cdf223ee727b9f,
+    type: 3}

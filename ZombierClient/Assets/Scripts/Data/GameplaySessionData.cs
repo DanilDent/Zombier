@@ -11,5 +11,6 @@ namespace Prototype.Data
         public int CurrentLevelIndex;
         public LocationData Location;
         public EnemyModel EnemyPrefab;
+        public EnemyProjectileModel EnemyProjectilePrefab;
     }
 }

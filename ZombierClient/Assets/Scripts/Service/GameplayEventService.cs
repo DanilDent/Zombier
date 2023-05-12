@@ -63,7 +63,7 @@ namespace Prototype.Service
 
         public class EnemyAttackAnimationEventArgs : EventArgs
         {
-
+            public IdData EntityId;
         }
 
         #endregion

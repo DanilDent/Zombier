@@ -9,7 +9,7 @@ namespace Prototype.Model
         // Public 
 
         [Inject]
-        public void Construct(GameplaySessionData session, MarkerWeaponEndPoint shootingPoint)
+        public void Construct(GameplaySessionData session, MarkerShootingPointPlayer shootingPoint)
         {
             _weaponData = session.Player.Weapon;
             _shootingPoint = shootingPoint;
@@ -39,8 +39,8 @@ namespace Prototype.Model
                 _weaponData.AttackRateRPM = value;
             }
         }
-        public Transform WeaponEndPoint => _shootingPoint.transform;
-        public ProjectileModel ProjectilePrefab => _weaponData.ProjectileData.Prefab;
+        public Transform ShootingPoint => _shootingPoint.transform;
+        public PlayerProjectileModel ProjectilePrefab => _weaponData.ProjectileData.Prefab as PlayerProjectileModel;
         public float Thrust => _weaponData.Thrust;
         public float Recoil => _weaponData.Recoil;
 
@@ -49,7 +49,7 @@ namespace Prototype.Model
         // Dependecies
 
         // Injected
-        private MarkerWeaponEndPoint _shootingPoint;
+        private MarkerShootingPointPlayer _shootingPoint;
         //
         private WeaponData _weaponData;
     }

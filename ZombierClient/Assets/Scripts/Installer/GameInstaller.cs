@@ -63,23 +63,37 @@ namespace Prototype
             // Weapon
             Container.Bind<MarkerProjectiles>().FromComponentInHierarchy().AsSingle();
 
-            Container.BindFactory<UnityEngine.Object, ProjectileModel, PoolObjectFactory<ProjectileModel>>()
-                .FromFactory<PrefabFactory<ProjectileModel>>();
+            Container.BindFactory<UnityEngine.Object, PlayerProjectileModel, PoolObjectFactory<PlayerProjectileModel>>()
+                .FromFactory<PrefabFactory<PlayerProjectileModel>>();
+            Container.BindFactory<UnityEngine.Object, EnemyProjectileModel, PoolObjectFactory<EnemyProjectileModel>>()
+                .FromFactory<PrefabFactory<EnemyProjectileModel>>();
 
-            Container.Bind<MonoObjectPool<ProjectileModel>>()
+            Container.Bind<MonoObjectPool<PlayerProjectileModel>>()
                 .AsSingle()
                 .OnInstantiated((ctx, obj) =>
                 {
-                    if (obj is MonoObjectPool<ProjectileModel> pool)
+                    if (obj is MonoObjectPool<PlayerProjectileModel> pool)
                     {
-                        var prefab = _session.Player.Weapon.ProjectileData.Prefab;
+                        var prefab = _session.Player.Weapon.ProjectileData.Prefab as PlayerProjectileModel;
                         var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
                         pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
                     }
                 })
                 .NonLazy();
 
-            Container.Bind<MarkerWeaponEndPoint>().FromComponentInChildren().AsTransient();
+            Container.Bind<MonoObjectPool<EnemyProjectileModel>>()
+                .AsSingle()
+                .OnInstantiated((ctx, obj) =>
+                 {
+                     if (obj is MonoObjectPool<EnemyProjectileModel> pool)
+                     {
+                         var prefab = _session.EnemyProjectilePrefab;
+                         var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
+                         pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                     }
+                 })
+                .NonLazy();
+
 
             // Enemy
             Container.BindFactory<IdData, EnemyData, EnemyModel, EnemyModel.Factory>()
@@ -88,7 +102,7 @@ namespace Prototype
                 .UnderTransform(GetMarker<MarkerEnemies>());
 
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>().
-                FromFactory<PrefabFactory<EnemyView>>();
+                    FromFactory<PrefabFactory<EnemyView>>();
 
             Container.BindFactory<EnemyModel, MeleeAttackStrategy, MeleeAttackStrategy.Factory>();
             Container.BindFactory<EnemyModel, RangeAttackStrategy, RangeAttackStrategy.Factory>();
@@ -96,7 +110,6 @@ namespace Prototype
                 .FromFactory<AttackStrategyByStrategyTypeFactory>();
 
             Container.Bind<List<EnemyModel>>().AsSingle();
-
 
             // VFX
             Container.Bind<ParticleSystem>().FromComponentsInChildren().AsTransient();
@@ -110,6 +123,7 @@ namespace Prototype
             Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
+            Container.Bind<MarkerShootingPointPlayer>().FromComponentInChildren().AsTransient();
         }
 
         private Transform GetMarker<T>(InjectContext context)

@@ -63,7 +63,10 @@ namespace Prototype.Model
         public NavMeshAgent Agent => _agent;
         public Rigidbody Rigidbody => _rigidbody;
         public Transform TargetPoint => _targetPoint.transform;
+        public Transform ShootingPoint => _shootingPoint.transform;
         public float AttackRateRpm => _data.Weapon.AttackRateRPM;
+        public EnemyProjectileModel ProjectilePrefab => _data.Weapon.ProjectileData.Prefab as EnemyProjectileModel;
+        public float Thrust => _data.Weapon.Thrust;
         public float RotationMultiplier => _rotationMultiplier;
         public float Acceleration => _acceleration;
         public float Deceleration => _deceleration;
@@ -92,7 +95,13 @@ namespace Prototype.Model
         [SerializeField] private float _rotationMultiplier;
         [SerializeField] private float _acceleration;
         [SerializeField] private float _deceleration;
+        private MarkerShootingPointEnemy _shootingPoint;
         private DescDamage _damage;
+
+        private void Start()
+        {
+            _shootingPoint = GetComponentInChildren<MarkerShootingPointEnemy>();
+        }
 
         private void RecalcDamage()
         {

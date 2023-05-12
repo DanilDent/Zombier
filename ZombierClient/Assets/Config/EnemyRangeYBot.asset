@@ -77,8 +77,11 @@ MonoBehaviour:
       Data: 
   ViewPrefab: {fileID: 6298992117564728933, guid: 4fa797d8c5967e7478817abdd9102e4f,
     type: 3}
-  Health: 50
   MaxSpeed: 1.8
+  CritChance: 0
+  CritMultiplier: 0
+  Health: 50
+  MaxHealth: 50
   Weapon: {fileID: 11400000, guid: cce01ccfc419c9a4a80eb9cd09ddb572, type: 2}
   AttackStrategies:
   - Type: 1

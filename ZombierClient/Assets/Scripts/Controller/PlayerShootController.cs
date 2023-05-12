@@ -16,7 +16,7 @@ namespace Prototype.Controller
         public void Construct(
             PlayerModel player,
             List<EnemyModel> enemies,
-            MonoObjectPool<ProjectileModel> projectilePool,
+            MonoObjectPool<PlayerProjectileModel> projectilePool,
             GameplayEventService eventService)
         {
             _player = player;
@@ -32,7 +32,7 @@ namespace Prototype.Controller
         // Injected
         private PlayerModel _player;
         private List<EnemyModel> _enemies;
-        private MonoObjectPool<ProjectileModel> _projectilePool;
+        private MonoObjectPool<PlayerProjectileModel> _projectilePool;
         private GameplayEventService _eventService;
         //
         private float _timer;
@@ -74,7 +74,7 @@ namespace Prototype.Controller
             if (_player.CurrentTarget != null)
             {
                 WeaponModel weapon = _player.WeaponModel;
-                Vector3 shootDir = (_player.CurrentTarget.TargetPoint.position - weapon.WeaponEndPoint.position).normalized;
+                Vector3 shootDir = (_player.CurrentTarget.TargetPoint.position - weapon.ShootingPoint.position).normalized;
 
                 float recoilX = UnityEngine.Random.Range(-weapon.Recoil, weapon.Recoil);
                 float recoilY = UnityEngine.Random.Range(-weapon.Recoil, weapon.Recoil);
@@ -82,7 +82,7 @@ namespace Prototype.Controller
 
                 Quaternion rot = Quaternion.LookRotation(shootDir);
 
-                ProjectileModel projectile = _projectilePool.Create(weapon.ProjectilePrefab, weapon.WeaponEndPoint.position, rot);
+                PlayerProjectileModel projectile = _projectilePool.Create(weapon.ProjectilePrefab, weapon.ShootingPoint.position, rot);
                 projectile.Sender = _player;
 
                 projectile.Rigidbody.AddForce(shootDir * weapon.Thrust, ForceMode.Impulse);

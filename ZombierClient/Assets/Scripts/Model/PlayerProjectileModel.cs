@@ -5,30 +5,22 @@ using Zenject;
 
 namespace Prototype.Model
 {
-    public class ProjectileModel : PoolObject
+    public class PlayerProjectileModel : ProjectileModelBase
     {
         // Public
 
         [Inject]
-        public void Construct(GameplayEventService eventService, MonoObjectPool<ProjectileModel> pool, Rigidbody rigidbody)
+        public void Construct(MonoObjectPool<PlayerProjectileModel> pool)
         {
-            _eventService = eventService;
             _pool = pool;
-            _rigidbody = rigidbody;
         }
-
-        public IDamaging Sender { get; set; }
-        public Rigidbody Rigidbody => _rigidbody;
 
         // Private
 
-        // Dependencies
-
         // Injected
-        private GameplayEventService _eventService;
-        private MonoObjectPool<ProjectileModel> _pool;
-        private Rigidbody _rigidbody;
+        private MonoObjectPool<PlayerProjectileModel> _pool;
         //
+
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
@@ -41,11 +33,6 @@ namespace Prototype.Model
                 }
             }
             _pool.Destroy(this);
-        }
-
-        private void OnDisable()
-        {
-            _rigidbody.velocity = Vector3.zero;
         }
     }
 }

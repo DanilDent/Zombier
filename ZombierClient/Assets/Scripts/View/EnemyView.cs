@@ -22,7 +22,7 @@ namespace Prototype.View
 
         public void OnAttackAnimationEvent()
         {
-            _eventService.OnEnemyAttackAnimationEvent(new GameplayEventService.EnemyAttackAnimationEventArgs { });
+            _eventService.OnEnemyAttackAnimationEvent(new GameplayEventService.EnemyAttackAnimationEventArgs { EntityId = _id });
         }
 
         public void OnHitEndAnimationEvent()

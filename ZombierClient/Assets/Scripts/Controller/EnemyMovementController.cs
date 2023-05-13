@@ -138,12 +138,12 @@ namespace Prototype.Controller
             {
                 Vector3 velocityLocalZ = new Vector3(0f, 0f, Mathf.Max(0f, enemy.transform.InverseTransformDirection(enemy.Rigidbody.velocity).z));
                 Vector3 velocityZ = enemy.transform.TransformDirection(velocityLocalZ);
-                Vector3 newVelocityZ = Vector3.Slerp(velocityZ, positionToLookAt, enemy.RotationMultiplier * Time.deltaTime);
+                Vector3 newVelocityZ = Vector3.Slerp(velocityZ, positionToLookAt, enemy.RotationMultiplier * Time.fixedDeltaTime);
                 enemy.Rigidbody.velocity = newVelocityZ + (enemy.Rigidbody.velocity - velocityZ);
 
                 Quaternion currentRotation = enemy.transform.rotation;
                 Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
-                enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.deltaTime);
+                enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.fixedDeltaTime);
             }
         }
 
@@ -161,7 +161,7 @@ namespace Prototype.Controller
             Quaternion currentRotation = enemy.transform.rotation;
             Quaternion targetRotation = Quaternion.LookRotation(postitionToLookAt);
 
-            enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.deltaTime);
+            enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.fixedDeltaTime);
         }
     }
 

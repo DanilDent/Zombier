@@ -33,12 +33,21 @@ MonoBehaviour:
     - Name: Type
       Entry: 3
       Data: 0
-    - Name: Value
-      Entry: 4
-      Data: 0
     - Name: Chance
       Entry: 4
       Data: 0
+    - Name: _valueRange
+      Entry: 7
+      Data: Prototype.Data.DescRandomRange, Assembly-CSharp
+    - Name: Min
+      Entry: 4
+      Data: 0
+    - Name: Max
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -60,12 +69,21 @@ MonoBehaviour:
     - Name: Type
       Entry: 3
       Data: 0
-    - Name: Value
-      Entry: 4
-      Data: 0
     - Name: Chance
       Entry: 4
       Data: 0
+    - Name: _valueRange
+      Entry: 7
+      Data: Prototype.Data.DescRandomRange, Assembly-CSharp
+    - Name: Min
+      Entry: 4
+      Data: 0
+    - Name: Max
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -78,8 +96,8 @@ MonoBehaviour:
   PlayerPrefab: {fileID: 5860778791831712981, guid: eaf5bb002bbd61549a21f5276edcf3ef,
     type: 3}
   MaxSpeed: 5.28
-  CritChance: 0
-  CritMultiplier: 1
-  Health: 100
+  CritChance: 0.5
+  CritMultiplier: 2
+  Health: 0
   MaxHealth: 100
   Weapon: {fileID: 11400000, guid: 3bd8745d607e42046a47ff64e1d77733, type: 2}

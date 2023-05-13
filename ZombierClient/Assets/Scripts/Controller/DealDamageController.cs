@@ -50,7 +50,8 @@ public class DealDamageController : MonoBehaviour
         {
             EntityId = entityId,
             DamagedEntity = defender,
-            DamageValue = sumDmg
+            DamageValue = sumDmg,
+            IsCrit = isCritApplied
         });
 
         if (defender.Health < 0f || Mathf.Approximately(defender.Health, 0f))

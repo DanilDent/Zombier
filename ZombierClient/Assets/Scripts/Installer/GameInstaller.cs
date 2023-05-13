@@ -59,6 +59,10 @@ namespace Prototype
                 .FromComponentInChildren()
                 .AsTransient()
                 .WhenInjectedInto<DamageTextUIView>();
+
+            Container.Bind<RectTransform>().FromComponentInChildren()
+                .AsTransient()
+                .WhenInjectedInto<DamageTextUIView>();
             // !Unity UI components
 
             // Camera

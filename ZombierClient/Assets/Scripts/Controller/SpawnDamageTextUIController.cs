@@ -43,9 +43,11 @@ namespace Prototype.Controller
             {
                 Vector3 offset = new Vector3(Random.Range(-.2f, .2f), 1.5f + Random.Range(-.2f, .2f), -.5f);
                 Vector3 spawnPosition = cast.transform.position + offset;
-                DamageTextUIView instance = _damageTextPool.Create(spawnPosition, Quaternion.identity);
+                DamageTextUIView instance = _damageTextPool.Create(spawnPosition, Quaternion.identity, enabled: false);
                 instance.SetTextValue(e.DamageValue);
+                instance.IsCrit = e.IsCrit;
                 instance.DisplayDuration = Random.Range(_displayDuration.Min, _displayDuration.Max);
+                instance.gameObject.SetActive(true);
                 StartCoroutine(_damageTextPool.Destroy(instance, instance.DisplayDuration));
             }
         }

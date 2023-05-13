@@ -43,36 +43,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7194818091922325566}
     m_Modifications:
-    - target: {fileID: 5127691866161925000, guid: 4c1a8d0537d34664da9dc937657e5e34,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5127691866161925000, guid: 4c1a8d0537d34664da9dc937657e5e34,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5127691866161925000, guid: 4c1a8d0537d34664da9dc937657e5e34,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5127691866161925000, guid: 4c1a8d0537d34664da9dc937657e5e34,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5127691867331825173, guid: 4c1a8d0537d34664da9dc937657e5e34,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 5127691867331825173, guid: 4c1a8d0537d34664da9dc937657e5e34,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 304
-      objectReference: {fileID: 0}
     - target: {fileID: 7074408953038375413, guid: 4c1a8d0537d34664da9dc937657e5e34,
         type: 3}
       propertyPath: m_Pivot.x

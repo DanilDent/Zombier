@@ -31,7 +31,7 @@ namespace Prototype.Model
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
             {
-                _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs { Attacker = Sender, Defender = damageable });
+                _eventService.OnAttacked(new GameplayEventService.AttackedEventArgs { Attacker = Sender, Defender = damageable });
             }
             _pool.Destroy(this);
         }

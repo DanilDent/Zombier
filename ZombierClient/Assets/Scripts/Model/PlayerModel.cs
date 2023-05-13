@@ -40,6 +40,7 @@ namespace Prototype.Model
 
         // IDamageable
         public float Health { get => _data.Health; set => _data.Health = value; }
+        public float MaxHealth { get => _data.MaxHealth; set => _data.MaxHealth = value; }
         public DescDamage Resists => _data.Resists;
         // !IDamageable
 

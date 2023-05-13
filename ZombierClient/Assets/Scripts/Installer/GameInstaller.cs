@@ -1,6 +1,7 @@
 using Cinemachine;
 using Prototype.Controller;
 using Prototype.Data;
+using Prototype.Extensions;
 using Prototype.Model;
 using Prototype.ObjectPool;
 using Prototype.Service;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Prototype
@@ -33,7 +35,25 @@ namespace Prototype
             Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerShootingPointPlayer>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerGround>().FromComponentInHierarchy().AsCached();
+
+            Container.Bind<Camera>().FromComponentInHierarchy().AsSingle();
             // !Unity components
+
+            // Unity UI components
+            Container.Bind<Image>().FromMethod((InjectContext ctx) =>
+            {
+                if (ctx.ObjectInstance is Component cast)
+                {
+                    Transform root = cast.transform;
+                    return root.SearchComponent<MarkerFiller>().GetComponent<Image>();
+                }
+
+                return null;
+            })
+            .AsTransient()
+            .WhenInjectedInto<EnemyHealthBarUIView>();
+
+            // !Unity UI components
 
             // Camera
             Container.Bind<CinemachineVirtualCamera>().FromComponentInHierarchy().AsSingle();

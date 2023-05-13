@@ -51,5 +51,5 @@ MonoBehaviour:
   AttackRateRPM: 100
   AttackRange: 10
   Thrust: 500
-  Recoil: 3
+  Recoil: 0
   ProjectileData: {fileID: 11400000, guid: 7c6e8c6526ce2d24bbe77d0dc787ea70, type: 2}

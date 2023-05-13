@@ -63,7 +63,7 @@ namespace Prototype.Controller
             {
                 if (Vector3.Distance(_enemy.transform.position, _player.transform.position) < _enemy.AttackRange)
                 {
-                    _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs { Attacker = _enemy, Defender = _player });
+                    _eventService.OnAttacked(new GameplayEventService.AttackedEventArgs { Attacker = _enemy, Defender = _player });
                 }
             }
         }

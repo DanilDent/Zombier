@@ -15,17 +15,17 @@ public class DealDamageController : MonoBehaviour
 
     private void OnEnable()
     {
-        _eventService.Damaged += HandleDamagedEvent;
+        _eventService.Attacked += HandleDamagedEvent;
     }
 
     private void OnDisable()
     {
-        _eventService.Damaged -= HandleDamagedEvent;
+        _eventService.Attacked -= HandleDamagedEvent;
     }
 
     private GameplayEventService _eventService;
 
-    private void HandleDamagedEvent(object sender, GameplayEventService.DamagedEventArgs e)
+    private void HandleDamagedEvent(object sender, GameplayEventService.AttackedEventArgs e)
     {
         IDamaging attacker = e.Attacker;
         IDamageable defender = e.Defender;
@@ -42,6 +42,9 @@ public class DealDamageController : MonoBehaviour
         sumDmg *= critMultiplier;
 
         defender.Health -= sumDmg;
+
+        IdData entityId = defender is EnemyModel cast ? cast.Id : IdData.Empty;
+        _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs { EntityId = entityId, DamagedEntity = defender });
 
         if (defender.Health < 0f || Mathf.Approximately(defender.Health, 0f))
         {

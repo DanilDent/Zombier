@@ -80,8 +80,8 @@ MonoBehaviour:
   MaxSpeed: 1.8
   CritChance: 0
   CritMultiplier: 0
-  Health: 50
-  MaxHealth: 50
+  Health: 75
+  MaxHealth: 75
   Weapon: {fileID: 11400000, guid: cce01ccfc419c9a4a80eb9cd09ddb572, type: 2}
   AttackStrategies:
   - Type: 1

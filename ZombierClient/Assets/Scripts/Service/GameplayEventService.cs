@@ -16,6 +16,7 @@ namespace Prototype.Service
         public event EventHandler PlayerShoot;
         public event EventHandler PlayerShootAnimationEvent;
 
+        public event EventHandler<AttackedEventArgs> Attacked;
         public event EventHandler<DamagedEventArgs> Damaged;
         public event EventHandler<EnemyDeathEventArgs> EnemyDeath;
         public event EventHandler<EnemyDeathEventArgs> EnemyDeathInstant;
@@ -35,10 +36,16 @@ namespace Prototype.Service
             public Vector3 Movement;
         }
 
-        public class DamagedEventArgs : EventArgs
+        public class AttackedEventArgs : EventArgs
         {
             public IDamaging Attacker;
             public IDamageable Defender;
+        }
+
+        public class DamagedEventArgs : EventArgs
+        {
+            public IdData EntityId;
+            public IDamageable DamagedEntity;
         }
 
         public class EnemyDeathEventArgs : EventArgs
@@ -106,6 +113,11 @@ namespace Prototype.Service
         public void OnPlayerShootAnimationEvent()
         {
             PlayerShootAnimationEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnAttacked(AttackedEventArgs e)
+        {
+            Attacked?.Invoke(this, e);
         }
 
         public void OnDamaged(DamagedEventArgs e)

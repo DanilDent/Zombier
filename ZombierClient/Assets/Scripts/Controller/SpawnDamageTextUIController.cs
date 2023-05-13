@@ -1,5 +1,4 @@
 ﻿using Prototype.Data;
-using Prototype.Model;
 using Prototype.ObjectPool;
 using Prototype.Service;
 using Prototype.View;
@@ -39,7 +38,7 @@ namespace Prototype.Controller
 
         private void HandleDamaged(object sender, GameplayEventService.DamagedEventArgs e)
         {
-            if (e.DamagedEntity is EnemyModel cast)
+            if (e.DamagedEntity is Component cast && e.DamageValue > 0)
             {
                 Vector3 offset = new Vector3(Random.Range(-.2f, .2f), 1.5f + Random.Range(-.2f, .2f), -.5f);
                 Vector3 spawnPosition = cast.transform.position + offset;

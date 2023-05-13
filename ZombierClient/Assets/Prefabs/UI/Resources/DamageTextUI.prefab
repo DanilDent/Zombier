@@ -218,7 +218,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5288352921876884208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,3 +261,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de693893b2d41714fadbbf9a9f79fcec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _flyDistance: 1

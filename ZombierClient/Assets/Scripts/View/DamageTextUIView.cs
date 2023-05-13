@@ -1,4 +1,5 @@
-﻿using Prototype.ObjectPool;
+﻿using DG.Tweening;
+using Prototype.ObjectPool;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -14,8 +15,6 @@ namespace Prototype.View
         {
             _text = text;
             _rectTransform = rectTransform;
-
-            _defaultScale = _rectTransform.localScale;
         }
 
         public float DisplayDuration { get; set; }
@@ -31,14 +30,30 @@ namespace Prototype.View
         // Injected
         private TextMeshProUGUI _text;
         private RectTransform _rectTransform;
+        // From inspector
+        [SerializeField] private float _flyDistance;
         //
         private Vector3 _defaultScale;
+        private Color _defaultColor;
 
         private void OnEnable()
         {
+            _defaultScale = _rectTransform.localScale;
+            _defaultColor = _text.color;
+
+            _rectTransform.DOMoveY(_rectTransform.position.y + _flyDistance, DisplayDuration);
+
             if (IsCrit)
             {
-                _rectTransform.localScale *= 2f;
+                float scaleTo = Random.Range(1.5f, 2f);
+                Sequence scaleSequence = DOTween.Sequence();
+                scaleSequence.Append(_rectTransform.DOScale(_rectTransform.localScale * scaleTo, DisplayDuration / 2f));
+                scaleSequence.Append(_rectTransform.DOScale(_defaultScale, DisplayDuration / 2f));
+
+                Color toColor = Random.ColorHSV();
+                Sequence colorSequence = DOTween.Sequence();
+                colorSequence.Append(_text.DOColor(toColor, DisplayDuration / 2f));
+                colorSequence.Append(_text.DOColor(_defaultColor, DisplayDuration / 2f));
             }
         }
 
@@ -46,6 +61,7 @@ namespace Prototype.View
         {
             IsCrit = false;
             _rectTransform.localScale = _defaultScale;
+            _text.color = _defaultColor;
         }
     }
 }

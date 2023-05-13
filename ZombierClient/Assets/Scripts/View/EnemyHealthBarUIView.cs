@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
@@ -12,11 +13,10 @@ namespace Prototype.View
         // Public
 
         [Inject]
-        public void Construct(IdData id, GameplayEventService eventService, Image image)
+        public void Construct(IdData id, GameplayEventService eventService)
         {
             _id = id;
             _eventService = eventService;
-            _image = image;
         }
 
         // Private
@@ -24,7 +24,10 @@ namespace Prototype.View
         // Injected
         private IdData _id;
         private GameplayEventService _eventService;
-        private Image _image;
+        // From inspector
+        [SerializeField] private Image _imgFiller;
+        [SerializeField] private Image _imgFillerFollower;
+        [SerializeField] private float _followDuration = 1f;
 
         private void OnEnable()
         {
@@ -42,7 +45,8 @@ namespace Prototype.View
         {
             if (_id == e.EntityId)
             {
-                _image.fillAmount = e.DamagedEntity.Health / e.DamagedEntity.MaxHealth;
+                _imgFiller.fillAmount = e.DamagedEntity.Health / e.DamagedEntity.MaxHealth;
+                DOTween.To(() => _imgFillerFollower.fillAmount, x => _imgFillerFollower.fillAmount = x, _imgFiller.fillAmount, _followDuration);
             }
         }
 

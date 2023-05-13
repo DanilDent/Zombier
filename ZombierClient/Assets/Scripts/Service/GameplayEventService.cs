@@ -46,6 +46,7 @@ namespace Prototype.Service
         {
             public IdData EntityId;
             public IDamageable DamagedEntity;
+            public float DamageValue;
         }
 
         public class EnemyDeathEventArgs : EventArgs

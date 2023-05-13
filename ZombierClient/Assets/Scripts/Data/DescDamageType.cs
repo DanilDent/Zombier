@@ -16,12 +16,13 @@ namespace Prototype.Data
         public DescDamageType(DamageType type)
         {
             Type = type;
-            Value = 0;
+
+            _valueRange = new DescRandomRange { Min = 0f, Max = 0f };
             Chance = 0;
         }
 
         public DamageType Type;
-        public float Value;
+        public float Value => UnityEngine.Random.Range(_valueRange.Min, _valueRange.Max);
         public float Chance;
 
         public static DescDamageType operator +(DescDamageType a, DescDamageType b)
@@ -31,7 +32,7 @@ namespace Prototype.Data
                 return new DescDamageType
                 {
                     Type = a.Type,
-                    Value = a.Value + b.Value,
+                    _valueRange = a._valueRange + b._valueRange,
                     Chance = Mathf.Clamp01(a.Chance + b.Chance)
                 };
             }
@@ -43,7 +44,7 @@ namespace Prototype.Data
         {
             return
                 this.Type == other.Type &&
-                this.Value == other.Value &&
+                this._valueRange == other._valueRange &&
                 this.Chance == other.Chance;
         }
 
@@ -60,7 +61,7 @@ namespace Prototype.Data
         {
             int hash = 10007;
             hash = hash * 15377 + (int)Type.GetHashCode();
-            hash = hash * 15377 + (int)Value.GetHashCode();
+            hash = hash * 15377 + (int)_valueRange.GetHashCode();
             hash = hash * 15377 + (int)Chance.GetHashCode();
 
             return hash;
@@ -75,5 +76,8 @@ namespace Prototype.Data
         {
             return !t1.Equals(t2);
         }
+
+        // Private
+        [SerializeField] private DescRandomRange _valueRange;
     }
 }

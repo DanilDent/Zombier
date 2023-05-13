@@ -42,9 +42,16 @@ public class DealDamageController : MonoBehaviour
         sumDmg *= critMultiplier;
 
         defender.Health -= sumDmg;
+        defender.Health = Mathf.Clamp(defender.Health, 0f, defender.MaxHealth);
 
         IdData entityId = defender is EnemyModel cast ? cast.Id : IdData.Empty;
-        _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs { EntityId = entityId, DamagedEntity = defender });
+
+        _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs
+        {
+            EntityId = entityId,
+            DamagedEntity = defender,
+            DamageValue = sumDmg
+        });
 
         if (defender.Health < 0f || Mathf.Approximately(defender.Health, 0f))
         {

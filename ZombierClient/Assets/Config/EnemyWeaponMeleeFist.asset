@@ -33,12 +33,21 @@ MonoBehaviour:
     - Name: Type
       Entry: 3
       Data: 0
-    - Name: Value
-      Entry: 4
-      Data: 1
     - Name: Chance
       Entry: 4
       Data: 1
+    - Name: _valueRange
+      Entry: 7
+      Data: Prototype.Data.DescRandomRange, Assembly-CSharp
+    - Name: Min
+      Entry: 4
+      Data: 5
+    - Name: Max
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 8
       Data: 

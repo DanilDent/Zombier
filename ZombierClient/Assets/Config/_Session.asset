@@ -23,3 +23,5 @@ MonoBehaviour:
     type: 3}
   DeathVFXPrefab: {fileID: 1595422084901427750, guid: 08b22b4bf284aed4a8cdf223ee727b9f,
     type: 3}
+  DamageTextUIPrefab: {fileID: 7527771985142309774, guid: dff3212dbb9c7c24695e065340d3e3a8,
+    type: 3}

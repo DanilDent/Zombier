@@ -7,6 +7,7 @@ using Prototype.ObjectPool;
 using Prototype.Service;
 using Prototype.View;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
@@ -25,6 +26,7 @@ namespace Prototype
         {
             // Config
             Container.Bind<GameplaySessionData>().FromInstance(_session).AsSingle();
+            // !Config
 
             // Unity components
             Container.Bind<Animator>().FromComponentInChildren().AsTransient();
@@ -53,18 +55,42 @@ namespace Prototype
             .AsTransient()
             .WhenInjectedInto<EnemyHealthBarUIView>();
 
+            Container.Bind<TextMeshProUGUI>()
+                .FromComponentInChildren()
+                .AsTransient()
+                .WhenInjectedInto<DamageTextUIView>();
             // !Unity UI components
 
             // Camera
             Container.Bind<CinemachineVirtualCamera>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesTo<CameraController>().AsSingle();
+            // !Camera
 
             // UI 
             Container.Bind<FloatingJoystick>().FromComponentInHierarchy().AsSingle();
 
+
+            Container.BindFactory<UnityEngine.Object, DamageTextUIView, PoolObjectFactory<DamageTextUIView>>()
+                .FromFactory<PrefabFactory<DamageTextUIView>>();
+
+            Container.Bind<MonoObjectPool<DamageTextUIView>>()
+                .AsSingle()
+                .OnInstantiated((ctx, obj) =>
+                {
+                    if (obj is MonoObjectPool<DamageTextUIView> pool)
+                    {
+                        var prefab = _session.DamageTextUIPrefab;
+                        var tranfromContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
+                        pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                    }
+                })
+                .NonLazy();
+            // !UI
+
             // Services
             Container.Bind<GameplayInputService>().AsSingle();
             Container.Bind<GameplayEventService>().AsSingle();
+            // !Services
 
             //// Game entities
 

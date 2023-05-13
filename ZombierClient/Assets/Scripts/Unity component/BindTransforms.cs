@@ -7,7 +7,7 @@ namespace Prototype.UnityComponent
         public Transform VirtualParentTransform;
 
 
-        private void Start()
+        private void Awake()
         {
             if (VirtualParentTransform != null)
             {

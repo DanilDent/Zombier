@@ -26,7 +26,7 @@ namespace Prototype.Controller
         private AttackStrategyFactory _strategyFactory;
         //
 
-        private void Start()
+        private void OnEnable()
         {
             foreach (var enemy in _enemies)
             {

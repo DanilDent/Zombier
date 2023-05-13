@@ -89,5 +89,10 @@ namespace Prototype.Controller
             float gravity = -9.8f;
             _currentMovement.y = gravity;
         }
+
+        private void OnDisable()
+        {
+            _eventService.OnPlayerMoved(new GameplayEventService.PlayerMovedEventArgs { Movement = Vector3.zero });
+        }
     }
 }

@@ -56,14 +56,21 @@ public class DealDamageController : MonoBehaviour
 
         if (defender.Health < 0f || Mathf.Approximately(defender.Health, 0f))
         {
-            float noAnimDeathChance = 0.5f;
-            if (Helpers.TryRandom(noAnimDeathChance))
+            if (defender is EnemyModel)
             {
-                _eventService.OnEnemyDeathInstant(new GameplayEventService.EnemyDeathEventArgs { Entity = defender });
+                float noAnimDeathChance = 0.5f;
+                if (Helpers.TryRandom(noAnimDeathChance))
+                {
+                    _eventService.OnEnemyDeathInstant(new GameplayEventService.EnemyDeathEventArgs { Entity = defender });
+                }
+                else
+                {
+                    _eventService.OnEnemyDeath(new GameplayEventService.EnemyDeathEventArgs { Entity = defender });
+                }
             }
             else
             {
-                _eventService.OnEnemyDeath(new GameplayEventService.EnemyDeathEventArgs { Entity = defender });
+                _eventService.OnPlayerDeath();
             }
         }
 

@@ -6,77 +6,77 @@
 
 namespace CodeStage.AdvancedFPSCounter.CountersData
 {
-	using System.Collections;
-	using UnityEngine;
+    using System.Collections;
+    using UnityEngine;
 
-	/// <summary>
-	/// Base class for the counters which should repeatedly update at runtime.
-	/// </summary>
-	public abstract class UpdatableCounterData : BaseCounterData
-	{
-		// ----------------------------------------------------------------------------
-		// protected fields
-		// ----------------------------------------------------------------------------
+    /// <summary>
+    /// Base class for the counters which should repeatedly update at runtime.
+    /// </summary>
+    public abstract class UpdatableCounterData : BaseCounterData
+    {
+        // ----------------------------------------------------------------------------
+        // protected fields
+        // ----------------------------------------------------------------------------
 
-		protected Coroutine updateCoroutine;
+        protected Coroutine updateCoroutine;
 
-		// ----------------------------------------------------------------------------
-		// properties exposed to the inspector
-		// ----------------------------------------------------------------------------
+        // ----------------------------------------------------------------------------
+        // properties exposed to the inspector
+        // ----------------------------------------------------------------------------
 
-		#region UpdateInterval
-		[Tooltip("Update interval in seconds.")]
-		[Range(0.1f, 10f)]
-		[SerializeField]
-		protected float updateInterval = 0.5f;
+        #region UpdateInterval
+        [Tooltip("Update interval in seconds.")]
+        [Range(0.1f, 10f)]
+        [SerializeField]
+        protected float updateInterval = 0.5f;
 
-		/// <summary>
-		/// Update interval in seconds.
-		/// </summary>
-		public float UpdateInterval
-		{
-			get { return updateInterval; }
-			set
-			{
-				if (System.Math.Abs(updateInterval - value) < 0.001f || !Application.isPlaying) return;
+        /// <summary>
+        /// Update interval in seconds.
+        /// </summary>
+        public float UpdateInterval
+        {
+            get { return updateInterval; }
+            set
+            {
+                if (System.Math.Abs(updateInterval - value) < 0.001f || !Application.isPlaying) return;
 
-				updateInterval = value;
-			}
-		}
-		#endregion
+                updateInterval = value;
+            }
+        }
+        #endregion
 
-		// ----------------------------------------------------------------------------
-		// protected methods
-		// ----------------------------------------------------------------------------
+        // ----------------------------------------------------------------------------
+        // protected methods
+        // ----------------------------------------------------------------------------
 
-		protected override void PerformInitActions()
-		{
-			base.PerformInitActions();
+        protected override void PerformInitActions()
+        {
+            base.PerformInitActions();
 
-			StartUpdateCoroutine();
-		}
+            StartUpdateCoroutine();
+        }
 
-		protected override void PerformDeActivationActions()
-		{
-			base.PerformDeActivationActions();
+        protected override void PerformDeActivationActions()
+        {
+            base.PerformDeActivationActions();
 
-			StopUpdateCoroutine();
-		}
+            StopUpdateCoroutine();
+        }
 
-		protected abstract IEnumerator UpdateCounter();
+        protected abstract IEnumerator UpdateCounter();
 
-		// ----------------------------------------------------------------------------
-		// private methods
-		// ----------------------------------------------------------------------------
+        // ----------------------------------------------------------------------------
+        // private methods
+        // ----------------------------------------------------------------------------
 
-		private void StartUpdateCoroutine()
-		{
-			updateCoroutine = main.StartCoroutine(UpdateCounter());
-		}
+        private void StartUpdateCoroutine()
+        {
+            updateCoroutine = main.StartCoroutine(UpdateCounter());
+        }
 
-		private void StopUpdateCoroutine()
-		{
-			main.StopCoroutine(updateCoroutine);
-		}
-	}
+        private void StopUpdateCoroutine()
+        {
+            main.StopCoroutine(updateCoroutine);
+        }
+    }
 }

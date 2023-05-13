@@ -20,7 +20,14 @@ namespace Prototype.Controller
 
         // Private
 
-        private void Start()
+        // Injected
+        private PlayerModel _player;
+        private List<EnemyModel> _enemies;
+        //
+        [SerializeField] private float _chaseRange;
+        [SerializeField] private float _destUpdateRate = 0.1f;
+
+        private void OnEnable()
         {
             foreach (var enemy in _enemies)
             {
@@ -88,11 +95,14 @@ namespace Prototype.Controller
             }
         }
 
-        // Injected
-        private PlayerModel _player;
-        private List<EnemyModel> _enemies;
-        //
-        [SerializeField] private float _chaseRange;
-        [SerializeField] private float _destUpdateRate = 0.1f;
+        private void OnDisable()
+        {
+            foreach (var enemy in _enemies)
+            {
+                enemy.CurrentState = EnemyModel.State.Idle;
+                enemy.Agent.SetDestination(enemy.transform.position);
+                StopAllCoroutines();
+            }
+        }
     }
 }

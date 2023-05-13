@@ -37,7 +37,7 @@ namespace Prototype.Controller
         [SerializeField] private float _targetTranstiionMultiplier = 9f;
         [SerializeField] private float _stateUpdateRate = 0.1f;
 
-        private void Start()
+        private void OnEnable()
         {
             StartCoroutine(UpdatePlayerState());
         }
@@ -168,6 +168,20 @@ namespace Prototype.Controller
             }
 
             handle.transform.localPosition = Vector3.zero;
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+            _targetTransitionCoroutine = null;
+
+            _player.CurrentState = PlayerModel.State.Death;
+            _player.CurrentTarget = null;
+            _player.TargetHandle.transform.SetParent(_player.DefaultTargetPoint);
+            _player.TargetHandle.transform.localEulerAngles = Vector3.zero;
+            _player.TargetHandle.transform.localPosition = Vector3.zero;
+
+            _eventService.OnPlayerStopFight();
         }
     }
 }

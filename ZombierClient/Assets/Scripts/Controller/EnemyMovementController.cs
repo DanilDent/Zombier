@@ -27,7 +27,7 @@ namespace Prototype.Controller
         //
         [SerializeField] private float _obstacleAvoidanceRadius = 1f;
 
-        private void Start()
+        private void OnEnable()
         {
             foreach (var enemy in _enemies)
             {
@@ -162,6 +162,16 @@ namespace Prototype.Controller
             Quaternion targetRotation = Quaternion.LookRotation(postitionToLookAt);
 
             enemy.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, enemy.RotationMultiplier * Time.fixedDeltaTime);
+        }
+
+        private void OnDisable()
+        {
+
+            foreach (var enemy in _enemies)
+            {
+                _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = 0f });
+                enemy.Rigidbody.velocity = Vector3.zero;
+            }
         }
     }
 

@@ -51,20 +51,16 @@ namespace Prototype.Controller
         // Spawn enemies only outside this range from player
         [SerializeField] private float _allowedCenterPointRange;
 
-        private void Awake()
-        {
-            float distancePlayerToExit = Vector3.Distance(_player.transform.position, _level.ExitPoint.transform.position);
-            _allowedCenterPointRange = distancePlayerToExit - _minDistanceFromPlayer - _maxSampleDistance;
-
-            _enemiesToDestroy = new List<EnemyModel>();
-        }
-
         private void OnEnable()
         {
+            // Events
             _eventService.EnemyDeath += HandleDeath;
             _eventService.EnemyDeathAnimationEvent += HandleDeathAnimationEvent;
             _eventService.EnemyDeathInstant += HandleDeathInstant;
-
+            //
+            float distancePlayerToExit = Vector3.Distance(_player.transform.position, _level.ExitPoint.transform.position);
+            _allowedCenterPointRange = distancePlayerToExit - _minDistanceFromPlayer - _maxSampleDistance;
+            _enemiesToDestroy = new List<EnemyModel>();
             SpawnEnemies();
         }
 

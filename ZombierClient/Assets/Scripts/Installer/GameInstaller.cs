@@ -203,6 +203,19 @@ namespace Prototype
                })
                .NonLazy();
 
+            // Gameplay Controllers
+            Container.Bind<EnemySpawnController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<PlayerMovementController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<PlayerAimController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<PlayerShootController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<DealDamageController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<EnemyAttackController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<EnemyChaseController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<EnemyMovementController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<SpawnDamageTextUIController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
+            // !Gameplay Controllers
+
             //// !Game entities
         }
 

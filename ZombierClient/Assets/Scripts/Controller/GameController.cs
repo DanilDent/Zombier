@@ -68,7 +68,7 @@ namespace Prototype.Controller
         {
             Application.targetFrameRate = 60;
 
-            SetControllersState(true);
+            InitGame();
 
             // Init player
             _player.Health = _player.MaxHealth;
@@ -82,11 +82,26 @@ namespace Prototype.Controller
             });
         }
 
+        private void InitGame()
+        {
+            // Enemy spawn controller should be true before any other enemy related controllers
+            _enemySpawnController.gameObject.SetActive(true);
+            _enemySpawnController.SpawnEnemies();
+            //
+            _dealDamageController.gameObject.SetActive(true);
+            _enemyAttackController.gameObject.SetActive(true);
+            _enemyChaseController.gameObject.SetActive(true);
+            _enemyMovementController.gameObject.SetActive(true);
+            _playerAimController.gameObject.SetActive(true);
+            _playerMovementController.gameObject.SetActive(true);
+            _playerShootController.gameObject.SetActive(true);
+            _spawnDamageTextUIController.gameObject.SetActive(true);
+            _vfxController.gameObject.SetActive(true);
+        }
+
         private void SetControllersState(bool enabled)
         {
-            // Enemy spawn controller should be enabledd before any other enemy related controllers
             _enemySpawnController.gameObject.SetActive(enabled);
-            //
             _dealDamageController.gameObject.SetActive(enabled);
             _enemyAttackController.gameObject.SetActive(enabled);
             _enemyChaseController.gameObject.SetActive(enabled);

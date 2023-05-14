@@ -31,54 +31,7 @@ namespace Prototype.Controller
             _eventService = eventService;
         }
 
-        // Private
-
-        // Dependencies
-
-        // Injected
-        GameplayEventService _eventService;
-        private LevelModel _level;
-        private EnemyModel.Factory _enemyFactory;
-        private PlayerModel _player;
-        [SerializeField] private List<EnemyModel> _enemies;
-        private List<EnemyModel> _enemiesToDestroy;
-        //
-
-        // Minimal spawn enemy distance from player
-        [SerializeField] private float _minDistanceFromPlayer = 10f;
-        [SerializeField] private float _navMeshSampleRange = 10f;
-        [SerializeField] private float _maxSampleDistance = 10f;
-        // Spawn enemies only outside this range from player
-        [SerializeField] private float _allowedCenterPointRange;
-
-        private void OnEnable()
-        {
-            // Events
-            _eventService.EnemyDeath += HandleDeath;
-            _eventService.EnemyDeathAnimationEvent += HandleDeathAnimationEvent;
-            _eventService.EnemyDeathInstant += HandleDeathInstant;
-            //
-            float distancePlayerToExit = Vector3.Distance(_player.transform.position, _level.ExitPoint.transform.position);
-            _allowedCenterPointRange = distancePlayerToExit - _minDistanceFromPlayer - _maxSampleDistance;
-            _enemiesToDestroy = new List<EnemyModel>();
-            SpawnEnemies();
-        }
-
-        private void OnDisable()
-        {
-            _eventService.EnemyDeath -= HandleDeath;
-            _eventService.EnemyDeathAnimationEvent -= HandleDeathAnimationEvent;
-            _eventService.EnemyDeathInstant -= HandleDeathInstant;
-        }
-
-        private void Update()
-        {
-#if DEBUG
-            //DebugDrawSpawnPosition();
-#endif
-        }
-
-        private void SpawnEnemies()
+        public void SpawnEnemies()
         {
             int countLeftToSpawn = Random.Range(_level.EnemySpawnData.MinEnemyCount, _level.EnemySpawnData.MaxEnemyCount + 1);
 
@@ -109,6 +62,51 @@ namespace Prototype.Controller
                     Debug.LogWarning("Can't find random position on navmesh surface");
                 }
             }
+        }
+
+        // Private
+
+        // Dependencies
+
+        // Injected
+        GameplayEventService _eventService;
+        private LevelModel _level;
+        private EnemyModel.Factory _enemyFactory;
+        private PlayerModel _player;
+        [SerializeField] private List<EnemyModel> _enemies;
+        private List<EnemyModel> _enemiesToDestroy;
+        //
+        // Minimal spawn enemy distance from player
+        [SerializeField] private float _minDistanceFromPlayer = 10f;
+        [SerializeField] private float _navMeshSampleRange = 10f;
+        [SerializeField] private float _maxSampleDistance = 10f;
+        // Spawn enemies only outside this range from player
+        [SerializeField] private float _allowedCenterPointRange;
+
+        private void OnEnable()
+        {
+            // Events
+            _eventService.EnemyDeath += HandleDeath;
+            _eventService.EnemyDeathAnimationEvent += HandleDeathAnimationEvent;
+            _eventService.EnemyDeathInstant += HandleDeathInstant;
+            //
+            float distancePlayerToExit = Vector3.Distance(_player.transform.position, _level.ExitPoint.transform.position);
+            _allowedCenterPointRange = distancePlayerToExit - _minDistanceFromPlayer - _maxSampleDistance;
+            _enemiesToDestroy = new List<EnemyModel>();
+        }
+
+        private void OnDisable()
+        {
+            _eventService.EnemyDeath -= HandleDeath;
+            _eventService.EnemyDeathAnimationEvent -= HandleDeathAnimationEvent;
+            _eventService.EnemyDeathInstant -= HandleDeathInstant;
+        }
+
+        private void Update()
+        {
+#if DEBUG
+            //DebugDrawSpawnPosition();
+#endif
         }
 
         private bool GetRandomPointOnNavmeshDistantFromPlayer(out Vector3 result)

@@ -76,6 +76,7 @@ namespace Prototype.View
             _eventService.PlayerStartFight += HandleNoAimToAimTransition;
             _eventService.PlayerStopFight += HandleAimToNoAimTransition;
             _eventService.PlayerShoot += HandleShootAnimation;
+            _eventService.PlayerDeath += HandlePlayerDeath;
         }
 
         private void OnDisable()
@@ -84,6 +85,7 @@ namespace Prototype.View
             _eventService.PlayerStartFight -= HandleNoAimToAimTransition;
             _eventService.PlayerStopFight -= HandleAimToNoAimTransition;
             _eventService.PlayerShoot -= HandleShootAnimation;
+            _eventService.PlayerDeath -= HandlePlayerDeath;
         }
 
         private void HandleMovementAnimations(object sender, GameplayEventService.PlayerMovedEventArgs e)
@@ -123,7 +125,7 @@ namespace Prototype.View
             _animator.SetTrigger(_shootTriggerHash);
         }
 
-        private void OnDeath()
+        private void HandlePlayerDeath(object sender, EventArgs e)
         {
             SwitchToDeathState();
             _animator.SetTrigger(_deathTriggerHash);

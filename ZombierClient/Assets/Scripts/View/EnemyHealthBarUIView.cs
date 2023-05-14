@@ -2,6 +2,7 @@ using DG.Tweening;
 using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -32,13 +33,15 @@ namespace Prototype.View
         private void OnEnable()
         {
             _eventService.Damaged += HandleDamaged;
-            _eventService.EnemyDeath += HandleDeath;
+            _eventService.EnemyDeath += HandleEnemyDeath;
+            _eventService.PlayerDeath += HandlePlayerDeath;
         }
 
         private void OnDisable()
         {
             _eventService.Damaged -= HandleDamaged;
-            _eventService.EnemyDeath -= HandleDeath;
+            _eventService.EnemyDeath -= HandleEnemyDeath;
+            _eventService.PlayerDeath -= HandlePlayerDeath;
         }
 
         private void HandleDamaged(object sender, GameplayEventService.DamagedEventArgs e)
@@ -50,12 +53,17 @@ namespace Prototype.View
             }
         }
 
-        private void HandleDeath(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        private void HandleEnemyDeath(object sender, GameplayEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast && _id == cast.Id)
             {
                 gameObject.SetActive(false);
             }
+        }
+
+        private void HandlePlayerDeath(object sender, EventArgs e)
+        {
+            gameObject.SetActive(false);
         }
     }
 }

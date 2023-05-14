@@ -28,6 +28,9 @@ namespace Prototype.Service
         public event EventHandler<EnemyAttackEventArgs> EnemyAttack;
         public event EventHandler<EnemyAttackAnimationEventArgs> EnemyAttackAnimationEvent;
 
+        // Common game events
+        public event EventHandler Reset;
+
         #endregion
 
         #region EventArgs
@@ -166,6 +169,11 @@ namespace Prototype.Service
         public void OnEnemyAttackAnimationEvent(EnemyAttackAnimationEventArgs e)
         {
             EnemyAttackAnimationEvent?.Invoke(this, e);
+        }
+
+        public void OnReset()
+        {
+            Reset?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

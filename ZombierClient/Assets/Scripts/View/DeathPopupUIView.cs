@@ -47,7 +47,8 @@ namespace Prototype.View
 
         private void OnReset()
         {
-
+            _eventService.OnReset();
+            _viewRoot.gameObject.SetActive(false);
         }
 
         private void HandleCameraOnDeadPlayer(object sender, EventArgs e)

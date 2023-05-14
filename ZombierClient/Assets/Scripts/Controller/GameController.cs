@@ -13,6 +13,7 @@ namespace Prototype.Controller
         public void Construct(
             GameplayEventService eventService,
             PlayerModel player,
+            SceneLoaderService sceneLoaderService,
             // Controllers
             DealDamageController dealDamageController,
             EnemyAttackController enemyAttackController,
@@ -27,6 +28,7 @@ namespace Prototype.Controller
         {
             _eventService = eventService;
             _player = player;
+            _sceneLoaderService = sceneLoaderService;
             // Controllers
             _dealDamageController = dealDamageController;
             _enemyAttackController = enemyAttackController;
@@ -41,6 +43,7 @@ namespace Prototype.Controller
         }
 
         private GameplayEventService _eventService;
+        private SceneLoaderService _sceneLoaderService;
         private PlayerModel _player;
         // Controllers
         private DealDamageController _dealDamageController;
@@ -58,6 +61,7 @@ namespace Prototype.Controller
         {
             _eventService.PlayerDeath += HandlePlayerDeath;
             _eventService.PlayerRevive += HandlePlayerRevive;
+            _eventService.Reset += HandleReset;
         }
 
         private void Start()
@@ -112,10 +116,16 @@ namespace Prototype.Controller
             SetControllersState(true);
         }
 
+        private void HandleReset(object sender, EventArgs e)
+        {
+            _sceneLoaderService.ReloadCurrentScene();
+        }
+
         private void OnDisable()
         {
             _eventService.PlayerDeath -= HandlePlayerDeath;
             _eventService.PlayerRevive -= HandlePlayerRevive;
+            _eventService.Reset -= HandleReset;
         }
     }
 }

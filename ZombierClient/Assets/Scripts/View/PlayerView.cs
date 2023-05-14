@@ -49,6 +49,7 @@ namespace Prototype.View
         private int _velocityZHash;
         private int _shootTriggerHash;
         private int _deathTriggerHash;
+        private int _reviveTriggerHash;
 
         private State _state;
 
@@ -65,6 +66,7 @@ namespace Prototype.View
             _velocityZHash = Animator.StringToHash("VelocityZ");
             _shootTriggerHash = Animator.StringToHash("ShootTrigger");
             _deathTriggerHash = Animator.StringToHash("DeathTrigger");
+            _reviveTriggerHash = Animator.StringToHash("ReviveTrigger");
 
             _aimLayerIndex = _animator.GetLayerIndex("Aim");
             _aimMovementLayerIndex = _animator.GetLayerIndex("Aim movement");
@@ -77,6 +79,7 @@ namespace Prototype.View
             _eventService.PlayerStopFight += HandleAimToNoAimTransition;
             _eventService.PlayerShoot += HandleShootAnimation;
             _eventService.PlayerDeath += HandlePlayerDeath;
+            _eventService.PlayerRevive += HandlePlayerRevive;
         }
 
         private void OnDisable()
@@ -86,6 +89,7 @@ namespace Prototype.View
             _eventService.PlayerStopFight -= HandleAimToNoAimTransition;
             _eventService.PlayerShoot -= HandleShootAnimation;
             _eventService.PlayerDeath -= HandlePlayerDeath;
+            _eventService.PlayerRevive -= HandlePlayerRevive;
         }
 
         private void HandleMovementAnimations(object sender, GameplayEventService.PlayerMovedEventArgs e)
@@ -129,6 +133,12 @@ namespace Prototype.View
         {
             SwitchToDeathState();
             _animator.SetTrigger(_deathTriggerHash);
+        }
+
+        private void HandlePlayerRevive(object sender, EventArgs e)
+        {
+            _state = State.NoAim;
+            _animator.SetTrigger(_reviveTriggerHash);
         }
 
         private void SwitchToDeathState()

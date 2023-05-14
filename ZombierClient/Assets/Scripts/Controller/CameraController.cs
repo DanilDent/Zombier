@@ -30,8 +30,11 @@ namespace Prototype.Controller
             _virtualCamera.LookAt = _player.transform;
             _noise = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             _noise.enabled = false;
+            _transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+            _defaultFollowOffset = _transposer.m_FollowOffset;
             // Events
             _eventService.PlayerDeath += HandlePlayerDeath;
+            _eventService.PlayerRevive += HandlePlayerRevive;
         }
 
         // Private
@@ -43,14 +46,22 @@ namespace Prototype.Controller
         private GameUIEventService _uiEventService;
         //
         private CinemachineBasicMultiChannelPerlin _noise;
+        private CinemachineTransposer _transposer;
+        private Vector3 _defaultFollowOffset;
 
         private void HandlePlayerDeath(object sender, EventArgs e)
         {
             Vector3 deathFollowOffset = new Vector3(0f, 10f, 0f);
             float transitionDuration = 1f;
-            CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
-            DOTween.To(() => transposer.m_FollowOffset, x => transposer.m_FollowOffset = x, deathFollowOffset, transitionDuration)
+            DOTween.To(() => _transposer.m_FollowOffset, x => _transposer.m_FollowOffset = x, deathFollowOffset, transitionDuration)
                 .OnComplete(EnableNoise);
+        }
+
+        private void HandlePlayerRevive(object sender, EventArgs e)
+        {
+            _noise.enabled = false;
+            float transitionDuration = 1f;
+            DOTween.To(() => _transposer.m_FollowOffset, x => _transposer.m_FollowOffset = x, _defaultFollowOffset, transitionDuration);
         }
 
         private void EnableNoise()
@@ -62,6 +73,7 @@ namespace Prototype.Controller
         public void Dispose()
         {
             _eventService.PlayerDeath -= HandlePlayerDeath;
+            _eventService.PlayerRevive -= HandlePlayerRevive;
         }
     }
 }

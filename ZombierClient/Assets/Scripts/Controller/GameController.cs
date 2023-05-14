@@ -57,6 +57,7 @@ namespace Prototype.Controller
         private void OnEnable()
         {
             _eventService.PlayerDeath += HandlePlayerDeath;
+            _eventService.PlayerRevive += HandlePlayerRevive;
         }
 
         private void Start()
@@ -75,22 +76,6 @@ namespace Prototype.Controller
                 EntityId = IdData.Empty,
                 IsCrit = false
             });
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                _player.Health = _player.MaxHealth;
-                _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs
-                {
-                    DamagedEntity = _player,
-                    DamageValue = 0f,
-                    EntityId = IdData.Empty,
-                    IsCrit = false
-                });
-                SetControllersState(true);
-            }
         }
 
         private void SetControllersState(bool enabled)
@@ -114,9 +99,23 @@ namespace Prototype.Controller
             SetControllersState(false);
         }
 
+        private void HandlePlayerRevive(object sender, EventArgs e)
+        {
+            _player.Health = _player.MaxHealth;
+            _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs
+            {
+                DamagedEntity = _player,
+                DamageValue = 0f,
+                EntityId = IdData.Empty,
+                IsCrit = false
+            });
+            SetControllersState(true);
+        }
+
         private void OnDisable()
         {
             _eventService.PlayerDeath -= HandlePlayerDeath;
+            _eventService.PlayerRevive -= HandlePlayerRevive;
         }
     }
 }

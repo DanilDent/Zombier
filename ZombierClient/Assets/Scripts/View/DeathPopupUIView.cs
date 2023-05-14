@@ -9,12 +9,14 @@ namespace Prototype.View
     public class DeathPopupUIView : MonoBehaviour
     {
         [Inject]
-        public void Construct(GameUIEventService uiEventService)
+        public void Construct(GameUIEventService uiEventService, GameplayEventService eventService)
         {
             _uiEventService = uiEventService;
+            _eventService = eventService;
         }
 
         // Injected
+        private GameplayEventService _eventService;
         private GameUIEventService _uiEventService;
         // From inspector
         [SerializeField] private RectTransform _viewRoot;
@@ -39,7 +41,8 @@ namespace Prototype.View
 
         private void OnRevive()
         {
-
+            _eventService.OnPlayerRevive();
+            _viewRoot.gameObject.SetActive(false);
         }
 
         private void OnReset()

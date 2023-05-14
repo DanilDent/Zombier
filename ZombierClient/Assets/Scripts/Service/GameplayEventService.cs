@@ -12,6 +12,7 @@ namespace Prototype.Service
         public event EventHandler PlayerStartFight;
         public event EventHandler PlayerStopFight;
         public event EventHandler PlayerDeath;
+        public event EventHandler PlayerRevive;
         public event EventHandler<PlayerMovedEventArgs> PlayerMoved;
         public event EventHandler PlayerShoot;
         public event EventHandler PlayerShootAnimationEvent;
@@ -100,6 +101,11 @@ namespace Prototype.Service
         public void OnPlayerDeath()
         {
             PlayerDeath?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnPlayerRevive()
+        {
+            PlayerRevive?.Invoke(this, EventArgs.Empty);
         }
 
         public void OnPlayerMoved(PlayerMovedEventArgs e)

@@ -21,16 +21,23 @@ namespace Prototype.View
         private void OnEnable()
         {
             _eventService.PlayerDeath += HandlePlayerDeath;
+            _eventService.PlayerRevive += HandlePlayerRevive;
         }
 
         private void OnDisable()
         {
             _eventService.PlayerDeath -= HandlePlayerDeath;
+            _eventService.PlayerRevive -= HandlePlayerRevive;
         }
 
         private void HandlePlayerDeath(object sender, EventArgs e)
         {
             _joystick.gameObject.SetActive(false);
+        }
+
+        private void HandlePlayerRevive(object sender, EventArgs e)
+        {
+            _joystick.gameObject.SetActive(true);
         }
     }
 }

@@ -12,11 +12,16 @@ namespace Prototype.Controller
     {
         // Public
 
-        public CameraController(CinemachineVirtualCamera virtualCamera, PlayerModel player, GameplayEventService eventService)
+        public CameraController(
+            CinemachineVirtualCamera virtualCamera,
+            PlayerModel player,
+            GameplayEventService eventService,
+            GameUIEventService uiEventService)
         {
             _virtualCamera = virtualCamera;
             _player = player;
             _eventService = eventService;
+            _uiEventService = uiEventService;
         }
 
         public void Initialize()
@@ -35,6 +40,7 @@ namespace Prototype.Controller
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerModel _player;
         private GameplayEventService _eventService;
+        private GameUIEventService _uiEventService;
         //
         private CinemachineBasicMultiChannelPerlin _noise;
 
@@ -44,7 +50,13 @@ namespace Prototype.Controller
             float transitionDuration = 1f;
             CinemachineTransposer transposer = _virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
             DOTween.To(() => transposer.m_FollowOffset, x => transposer.m_FollowOffset = x, deathFollowOffset, transitionDuration)
-                .OnComplete(() => _noise.enabled = true);
+                .OnComplete(EnableNoise);
+        }
+
+        private void EnableNoise()
+        {
+            _noise.enabled = true;
+            _uiEventService.OnCameraOnDeadPlayer();
         }
 
         public void Dispose()

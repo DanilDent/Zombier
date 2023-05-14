@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -93,6 +94,16 @@ namespace Prototype.ObjectPool
                 yield break;
 
             yield return new WaitForSeconds(sec);
+            Destroy(instance);
+        }
+
+        public IEnumerator Destroy(T instance, float sec, Action callback)
+        {
+            if (!instance.gameObject.activeInHierarchy)
+                yield break;
+
+            yield return new WaitForSeconds(sec);
+            callback();
             Destroy(instance);
         }
 

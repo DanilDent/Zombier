@@ -93,6 +93,7 @@ namespace Prototype
 
             // Services
             Container.Bind<GameplayInputService>().AsSingle();
+            Container.Bind<GameUIEventService>().AsSingle();
             Container.Bind<GameplayEventService>().AsSingle();
             // !Services
 

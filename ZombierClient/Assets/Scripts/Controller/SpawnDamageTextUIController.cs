@@ -2,6 +2,7 @@
 using Prototype.ObjectPool;
 using Prototype.Service;
 using Prototype.View;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -25,15 +26,30 @@ namespace Prototype.Controller
         private MonoObjectPool<DamageTextUIView> _damageTextPool;
         //
         [SerializeField] private DescRandomRange _displayDuration;
+        private List<DamageTextUIView> _damageTextList;
 
         private void OnEnable()
         {
+            // Events
             _eventService.Damaged += HandleDamaged;
+            //
+            _damageTextList = new List<DamageTextUIView>();
         }
 
         private void OnDisable()
         {
+            // Events
             _eventService.Damaged -= HandleDamaged;
+            //
+            StopAllCoroutines();
+            for (int i = 0; i < _damageTextList.Count; ++i)
+            {
+                DamageTextUIView dmgTxt = _damageTextList[i];
+                _damageTextList.RemoveAt(i);
+                _damageTextPool.Destroy(dmgTxt);
+                --i;
+            }
+            _damageTextList = null;
         }
 
         private void HandleDamaged(object sender, GameplayEventService.DamagedEventArgs e)
@@ -47,7 +63,8 @@ namespace Prototype.Controller
                 instance.IsCrit = e.IsCrit;
                 instance.DisplayDuration = Random.Range(_displayDuration.Min, _displayDuration.Max);
                 instance.gameObject.SetActive(true);
-                StartCoroutine(_damageTextPool.Destroy(instance, instance.DisplayDuration));
+                _damageTextList.Add(instance);
+                StartCoroutine(_damageTextPool.Destroy(instance, instance.DisplayDuration, () => _damageTextList.Remove(instance)));
             }
         }
     }

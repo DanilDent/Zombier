@@ -8,7 +8,9 @@ namespace Prototype.Controller
     public class LevelGenerator : MonoBehaviour
     {
         public GameObject GroundPrefab;
+        public GameObject WallPrefab;
         public Transform GroundTransform;
+        public Transform WallsTransform;
         //
         private enum TileType
         {
@@ -58,17 +60,21 @@ namespace Prototype.Controller
         [SerializeField] private int _minRoomHeight = 10;
         [SerializeField] private int _maxRoomHeight = 50;
 
-        [SerializeField] private List<GameObject> _rooms;
+        [SerializeField] private List<GameObject> _roomGrounds;
+        [SerializeField] private List<GameObject> _walls;
 
         private TileType[,] _groundMap;
+        private TileType[,] _wallsMap;
 
         private DescRoomGround _room;
         private DescRoomGround _prevRoom;
 
         private void OnEnable()
         {
-            _rooms = new List<GameObject>();
+            _roomGrounds = new List<GameObject>();
+            _walls = new List<GameObject>();
             InitGroundMap();
+            InitWallsMap();
             _roomCount = _maxRoomCount;
         }
 
@@ -84,28 +90,87 @@ namespace Prototype.Controller
             }
         }
 
+        private void InitWallsMap()
+        {
+            _wallsMap = new TileType[_maxLevelSize, _maxLevelSize];
+            for (int w = 0; w < _maxLevelSize; ++w)
+            {
+                for (int h = 0; h < _maxLevelSize; ++h)
+                {
+                    _wallsMap[w, h] = TileType.Empty;
+                }
+            }
+        }
+
         private void Update()
         {
             if (_roomCount == _maxRoomCount)
             {
-                GenerateFirstRoom();
+                GenerateFirstRoomGround();
             }
 
             if (_roomCount > 0 && Input.GetMouseButtonDown(0))
             {
-                _room = GenerateNextRoom(_prevRoom);
+                _room = GenerateNextRoomGround(_prevRoom);
                 _prevRoom = _room;
                 _roomCount--;
             }
+
+            if (_roomCount == 0)
+            {
+                GenerateWalls();
+                _roomCount--;
+                //Debug.Log("Ground map: ");
+                //for (int w = 0; w < _maxLevelSize; ++w)
+                //{
+                //    StringBuilder line = new StringBuilder();
+                //    for (int h = 0; h < _maxLevelSize; ++h)
+                //    {
+                //        line.Append($"[{(_groundMap[w, h] == TileType.Ground ? 1 : 0)}] ");
+                //    }
+                //    Debug.Log(line.ToString());
+                //}
+            }
         }
 
-        private DescRoomGround GenerateFirstRoom()
+        private void GenerateWalls()
         {
+            for (int w = 0; w < _maxLevelSize; ++w)
+            {
+                for (int h = 0; h < _maxLevelSize; ++h)
+                {
+                    if (_groundMap[w, h] == TileType.Ground)
+                    {
+                        for (int x = -1; x <= 1; ++x)
+                        {
+                            for (int y = -1; y <= 1; ++y)
+                            {
+                                if (IsCellEmpty(_groundMap, w + x, h + y) &&
+                                    IsCellEmpty(_wallsMap, w + x, h + y))
+                                {
+                                    _wallsMap[w + x, h + y] = TileType.Wall;
+                                    Vector3 position = new Vector3(w + x, 0f, h + y);
+                                    var instance = Instantiate(WallPrefab, position, Quaternion.identity, WallsTransform);
+                                    _walls.Add(instance);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private DescRoomGround GenerateFirstRoomGround()
+        {
+            int width = Random.Range(_minRoomWidth, _maxRoomWidth);
+            int height = Random.Range(_minRoomHeight, _maxRoomHeight);
             _room = new DescRoomGround(
-                    Vector2Int.zero,
-                    Random.Range(_minRoomWidth, _maxRoomWidth),
-                    Random.Range(_minRoomHeight, _maxRoomHeight),
-                    isBottomClosed: true);
+                    new Vector2Int(_maxLevelSize / 2 - width / 2, _maxLevelSize / 2 - height / 2),
+                    width,
+                    height,
+                    isBottomClosed: true,
+                    isLeftClosed: true,
+                    isRightClosed: true);
 
             CreateRoomGround(_room);
             _prevRoom = _room;
@@ -113,12 +178,13 @@ namespace Prototype.Controller
 
             return _room;
         }
-        private DescRoomGround GenerateNextRoom(DescRoomGround prevRoom)
+
+        private DescRoomGround GenerateNextRoomGround(DescRoomGround prevRoom)
         {
             int width = Random.Range(_minRoomWidth, _maxRoomWidth);
             int height = Random.Range(_minRoomHeight, _maxRoomHeight);
             Vector2Int position = GetNewRoomPosition(prevRoom, width, height);
-            var room = new DescRoomGround(position, width, height);
+            var room = new DescRoomGround(position, width, height, isBottomClosed: true);
             CreateRoomGround(room);
             return room;
         }
@@ -210,7 +276,7 @@ namespace Prototype.Controller
             {
                 for (int h = 0; h < height; ++h)
                 {
-                    if (!IsGroundEmpty(position.x + w, position.y + h))
+                    if (!IsCellEmpty(_groundMap, position.x + w, position.y + h))
                     {
                         return false;
                     }
@@ -220,9 +286,14 @@ namespace Prototype.Controller
             return true;
         }
 
-        private bool IsGroundEmpty(int x, int y)
+        private bool IsCellEmpty(TileType[,] map, int x, int y)
         {
-            if (x > 0 && y > 0 && x < _maxLevelSize && y < _maxLevelSize && _groundMap[x, y] == TileType.Empty)
+            return IsCellEquals(TileType.Empty, map, x, y);
+        }
+
+        private bool IsCellEquals(TileType type, TileType[,] map, int x, int y)
+        {
+            if (x >= 0 && y >= 0 && x < _maxLevelSize && y < _maxLevelSize && map[x, y] == type)
             {
                 return true;
             }
@@ -250,16 +321,21 @@ namespace Prototype.Controller
                 }
             }
             room.transform.SetParent(GroundTransform);
-            _rooms.Add(room);
+            _roomGrounds.Add(room);
         }
 
         private void OnDisable()
         {
-            foreach (var go in _rooms)
+            foreach (var go in _roomGrounds)
             {
-                DestroyImmediate(go);
+                Destroy(go);
             }
-            _rooms = null;
+            foreach (var go in _walls)
+            {
+                Destroy(go);
+            }
+            _roomGrounds = null;
+            _walls = null;
             _groundMap = null;
             _lastRoomIndex = 0;
             _roomCount = 0;

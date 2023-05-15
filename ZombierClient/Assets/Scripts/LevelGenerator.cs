@@ -130,11 +130,11 @@ namespace Prototype.Controller
                 GenerateWalls();
                 Vector3 firstRoomPosition = new Vector3(_firstRoomPosition2D.x, 0f, _firstRoomPosition2D.y);
                 GroundTransform.position -= firstRoomPosition;
-                MeshCombiner.objectsToCombine = _groundQuadsGfx.ToArray();
+                MeshCombiner.ObjectsToCombine = _groundQuadsGfx.ToArray();
                 GameObject groundGO = MeshCombiner.Combine("GroundMesh");
                 groundGO.gameObject.AddComponent<MeshCollider>();
                 WallsTransform.position -= firstRoomPosition;
-                MeshCombiner.objectsToCombine = _wallsGfx.ToArray();
+                MeshCombiner.ObjectsToCombine = _wallsGfx.ToArray();
                 GameObject wallsGO = MeshCombiner.Combine("WallsMesh");
                 wallsGO.gameObject.AddComponent<MeshCollider>();
                 _roomCount--;

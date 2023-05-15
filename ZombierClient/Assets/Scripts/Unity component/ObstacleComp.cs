@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -18,9 +16,9 @@ public class ObstacleComp : MonoBehaviour
 
     private void Update()
     {
-        if(Application.isEditor)
+        if (Application.isEditor)
         {
-            if(transform.hasChanged)
+            if (transform.hasChanged)
             {
                 RecalBounds();
                 transform.hasChanged = false;
@@ -33,7 +31,7 @@ public class ObstacleComp : MonoBehaviour
         Bounds = new Bounds(transform.position, Vector3.one);
         var collidres = GetComponentsInChildren<Collider>();
 
-        foreach(var collider in collidres)
+        foreach (var collider in collidres)
         {
             Bounds.Encapsulate(collider.bounds);
         }
@@ -43,7 +41,7 @@ public class ObstacleComp : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if(!DrawGizmos)
+        if (!DrawGizmos)
         {
             return;
         }

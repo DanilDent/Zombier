@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Prototype.MeshCombine;
+using System.Collections.Generic;
 using UnityEngine;
 
 using Random = UnityEngine.Random;
@@ -7,6 +8,8 @@ namespace Prototype.Controller
 {
     public class LevelGenerator : MonoBehaviour
     {
+        public MeshCombiner MeshCombiner;
+
         public GameObject GroundPrefab;
         public GameObject WallPrefab;
         public Transform GroundTransform;
@@ -61,7 +64,11 @@ namespace Prototype.Controller
         [SerializeField] private int _maxRoomHeight = 50;
 
         [SerializeField] private List<GameObject> _roomGrounds;
+        [SerializeField] private List<GameObject> _groundQuadsGfx;
         [SerializeField] private List<GameObject> _walls;
+        [SerializeField] private List<GameObject> _wallsGfx;
+
+        private Vector2Int _firstRoomPosition2D;
 
         private TileType[,] _groundMap;
         private TileType[,] _wallsMap;
@@ -73,6 +80,8 @@ namespace Prototype.Controller
         {
             _roomGrounds = new List<GameObject>();
             _walls = new List<GameObject>();
+            _groundQuadsGfx = new List<GameObject>();
+            _wallsGfx = new List<GameObject>();
             InitGroundMap();
             InitWallsMap();
             _roomCount = _maxRoomCount;
@@ -119,17 +128,16 @@ namespace Prototype.Controller
             if (_roomCount == 0)
             {
                 GenerateWalls();
+                Vector3 firstRoomPosition = new Vector3(_firstRoomPosition2D.x, 0f, _firstRoomPosition2D.y);
+                GroundTransform.position -= firstRoomPosition;
+                MeshCombiner.objectsToCombine = _groundQuadsGfx.ToArray();
+                GameObject groundGO = MeshCombiner.Combine("GroundMesh");
+                groundGO.gameObject.AddComponent<MeshCollider>();
+                WallsTransform.position -= firstRoomPosition;
+                MeshCombiner.objectsToCombine = _wallsGfx.ToArray();
+                GameObject wallsGO = MeshCombiner.Combine("WallsMesh");
+                wallsGO.gameObject.AddComponent<MeshCollider>();
                 _roomCount--;
-                //Debug.Log("Ground map: ");
-                //for (int w = 0; w < _maxLevelSize; ++w)
-                //{
-                //    StringBuilder line = new StringBuilder();
-                //    for (int h = 0; h < _maxLevelSize; ++h)
-                //    {
-                //        line.Append($"[{(_groundMap[w, h] == TileType.Ground ? 1 : 0)}] ");
-                //    }
-                //    Debug.Log(line.ToString());
-                //}
             }
         }
 
@@ -152,6 +160,8 @@ namespace Prototype.Controller
                                     Vector3 position = new Vector3(w + x, 0f, h + y);
                                     var instance = Instantiate(WallPrefab, position, Quaternion.identity, WallsTransform);
                                     _walls.Add(instance);
+                                    var wallGfx = instance.transform.GetChild(0).gameObject;
+                                    _wallsGfx.Add(wallGfx);
                                 }
                             }
                         }
@@ -164,8 +174,9 @@ namespace Prototype.Controller
         {
             int width = Random.Range(_minRoomWidth, _maxRoomWidth);
             int height = Random.Range(_minRoomHeight, _maxRoomHeight);
+            _firstRoomPosition2D = new Vector2Int(_maxLevelSize / 2 - width / 2, _maxLevelSize / 2 - height / 2);
             _room = new DescRoomGround(
-                    new Vector2Int(_maxLevelSize / 2 - width / 2, _maxLevelSize / 2 - height / 2),
+                    _firstRoomPosition2D,
                     width,
                     height,
                     isBottomClosed: true,
@@ -318,6 +329,8 @@ namespace Prototype.Controller
                         new Vector3(position.x, 0f, position.y),
                         Quaternion.identity,
                         room.transform);
+                    GameObject quadGfx = instance.transform.GetChild(0).gameObject;
+                    _groundQuadsGfx.Add(quadGfx);
                 }
             }
             room.transform.SetParent(GroundTransform);

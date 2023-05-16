@@ -5,6 +5,11 @@ namespace Prototype.LevelGeneration
 {
     public partial class LevelGenerator
     {
+        private int _minObstacleCount;
+        private int _maxObstacleCount;
+        private int _minEnvObstacleCount;
+        private int _maxEnvObstacleCount;
+
         private TileMap _obstaclesMap;
 
         private GameObject GenerateObstacles(

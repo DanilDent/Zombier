@@ -27,7 +27,7 @@ namespace Prototype.LevelGeneration
 
         //
 
-        // Internal config, assign from Inspector
+        // Internal config, move to LevelGenerator SO
         [SerializeField] private int _maxLevelSize = 1000;
         [SerializeField] private int _minRoomWidth = 10;
         [SerializeField] private int _maxRoomWidth = 50;
@@ -36,16 +36,19 @@ namespace Prototype.LevelGeneration
         [SerializeField] private int _minRoomEntryWidth = 4;
         [SerializeField] private int _envSurroundSize = 10;
         [SerializeField] private int _playerPosY = 3;
-        // TODO: Recalculate that based on SO data
-        [SerializeField] private int _minObstaclesCount = 10;
-        [SerializeField] private int _maxObstaclesCount = 40;
-        [SerializeField] private int _minEnvObstacleCount = 10;
-        [SerializeField] private int _maxEnvObstacleCount = 30;
-        //
+        [SerializeField] private int _minObstacleCountPerRoom = 2;
+        [SerializeField] private int _maxObstacleCountPerRoom = 4;
+        [SerializeField] private int _minEnvObstacleCountPerRoom = 3;
+        [SerializeField] private int _maxEnvObstacleCountPerRoom = 5;
 
         // TODO: move to constructor
         private void OnEnable()
         {
+            _minObstacleCount = _minObstacleCountPerRoom * _levelData.LevelSize;
+            _maxObstacleCount = _maxObstacleCountPerRoom * _levelData.LevelSize;
+            _minEnvObstacleCount = _minEnvObstacleCountPerRoom * _levelData.LevelSize;
+            _maxEnvObstacleCountPerRoom = _maxEnvObstacleCountPerRoom * _levelData.LevelSize;
+
             _minX = -_maxLevelSize / 2;
             _maxX = _maxLevelSize / 2 + _maxLevelSize % 2;
             _minY = -_maxLevelSize / 2;
@@ -73,8 +76,8 @@ namespace Prototype.LevelGeneration
                 _locationData.ObstaclePrefabs,
                 TileType.Obstacle,
                 TileType.Ground,
-                _minObstaclesCount,
-                _maxObstaclesCount).transform;
+                _minObstacleCount,
+                _maxObstacleCount).transform;
             Transform envGround = GenerateEnvGround().transform;
             Transform envObstacles = GenerateObstacles(
                 "EnvironmentObstacles",

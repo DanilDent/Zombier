@@ -6,24 +6,10 @@ using Random = UnityEngine.Random;
 
 namespace Prototype.Controller
 {
+    // TODO: Make non MonoBehaviour
     public class LevelGenerator : MonoBehaviour
     {
-        public MeshCombiner MeshCombiner;
-
-        public GameObject GroundPrefab;
-        public GameObject WallPrefab;
-        public GameObject[] ObstaclePrefabs;
-        public GameObject ExitPrefab;
-        //
-        public GameObject EnvGroundPrefab;
-        public GameObject[] EnvObstaclePrefabs;
-
-        public Transform GroundTransform;
-        public Transform WallsTransform;
-        public Transform ObstaclesTransform;
-        public Transform EnvGroundTransform;
-        public Transform EnvObstaclesTransform;
-        //
+        // Private types
         private enum TileType
         {
             Empty = 0,
@@ -62,51 +48,72 @@ namespace Prototype.Controller
             // 0 - Bottom, 1 - Left, 2 - Top, 3 - Right
             public bool[] IsClosed;
         }
+        //
 
-        [SerializeField] private int _maxRoomCount = 1;
+        // TODO: Inject that
+        public MeshCombiner MeshCombiner;
+        //
+
+        // TODO: external config, move to Scriptable object
+        public GameObject GroundPrefab;
+        public GameObject WallPrefab;
+        public GameObject[] ObstaclePrefabs;
+        public GameObject ExitPrefab;
+        public GameObject EnvGroundPrefab;
+        public GameObject[] EnvObstaclePrefabs;
+        public int MaxRoomCount = 1;
+        //
+
+        // Private class variables, need this in order the class logic to work
+        private Transform _groundTransform;
+        private Transform _wallsTransform;
+        private Transform _obstaclesTransform;
+        private Transform _envGroundTransform;
+        private Transform _envObstaclesTransform;
+        private Transform _exitTransform;
         private int _roomCount;
         private int _lastRoomIndex = 0;
+        private int _minX;
+        private int _maxX;
+        private int _minY;
+        private int _maxY;
+        private DescRoomGround _room;
+        private DescRoomGround _prevRoom;
+        private int _firstRoomWidth;
+        private Vector2Int _firstRoomPosition2D;
+        private DescRoomGround _exitRoom;
+
+        // TODO: make a single List, no need to differentiate that
+        private List<GameObject> _roomGrounds;
+        private List<GameObject> _groundQuadsGfx;
+        private List<GameObject> _walls;
+        private List<GameObject> _wallsGfx;
+        private List<GameObject> _obstaclesGfx;
+        private List<GameObject> _envGroundQuadsGfx;
+        private List<GameObject> _envObstaclesGfx;
+
+        private TileType[,] _groundMap;
+        private TileType[,] _wallsMap;
+        private TileType[,] _obstaclesMap;
         //
+
+        // Internal config, assign from Inspector
         [SerializeField] private int _maxLevelSize = 1000;
         [SerializeField] private int _minRoomWidth = 10;
         [SerializeField] private int _maxRoomWidth = 50;
         [SerializeField] private int _minRoomHeight = 10;
         [SerializeField] private int _maxRoomHeight = 50;
+        [SerializeField] private int _minRoomEntryWidth = 4;
+        [SerializeField] private int _envSurroundSize = 10;
+        [SerializeField] private int _playerPosY = 3;
+        // TODO: Recalculate that based on SO data
         [SerializeField] private int _minObstaclesCount = 10;
         [SerializeField] private int _maxObstaclesCount = 40;
         [SerializeField] private int _minEnvObstacleCount = 10;
         [SerializeField] private int _maxEnvObstacleCount = 30;
-        [SerializeField] private int _minRoomEntryWidth = 4;
-        [SerializeField] private GameObject _exitGO;
+        //
 
-        [SerializeField] private int _envSurroundSize = 10;
-        private int _minX;
-        private int _maxX;
-        private int _minY;
-        private int _maxY;
-
-        private int _firstRoomWidth;
-        [SerializeField] private int _playerPosY = 3;
-
-        private DescRoomGround _exitRoom;
-
-        [SerializeField] private List<GameObject> _roomGrounds;
-        [SerializeField] private List<GameObject> _groundQuadsGfx;
-        [SerializeField] private List<GameObject> _walls;
-        [SerializeField] private List<GameObject> _wallsGfx;
-        [SerializeField] private List<GameObject> _obstaclesGfx;
-        [SerializeField] private List<GameObject> _envGroundQuadsGfx;
-        [SerializeField] private List<GameObject> _envObstaclesGfx;
-
-        private Vector2Int _firstRoomPosition2D;
-
-        private TileType[,] _groundMap;
-        private TileType[,] _wallsMap;
-        private TileType[,] _obstaclesMap;
-
-        private DescRoomGround _room;
-        private DescRoomGround _prevRoom;
-
+        // TODO: move to constructor
         private void OnEnable()
         {
             _roomGrounds = new List<GameObject>();
@@ -126,12 +133,13 @@ namespace Prototype.Controller
             InitMap(ref _wallsMap);
             InitMap(ref _obstaclesMap);
 
-            _roomCount = _maxRoomCount;
+            _roomCount = MaxRoomCount;
         }
 
+        // TODO: Move to single public Method, should return GameObject for Level View
         private void Update()
         {
-            if (_roomCount == _maxRoomCount)
+            if (_roomCount == MaxRoomCount)
             {
                 GenerateFirstRoomGround();
             }
@@ -155,28 +163,28 @@ namespace Prototype.Controller
                 GenerateEnvGround();
                 GenerateObstacles(EnvObstaclePrefabs, TileType.EnvironmentObstacle, TileType.EnvironmentGround, _minEnvObstacleCount, _maxEnvObstacleCount, _envObstaclesGfx, 1f);
 
-                GroundTransform.position -= levelOffset;
+                _groundTransform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _groundQuadsGfx.ToArray();
                 GameObject groundGO = MeshCombiner.Combine("GroundMesh");
                 groundGO.gameObject.AddComponent<MeshCollider>();
 
-                WallsTransform.position -= levelOffset;
+                _wallsTransform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _wallsGfx.ToArray();
                 GameObject wallsGO = MeshCombiner.Combine("WallsMesh");
                 wallsGO.gameObject.AddComponent<MeshCollider>();
 
-                ObstaclesTransform.position -= levelOffset;
+                _obstaclesTransform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _obstaclesGfx.ToArray();
                 GameObject obstaclesGO = MeshCombiner.Combine("ObstaclesMesh");
                 obstaclesGO.gameObject.AddComponent<MeshCollider>();
 
-                _exitGO.transform.position -= levelOffset;
+                _exitTransform.transform.position -= levelOffset;
 
-                EnvGroundTransform.transform.position -= levelOffset;
+                _envGroundTransform.transform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _envGroundQuadsGfx.ToArray();
                 GameObject envGroundGO = MeshCombiner.Combine("EnvironmentGroundMesh");
 
-                EnvObstaclesTransform.transform.position -= levelOffset;
+                _envObstaclesTransform.transform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _envObstaclesGfx.ToArray();
                 GameObject envObstaclesGO = MeshCombiner.Combine("EnvironmentObstaclesMesh");
 
@@ -202,7 +210,7 @@ namespace Prototype.Controller
             int posY = exitRoom.Position.y + exitRoom.Height;
 
             Vector3 exitPosition = new Vector3(posX, 0f, posY);
-            _exitGO = Instantiate(ExitPrefab, exitPosition, Quaternion.identity);
+            _exitTransform = Instantiate(ExitPrefab, exitPosition, Quaternion.identity).transform;
             var gfx = ExitPrefab.transform.GetChild(0);
             Vector2Int size = new Vector2Int(Mathf.CeilToInt(gfx.transform.localScale.x), Mathf.CeilToInt(gfx.transform.localScale.z));
             for (int w = -size.x / 2; w < size.x / 2 + size.x % 2; ++w)
@@ -255,7 +263,7 @@ namespace Prototype.Controller
                 if (CanPlaceObstacleOn(groundType, position.x, position.y, size))
                 {
                     Quaternion rot = Quaternion.Euler(0f, rotY, 0f);
-                    GameObject instance = Instantiate(prefab, new Vector3(position.x, yOffset, position.y), rot, ObstaclesTransform);
+                    GameObject instance = Instantiate(prefab, new Vector3(position.x, yOffset, position.y), rot, _obstaclesTransform);
 
                     for (int w = -size.x / 2; w < size.x / 2 + size.x % 2; ++w)
                     {
@@ -317,7 +325,7 @@ namespace Prototype.Controller
                                 {
                                     _wallsMap[w + x, h + y] = TileType.Wall;
                                     Vector3 position = new Vector3(w + x, 0f, h + y);
-                                    var instance = Instantiate(WallPrefab, position, Quaternion.identity, WallsTransform);
+                                    var instance = Instantiate(WallPrefab, position, Quaternion.identity, _wallsTransform);
                                     _walls.Add(instance);
                                     var wallGfx = instance.transform.GetChild(0).gameObject;
                                     _wallsGfx.Add(wallGfx);
@@ -500,7 +508,7 @@ namespace Prototype.Controller
                     _maxY = Mathf.Max(_maxY, position.y);
                 }
             }
-            room.transform.SetParent(GroundTransform);
+            room.transform.SetParent(_groundTransform);
             _roomGrounds.Add(room);
         }
 
@@ -522,13 +530,14 @@ namespace Prototype.Controller
                             EnvGroundPrefab,
                             new Vector3(x, 1f, y),
                             Quaternion.identity,
-                            EnvGroundTransform);
+                            _envGroundTransform);
                         _envGroundQuadsGfx.Add(instance.transform.GetChild(0).gameObject);
                     }
                 }
             }
         }
 
+        // TODO: Move to destructor
         private void OnDisable()
         {
             foreach (var go in _roomGrounds)

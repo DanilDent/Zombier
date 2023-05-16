@@ -282,7 +282,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebc80cb16cb1744cae65022c2a0507a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectsToCombine: []
   UseMipMaps: 1
   TextureFormat: 3
 --- !u!1 &1089712819
@@ -454,7 +453,8 @@ MonoBehaviour:
   MeshCombiner: {fileID: 947406855}
   _locationData: {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}
   _levelData: {fileID: 11400000, guid: 99766ccd872a4814284ebdb4ca70b63c, type: 2}
-  _maxLevelSize: 1000
+  _levelGeneratorData: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
+    type: 2}
   _minRoomWidth: 10
   _maxRoomWidth: 30
   _minRoomHeight: 10
@@ -462,7 +462,7 @@ MonoBehaviour:
   _minRoomEntryWidth: 2
   _envSurroundSize: 10
   _playerPosY: 4
-  _minObstaclesCount: 15
-  _maxObstaclesCount: 35
-  _minEnvObstacleCount: 30
-  _maxEnvObstacleCount: 60
+  _minObstacleCountPerRoom: 2
+  _maxObstacleCountPerRoom: 4
+  _minEnvObstacleCountPerRoom: 5
+  _maxEnvObstacleCountPerRoom: 10

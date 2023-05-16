@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4849a86ff89472249b0c7c0cfe094784, type: 3}
+  m_Name: LevelGeneratorConfig
+  m_EditorClassIdentifier: 
+  MaxLevelSize: 1000
+  MinRoomWidth: 10
+  MaxRoomWidth: 50
+  MinRoomHeight: 10
+  MaxRoomHeight: 50
+  MinRoomEntryWidth: 4
+  EnvSurroundSize: 10
+  SpawnPosY: 3
+  MinObstacleCountPerRoom: 2
+  MaxObstacleCountPerRoom: 4
+  MinEnvObstacleCountPerRoom: 3
+  MaxEnvObstacleCountPerRoom: 5

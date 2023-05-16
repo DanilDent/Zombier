@@ -15,6 +15,7 @@ namespace Prototype.LevelGeneration
         // DONE ----> TODO: external config, move to Scriptable object
         [SerializeField] private LocationData _locationData;
         [SerializeField] private LevelData _levelData;
+        [SerializeField] private LevelGeneratorData _levelGeneratorData;
         //
 
         // Private class variables, need this in order the class logic to work
@@ -25,43 +26,27 @@ namespace Prototype.LevelGeneration
         private int _minY;
         private int _maxY;
 
-        //
-
-        // Internal config, move to LevelGenerator SO
-        [SerializeField] private int _maxLevelSize = 1000;
-        [SerializeField] private int _minRoomWidth = 10;
-        [SerializeField] private int _maxRoomWidth = 50;
-        [SerializeField] private int _minRoomHeight = 10;
-        [SerializeField] private int _maxRoomHeight = 50;
-        [SerializeField] private int _minRoomEntryWidth = 4;
-        [SerializeField] private int _envSurroundSize = 10;
-        [SerializeField] private int _playerPosY = 3;
-        [SerializeField] private int _minObstacleCountPerRoom = 2;
-        [SerializeField] private int _maxObstacleCountPerRoom = 4;
-        [SerializeField] private int _minEnvObstacleCountPerRoom = 3;
-        [SerializeField] private int _maxEnvObstacleCountPerRoom = 5;
-
         // TODO: move to constructor
         private void OnEnable()
         {
-            _minObstacleCount = _minObstacleCountPerRoom * _levelData.LevelSize;
-            _maxObstacleCount = _maxObstacleCountPerRoom * _levelData.LevelSize;
-            _minEnvObstacleCount = _minEnvObstacleCountPerRoom * _levelData.LevelSize;
-            _maxEnvObstacleCountPerRoom = _maxEnvObstacleCountPerRoom * _levelData.LevelSize;
+            _minObstacleCount = _levelGeneratorData.MinObstacleCountPerRoom * _levelData.LevelSize;
+            _maxObstacleCount = _levelGeneratorData.MaxObstacleCountPerRoom * _levelData.LevelSize;
+            _minEnvObstacleCount = _levelGeneratorData.MinEnvObstacleCountPerRoom * _levelData.LevelSize;
+            _maxEnvObstacleCount = _levelGeneratorData.MaxEnvObstacleCountPerRoom * _levelData.LevelSize;
 
-            _minX = -_maxLevelSize / 2;
-            _maxX = _maxLevelSize / 2 + _maxLevelSize % 2;
-            _minY = -_maxLevelSize / 2;
-            _maxY = _maxLevelSize / 2 + _maxLevelSize % 2;
+            _minX = -_levelGeneratorData.MaxLevelSize / 2;
+            _maxX = _levelGeneratorData.MaxLevelSize / 2 + _levelGeneratorData.MaxLevelSize % 2;
+            _minY = -_levelGeneratorData.MaxLevelSize / 2;
+            _maxY = _levelGeneratorData.MaxLevelSize / 2 + _levelGeneratorData.MaxLevelSize % 2;
 
             _minGroundCoordX = _maxX;
             _maxGroundCoordX = _minX;
             _minGroundCoordY = _maxY;
             _maxGroundCoordY = _minY;
 
-            _groundMap = new TileMap(_maxLevelSize);
-            _wallsMap = new TileMap(_maxLevelSize);
-            _obstaclesMap = new TileMap(_maxLevelSize);
+            _groundMap = new TileMap(_levelGeneratorData.MaxLevelSize);
+            _wallsMap = new TileMap(_levelGeneratorData.MaxLevelSize);
+            _obstaclesMap = new TileMap(_levelGeneratorData.MaxLevelSize);
 
             GenerateLevel();
         }

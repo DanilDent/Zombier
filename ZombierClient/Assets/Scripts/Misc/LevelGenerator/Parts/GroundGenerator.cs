@@ -72,8 +72,8 @@ namespace Prototype.LevelGeneration
 
         private void GenerateFirstRoomGround()
         {
-            int width = Random.Range(_minRoomWidth, _maxRoomWidth);
-            int height = Random.Range(_minRoomHeight, _maxRoomHeight);
+            int width = Random.Range(_levelGeneratorData.MinRoomWidth, _levelGeneratorData.MaxRoomWidth);
+            int height = Random.Range(_levelGeneratorData.MinRoomHeight, _levelGeneratorData.MaxRoomHeight);
             _firstRoomPosition2D = Vector2Int.zero;
             _firstRoomWidth = width;
 
@@ -86,15 +86,15 @@ namespace Prototype.LevelGeneration
                     isRightClosed: true);
 
             CreateRoomGround(room);
-            _obstaclesMap[_firstRoomWidth / 2, _playerPosY] = TileType.Obstacle;
+            _obstaclesMap[_firstRoomWidth / 2, _levelGeneratorData.SpawnPosY] = TileType.Obstacle;
             _prevRoom = room;
             --_roomCount;
         }
 
         private void GenerateNextRoomGround(DescRoomGround prevRoom)
         {
-            int width = Random.Range(_minRoomWidth, _maxRoomWidth);
-            int height = Random.Range(_minRoomHeight, _maxRoomHeight);
+            int width = Random.Range(_levelGeneratorData.MinRoomWidth, _levelGeneratorData.MaxRoomWidth);
+            int height = Random.Range(_levelGeneratorData.MinRoomHeight, _levelGeneratorData.MaxRoomHeight);
             Vector2Int position = GetNewRoomPosition(prevRoom, width, height);
             var room = new DescRoomGround(position, width, height, isBottomClosed: true);
             CreateRoomGround(room);
@@ -105,6 +105,7 @@ namespace Prototype.LevelGeneration
         private Vector2Int GetNewRoomPosition(DescRoomGround prevRoom, int newRoomWidth, int newRoomHeight)
         {
             List<Vector2Int> potentialPositions = new List<Vector2Int>();
+            int minRoomEntryWidth = _levelGeneratorData.MinRoomEntryWidth;
 
             for (int side = 0; side < prevRoom.IsClosed.Length; ++side)
             {
@@ -129,7 +130,7 @@ namespace Prototype.LevelGeneration
                         yOffset = prevRoom.Height;
                     }
 
-                    for (int xOffset = -(newRoomWidth - 1) + _minRoomEntryWidth; xOffset < Mathf.Max(prevRoom.Width - _minRoomEntryWidth, 1); ++xOffset)
+                    for (int xOffset = -(newRoomWidth - 1) + minRoomEntryWidth; xOffset < Mathf.Max(prevRoom.Width - minRoomEntryWidth, 1); ++xOffset)
                     {
                         int x = prevRoom.Position.x + xOffset;
                         int y = prevRoom.Position.y + yOffset;
@@ -158,7 +159,7 @@ namespace Prototype.LevelGeneration
                         xOffset = prevRoom.Width;
                     }
 
-                    for (int yOffset = -(newRoomHeight - 1) + _minRoomEntryWidth; yOffset < Mathf.Max(prevRoom.Height - _minRoomEntryWidth, 1); ++yOffset)
+                    for (int yOffset = -(newRoomHeight - 1) + minRoomEntryWidth; yOffset < Mathf.Max(prevRoom.Height - minRoomEntryWidth, 1); ++yOffset)
                     {
                         int x = prevRoom.Position.x + xOffset;
                         int y = prevRoom.Position.y + yOffset;
@@ -228,10 +229,11 @@ namespace Prototype.LevelGeneration
             _tempTransform = new GameObject("TempTransform").transform;
             _tempGameObjects = new List<GameObject>();
 
-            int minX = Mathf.Max(_minX, _minGroundCoordX - _envSurroundSize);
-            int maxX = Mathf.Min(_maxX, _maxGroundCoordX + _envSurroundSize);
-            int minY = Mathf.Max(_minY, _minGroundCoordY - _envSurroundSize);
-            int maxY = Mathf.Min(_maxY, _maxGroundCoordY + _envSurroundSize);
+            int envSurroundSize = _levelGeneratorData.EnvSurroundSize;
+            int minX = Mathf.Max(_minX, _minGroundCoordX - envSurroundSize);
+            int maxX = Mathf.Min(_maxX, _maxGroundCoordX + envSurroundSize);
+            int minY = Mathf.Max(_minY, _minGroundCoordY - envSurroundSize);
+            int maxY = Mathf.Min(_maxY, _maxGroundCoordY + envSurroundSize);
 
             for (int x = minX; x < maxX; ++x)
             {

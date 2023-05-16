@@ -6,8 +6,13 @@ using UnityEngine;
 namespace Prototype.MeshCombine
 {
     // TODO: Rewrite so it's non MonoBehaviour
-    public class MeshCombiner : MonoBehaviour
+    public class MeshCombiner
     {
+        public MeshCombiner()
+        {
+            _objectsToCombine = new List<GameObject>();
+        }
+
         public bool UseMipMaps = true;
         public TextureFormat TextureFormat = TextureFormat.RGB24;
 
@@ -136,11 +141,6 @@ namespace Prototype.MeshCombine
 
         // The objects to combine, each should have a mesh filter and renderer with a single material.
         private List<GameObject> _objectsToCombine;
-
-        private void Awake()
-        {
-            _objectsToCombine = new List<GameObject>();
-        }
 
         private int GetTextureSize(List<GameObject> o)
         {

@@ -10,16 +10,15 @@ namespace Prototype.LevelGeneration
     public partial class LevelGenerator
     {
         public LevelGenerator(
-            MeshCombiner meshCombiner,
             LevelGeneratorData levelGeneratorData,
             LocationData locationData,
             LevelData levelData)
         {
-            _meshCombiner = meshCombiner;
             _levelGeneratorData = levelGeneratorData;
             _locationData = locationData;
             _levelData = levelData;
 
+            _meshCombiner = new MeshCombiner();
             Init();
         }
 

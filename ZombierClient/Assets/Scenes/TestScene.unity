@@ -521,18 +521,21 @@ MonoBehaviour:
   - {fileID: 3730744119038026343, guid: 9e2fe5a7a8a0ade4799226f04ea091f2, type: 3}
   - {fileID: 2394632132745611180, guid: ce392eb318c11d6469cfdeb7aa45d5da, type: 3}
   - {fileID: 7912749713684374294, guid: 9f79a6c60143d5942b268fcd066cb59d, type: 3}
+  ExitPrefab: {fileID: 7568773469886889783, guid: 77afbeae3f635394db8c2c30b64e2d8a,
+    type: 3}
   GroundTransform: {fileID: 710530142}
   WallsTransform: {fileID: 667070204}
   ObstaclesTransform: {fileID: 2035651547}
-  _maxRoomCount: 40
+  _maxRoomCount: 2
   _maxLevelSize: 1000
   _minRoomWidth: 10
   _maxRoomWidth: 30
   _minRoomHeight: 10
   _maxRoomHeight: 50
-  _minObstaclesCount: 30
-  _maxObstaclesCount: 50
+  _minObstaclesCount: 3
+  _maxObstaclesCount: 5
   _obstaclesCount: 0
+  _exitGO: {fileID: 0}
   _roomGrounds: []
   _groundQuadsGfx: []
   _walls: []

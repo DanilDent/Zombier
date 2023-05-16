@@ -13,6 +13,7 @@ namespace Prototype.Controller
         public GameObject GroundPrefab;
         public GameObject WallPrefab;
         public GameObject[] ObstaclePrefabs;
+        public GameObject ExitPrefab;
 
         public Transform GroundTransform;
         public Transform WallsTransform;
@@ -24,6 +25,7 @@ namespace Prototype.Controller
             Ground,
             Wall,
             Obstacle,
+            Exit,
             EnvironmentGround,
             EnvironmentObstacle,
         }
@@ -68,6 +70,9 @@ namespace Prototype.Controller
         [SerializeField] private int _minObstaclesCount = 10;
         [SerializeField] private int _maxObstaclesCount = 40;
         [SerializeField] private int _obstaclesCount;
+        [SerializeField] private GameObject _exitGO;
+
+        private DescRoomGround _exitRoom;
 
         [SerializeField] private List<GameObject> _roomGrounds;
         [SerializeField] private List<GameObject> _groundQuadsGfx;
@@ -113,9 +118,13 @@ namespace Prototype.Controller
 
             if (_roomCount == 0)
             {
+                Vector3 firstRoomPosition = new Vector3(_firstRoomPosition2D.x, 0f, _firstRoomPosition2D.y);
+
+                _exitRoom = _prevRoom;
+                PlaceExit(_exitRoom);
+
                 GenerateWalls();
                 GenerateObstacles();
-                Vector3 firstRoomPosition = new Vector3(_firstRoomPosition2D.x, 0f, _firstRoomPosition2D.y);
 
                 GroundTransform.position -= firstRoomPosition;
                 MeshCombiner.ObjectsToCombine = _groundQuadsGfx.ToArray();
@@ -131,6 +140,8 @@ namespace Prototype.Controller
                 MeshCombiner.ObjectsToCombine = _obstaclesGfx.ToArray();
                 GameObject obstaclesGO = MeshCombiner.Combine("ObstaclesMesh");
                 obstaclesGO.gameObject.AddComponent<MeshCollider>();
+
+                _exitGO.transform.position -= firstRoomPosition;
 
                 _roomCount--;
             }
@@ -168,6 +179,24 @@ namespace Prototype.Controller
                 for (int h = 0; h < _maxLevelSize; ++h)
                 {
                     _obstaclesMap[w, h] = TileType.Empty;
+                }
+            }
+        }
+
+        private void PlaceExit(DescRoomGround exitRoom)
+        {
+            int posX = exitRoom.Position.x + exitRoom.Width / 2;
+            int posY = exitRoom.Position.y + exitRoom.Height;
+
+            Vector3 exitPosition = new Vector3(posX, 0f, posY);
+            _exitGO = Instantiate(ExitPrefab, exitPosition, Quaternion.identity);
+            var gfx = ExitPrefab.transform.GetChild(0);
+            Vector2Int size = new Vector2Int(Mathf.CeilToInt(gfx.transform.localScale.x), Mathf.CeilToInt(gfx.transform.localScale.z));
+            for (int w = -size.x / 2; w < size.x / 2 + size.x % 2; ++w)
+            {
+                for (int h = -size.y / 2; h < size.y / 2 + size.y % 2; ++h)
+                {
+                    _wallsMap[posX + w, posY + h] = TileType.Exit;
                 }
             }
         }

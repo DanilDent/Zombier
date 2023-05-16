@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Prototype.LevelGeneration
 {
@@ -45,6 +46,12 @@ namespace Prototype.LevelGeneration
             _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
             GameObject result = _meshCombiner.Combine(gameObjectName);
             result.AddComponent<MeshCollider>();
+            if (obstacleType == TileType.Obstacle)
+            {
+                NavMeshModifier navMeshModifier = result.AddComponent<NavMeshModifier>();
+                navMeshModifier.overrideArea = true;
+                navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);
+            }
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;

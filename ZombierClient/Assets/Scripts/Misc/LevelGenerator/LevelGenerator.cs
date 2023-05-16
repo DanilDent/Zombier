@@ -2,6 +2,7 @@
 using Prototype.MeshCombine;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Prototype.LevelGeneration
 {
@@ -32,28 +33,45 @@ namespace Prototype.LevelGeneration
 
         public void GenerateLevel()
         {
-            Transform ground = GenerateGround().transform;
-            Transform exit = GenerateExit().transform;
-            Transform walls = GenerateWalls().transform;
-            Transform obstacles = GenerateObstacles(
+            GameObject ground = GenerateGround();
+            GameObject exit = GenerateExit();
+            GameObject walls = GenerateWalls();
+            GameObject obstacles = GenerateObstacles(
                 "Obstacles",
                 _locationData.ObstaclePrefabs,
                 TileType.Obstacle,
                 TileType.Ground,
                 _minObstacleCount,
-                _maxObstacleCount).transform;
-            Transform envGround = GenerateEnvGround().transform;
-            Transform envObstacles = GenerateObstacles(
+                _maxObstacleCount);
+
+            GameObject environment = new GameObject("Environment");
+            GameObject envGround = GenerateEnvGround();
+            GameObject envObstacles = GenerateObstacles(
                 "EnvironmentObstacles",
                 _locationData.EnvObstaclePrefabs,
                 TileType.EnvironmentObstacle,
                 TileType.EnvironmentGround,
                 _minEnvObstacleCount,
-                _maxEnvObstacleCount).transform;
+                _maxEnvObstacleCount);
+            envGround.transform.SetParent(environment.transform);
+            envObstacles.transform.SetParent(environment.transform);
+
+            GameObject levelInstance = Object.Instantiate(_locationData.LocationLevelPrefab);
+            NavMeshSurface navMeshSurface = levelInstance.GetComponentInChildren<NavMeshSurface>();
+
+            environment.transform.SetParent(levelInstance.transform);
+
+            ground.transform.SetParent(navMeshSurface.transform);
+            exit.transform.SetParent(navMeshSurface.transform);
+            walls.transform.SetParent(navMeshSurface.transform);
+            obstacles.transform.SetParent(navMeshSurface.transform);
+
+            navMeshSurface.BuildNavMesh();
         }
 
         #region Private
 
+        private const string NOT_WALKABLE = "Not Walkable";
         // Injected
         private MeshCombiner _meshCombiner;
         // Config
@@ -108,6 +126,12 @@ namespace Prototype.LevelGeneration
                     _wallsMap[posX + xOffset, posY + yOffset] = TileType.Exit;
                 }
             }
+
+            instance.AddComponent<MarkerLevelExitPoint>();
+            NavMeshModifier navMeshModifier = instance.AddComponent<NavMeshModifier>();
+            navMeshModifier.overrideArea = true;
+            navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);
+
 
             return instance;
         }

@@ -61,6 +61,7 @@ namespace Prototype.LevelGeneration
             _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
             GameObject result = _meshCombiner.Combine("Ground");
             result.AddComponent<MeshCollider>();
+            result.AddComponent<MarkerGround>();
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;

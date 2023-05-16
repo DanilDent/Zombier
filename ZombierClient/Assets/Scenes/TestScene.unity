@@ -605,6 +605,7 @@ MonoBehaviour:
   _minRoomEntryWidth: 2
   _exitGO: {fileID: 0}
   _envSurroundSize: 10
+  _playerPosY: 4
   _roomGrounds: []
   _groundQuadsGfx: []
   _walls: []

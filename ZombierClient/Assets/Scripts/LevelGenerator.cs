@@ -85,6 +85,9 @@ namespace Prototype.Controller
         private int _minY;
         private int _maxY;
 
+        private int _firstRoomWidth;
+        [SerializeField] private int _playerPosY = 3;
+
         private DescRoomGround _exitRoom;
 
         [SerializeField] private List<GameObject> _roomGrounds;
@@ -142,7 +145,7 @@ namespace Prototype.Controller
 
             if (_roomCount == 0)
             {
-                Vector3 firstRoomPosition = new Vector3(_firstRoomPosition2D.x, 0f, _firstRoomPosition2D.y);
+                Vector3 levelOffset = new Vector3(_firstRoomPosition2D.x + _firstRoomWidth / 2, 0f, _firstRoomPosition2D.y + _playerPosY);
 
                 _exitRoom = _prevRoom;
                 PlaceExit(_exitRoom);
@@ -152,28 +155,28 @@ namespace Prototype.Controller
                 GenerateEnvGround();
                 GenerateObstacles(EnvObstaclePrefabs, TileType.EnvironmentObstacle, TileType.EnvironmentGround, _minEnvObstacleCount, _maxEnvObstacleCount, _envObstaclesGfx, 1f);
 
-                GroundTransform.position -= firstRoomPosition;
+                GroundTransform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _groundQuadsGfx.ToArray();
                 GameObject groundGO = MeshCombiner.Combine("GroundMesh");
                 groundGO.gameObject.AddComponent<MeshCollider>();
 
-                WallsTransform.position -= firstRoomPosition;
+                WallsTransform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _wallsGfx.ToArray();
                 GameObject wallsGO = MeshCombiner.Combine("WallsMesh");
                 wallsGO.gameObject.AddComponent<MeshCollider>();
 
-                ObstaclesTransform.position -= firstRoomPosition;
+                ObstaclesTransform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _obstaclesGfx.ToArray();
                 GameObject obstaclesGO = MeshCombiner.Combine("ObstaclesMesh");
                 obstaclesGO.gameObject.AddComponent<MeshCollider>();
 
-                _exitGO.transform.position -= firstRoomPosition;
+                _exitGO.transform.position -= levelOffset;
 
-                EnvGroundTransform.transform.position -= firstRoomPosition;
+                EnvGroundTransform.transform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _envGroundQuadsGfx.ToArray();
                 GameObject envGroundGO = MeshCombiner.Combine("EnvironmentGroundMesh");
 
-                EnvObstaclesTransform.transform.position -= firstRoomPosition;
+                EnvObstaclesTransform.transform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _envObstaclesGfx.ToArray();
                 GameObject envObstaclesGO = MeshCombiner.Combine("EnvironmentObstaclesMesh");
 
@@ -329,6 +332,7 @@ namespace Prototype.Controller
         private DescRoomGround GenerateFirstRoomGround()
         {
             int width = Random.Range(_minRoomWidth, _maxRoomWidth);
+            _firstRoomWidth = width;
             int height = Random.Range(_minRoomHeight, _maxRoomHeight);
             _firstRoomPosition2D = new Vector2Int(_maxLevelSize / 2 - width / 2, _maxLevelSize / 2 - height / 2);
             _room = new DescRoomGround(
@@ -340,6 +344,7 @@ namespace Prototype.Controller
                     isRightClosed: true);
 
             CreateRoomGround(_room);
+            _obstaclesMap[_firstRoomWidth / 2, _playerPosY] = TileType.Obstacle;
             _prevRoom = _room;
             --_roomCount;
 

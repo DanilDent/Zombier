@@ -42,13 +42,13 @@ namespace Prototype.LevelGeneration
                 --counter;
             }
 
-            MeshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = MeshCombiner.Combine(gameObjectName);
+            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _meshCombiner.Combine(gameObjectName);
             result.AddComponent<MeshCollider>();
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;
-            DestroyImmediate(_tempTransform.gameObject);
+            Object.DestroyImmediate(_tempTransform.gameObject);
             _tempTransform = null;
 
             return result;
@@ -73,7 +73,7 @@ namespace Prototype.LevelGeneration
                 if (CanPlaceObstacleOn(groundType, position.x, position.y, size))
                 {
                     Quaternion rot = Quaternion.Euler(0f, rotY, 0f);
-                    GameObject instance = Instantiate(prefab, new Vector3(position.x, 0f, position.y), rot, _tempTransform);
+                    GameObject instance = Object.Instantiate(prefab, new Vector3(position.x, 0f, position.y), rot, _tempTransform);
                     _tempGameObjects.Add(instance);
 
                     for (int xOffset = -size.x / 2; xOffset < size.x / 2 + size.x % 2; ++xOffset)

@@ -123,6 +123,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &279173159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 279173160}
+  - component: {fileID: 279173161}
+  m_Layer: 0
+  m_Name: LevelGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &279173160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279173159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &279173161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279173159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8ede745d55c36c43babcbc162f62e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshCombiner: {fileID: 947406855}
+  _locationData: {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}
+  _levelData: {fileID: 11400000, guid: 99766ccd872a4814284ebdb4ca70b63c, type: 2}
+  _levelGeneratorData: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
+    type: 2}
 --- !u!1 &667742332
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,62 +455,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1656527103
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1656527104}
-  - component: {fileID: 1656527105}
-  m_Layer: 0
-  m_Name: LevelGenerator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1656527104
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656527103}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1656527105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656527103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff710a687d8a8434cb7840cf9cebcaea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MeshCombiner: {fileID: 947406855}
-  _locationData: {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}
-  _levelData: {fileID: 11400000, guid: 99766ccd872a4814284ebdb4ca70b63c, type: 2}
-  _levelGeneratorData: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
-    type: 2}
-  _minRoomWidth: 10
-  _maxRoomWidth: 30
-  _minRoomHeight: 10
-  _maxRoomHeight: 50
-  _minRoomEntryWidth: 2
-  _envSurroundSize: 10
-  _playerPosY: 4
-  _minObstacleCountPerRoom: 2
-  _maxObstacleCountPerRoom: 4
-  _minEnvObstacleCountPerRoom: 5
-  _maxEnvObstacleCountPerRoom: 10

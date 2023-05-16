@@ -27,7 +27,7 @@ namespace Prototype.LevelGeneration
                                 {
                                     _wallsMap[x + xOffset, y + yOffset] = TileType.Wall;
                                     Vector3 position = new Vector3(x + xOffset, 0f, y + yOffset);
-                                    var instance = Instantiate(_locationData.WallPrefab, position, Quaternion.identity, _tempTransform);
+                                    var instance = Object.Instantiate(_locationData.WallPrefab, position, Quaternion.identity, _tempTransform);
                                     _tempGameObjects.Add(instance);
                                 }
                             }
@@ -36,13 +36,13 @@ namespace Prototype.LevelGeneration
                 }
             }
 
-            MeshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = MeshCombiner.Combine("Walls");
+            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _meshCombiner.Combine("Walls");
             result.AddComponent<MeshCollider>();
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;
-            DestroyImmediate(_tempTransform.gameObject);
+            Object.DestroyImmediate(_tempTransform.gameObject);
             _tempTransform = null;
 
             return result;

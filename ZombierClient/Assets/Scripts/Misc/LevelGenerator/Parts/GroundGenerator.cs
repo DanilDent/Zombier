@@ -58,13 +58,13 @@ namespace Prototype.LevelGeneration
                 GenerateNextRoomGround(_prevRoom);
             }
 
-            MeshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = MeshCombiner.Combine("Ground");
+            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _meshCombiner.Combine("Ground");
             result.AddComponent<MeshCollider>();
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;
-            DestroyImmediate(_tempTransform.gameObject);
+            Object.DestroyImmediate(_tempTransform.gameObject);
             _tempTransform = null;
 
             return result;
@@ -209,7 +209,7 @@ namespace Prototype.LevelGeneration
                 {
                     Vector2Int position = new Vector2Int(desc.Position.x + xOffset, desc.Position.y + yOffset);
                     _groundMap[position.x, position.y] = TileType.Ground;
-                    GameObject instance = Instantiate(
+                    GameObject instance = Object.Instantiate(
                         _locationData.GroundPrefab,
                         new Vector3(position.x, 0f, position.y),
                         Quaternion.identity,
@@ -242,7 +242,7 @@ namespace Prototype.LevelGeneration
                     if (_groundMap.IsCellEmpty(x, y))
                     {
                         _groundMap[x, y] = TileType.EnvironmentGround;
-                        var instance = Instantiate(
+                        var instance = Object.Instantiate(
                             _locationData.EnvGroundPrefab,
                             new Vector3(x, 1f, y),
                             Quaternion.identity,
@@ -252,12 +252,12 @@ namespace Prototype.LevelGeneration
                 }
             }
 
-            MeshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = MeshCombiner.Combine("EnvironmentGround");
+            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _meshCombiner.Combine("EnvironmentGround");
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;
-            DestroyImmediate(_tempTransform.gameObject);
+            Object.DestroyImmediate(_tempTransform.gameObject);
             _tempTransform = null;
 
             return result;

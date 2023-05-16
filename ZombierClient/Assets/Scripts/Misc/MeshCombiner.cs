@@ -1,12 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Prototype.MeshCombine
 {
+    // TODO: Rewrite so it's non MonoBehaviour
     public class MeshCombiner : MonoBehaviour
     {
-        // The objects to combine, each should have a mesh filter and renderer with a single material.
-        public GameObject[] ObjectsToCombine;
         public bool UseMipMaps = true;
         public TextureFormat TextureFormat = TextureFormat.RGB24;
 
@@ -28,18 +29,18 @@ namespace Prototype.MeshCombine
             Hashtable textureAtlas = new Hashtable();
             GameObject resultGO = null;
 
-            if (ObjectsToCombine.Length > 1)
+            if (_objectsToCombine.Count > 1)
             {
-                originalSize = ObjectsToCombine[0].GetComponent<Renderer>().material.mainTexture.width;
-                pow2 = GetTextureSize(ObjectsToCombine);
+                originalSize = _objectsToCombine[0].GetComponent<Renderer>().material.mainTexture.width;
+                pow2 = GetTextureSize(_objectsToCombine);
                 size = pow2 * originalSize;
                 combinedTexture = new Texture2D(size, size, TextureFormat, UseMipMaps);
 
                 // Create the combined texture (remember to ensure the total size of the texture isn't
                 // larger than the platform supports)
-                for (int i = 0; i < ObjectsToCombine.Length; i++)
+                for (int i = 0; i < _objectsToCombine.Count; i++)
                 {
-                    texture = (Texture2D)ObjectsToCombine[i].GetComponent<Renderer>().material.mainTexture;
+                    texture = (Texture2D)_objectsToCombine[i].GetComponent<Renderer>().material.mainTexture;
                     if (!textureAtlas.ContainsKey(texture))
                     {
                         combinedTexture.SetPixels((i % pow2) * originalSize, (i / pow2) * originalSize, originalSize, originalSize, texture.GetPixels());
@@ -47,18 +48,18 @@ namespace Prototype.MeshCombine
                     }
                 }
                 combinedTexture.Apply();
-                material = new Material(ObjectsToCombine[0].GetComponent<Renderer>().material);
+                material = new Material(_objectsToCombine[0].GetComponent<Renderer>().material);
                 material.mainTexture = combinedTexture;
 
                 // Update texture co-ords for each mesh (this will only work for meshes with coords betwen 0 and 1).
-                for (int i = 0; i < ObjectsToCombine.Length; i++)
+                for (int i = 0; i < _objectsToCombine.Count; i++)
                 {
-                    mesh = ObjectsToCombine[i].GetComponent<MeshFilter>().mesh;
+                    mesh = _objectsToCombine[i].GetComponent<MeshFilter>().mesh;
                     Vector2[] uv = new Vector2[mesh.uv.Length];
                     Vector2 offset;
-                    if (textureAtlas.ContainsKey(ObjectsToCombine[i].GetComponent<Renderer>().material.mainTexture))
+                    if (textureAtlas.ContainsKey(_objectsToCombine[i].GetComponent<Renderer>().material.mainTexture))
                     {
-                        offset = (Vector2)textureAtlas[ObjectsToCombine[i].GetComponent<Renderer>().material.mainTexture];
+                        offset = (Vector2)textureAtlas[_objectsToCombine[i].GetComponent<Renderer>().material.mainTexture];
                         for (int u = 0; u < mesh.uv.Length; u++)
                         {
                             uv[u] = mesh.uv[u] / (float)pow2;
@@ -72,19 +73,19 @@ namespace Prototype.MeshCombine
                     }
 
                     mesh.uv = uv;
-                    ObjectsToCombine[i].GetComponent<Renderer>().material = material;
+                    _objectsToCombine[i].GetComponent<Renderer>().material = material;
                 }
 
                 // Combine each mesh marked as static
                 int staticCount = 0;
-                CombineInstance[] combine = new CombineInstance[ObjectsToCombine.Length];
-                for (int i = 0; i < ObjectsToCombine.Length; i++)
+                CombineInstance[] combine = new CombineInstance[_objectsToCombine.Count];
+                for (int i = 0; i < _objectsToCombine.Count; i++)
                 {
-                    if (ObjectsToCombine[i].isStatic)
+                    if (_objectsToCombine[i].isStatic)
                     {
                         staticCount++;
-                        combine[i].mesh = ObjectsToCombine[i].GetComponent<MeshFilter>().mesh;
-                        combine[i].transform = ObjectsToCombine[i].transform.localToWorldMatrix;
+                        combine[i].mesh = _objectsToCombine[i].GetComponent<MeshFilter>().mesh;
+                        combine[i].transform = _objectsToCombine[i].transform.localToWorldMatrix;
                     }
                 }
 
@@ -102,29 +103,50 @@ namespace Prototype.MeshCombine
                     renderer.material = material;
 
                     // Disable all the static object renderers
-                    for (int i = 0; i < ObjectsToCombine.Length; i++)
+                    for (int i = 0; i < _objectsToCombine.Count; i++)
                     {
-                        if (ObjectsToCombine[i].isStatic)
+                        if (_objectsToCombine[i].isStatic)
                         {
-                            ObjectsToCombine[i].GetComponent<MeshFilter>().mesh = null;
-                            ObjectsToCombine[i].GetComponent<Renderer>().material = null;
-                            ObjectsToCombine[i].GetComponent<Renderer>().enabled = false;
+                            _objectsToCombine[i].GetComponent<MeshFilter>().mesh = null;
+                            _objectsToCombine[i].GetComponent<Renderer>().material = null;
+                            _objectsToCombine[i].GetComponent<Renderer>().enabled = false;
                         }
                     }
                 }
 
                 Resources.UnloadUnusedAssets();
+                _objectsToCombine.Clear();
                 return resultGO;
             }
 
+            _objectsToCombine.Clear();
             return resultGO;
         }
 
-        private int GetTextureSize(GameObject[] o)
+        public void SetObjectsToCombine(GameObject[] objectsToCombine)
+        {
+            _objectsToCombine.Clear();
+            foreach (GameObject objectToCombine in objectsToCombine)
+            {
+                // Get all objects with mesh renderer
+                GameObject[] goWithMeshes = objectToCombine.GetComponentsInChildren<MeshRenderer>().Select(x => x.gameObject).ToArray();
+                _objectsToCombine.AddRange(goWithMeshes);
+            }
+        }
+
+        // The objects to combine, each should have a mesh filter and renderer with a single material.
+        private List<GameObject> _objectsToCombine;
+
+        private void Awake()
+        {
+            _objectsToCombine = new List<GameObject>();
+        }
+
+        private int GetTextureSize(List<GameObject> o)
         {
             ArrayList textures = new ArrayList();
             // Find unique textures
-            for (int i = 0; i < o.Length; i++)
+            for (int i = 0; i < o.Count; i++)
             {
                 if (!textures.Contains(o[i].GetComponent<Renderer>().material.mainTexture))
                 {

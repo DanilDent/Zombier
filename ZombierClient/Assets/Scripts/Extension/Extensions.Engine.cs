@@ -1,10 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Prototype.Extensions
 {
     public static class ExtensionsEngine
     {
+        public static GameObject[] GetChildren(this Transform root)
+        {
+            List<GameObject> children = new List<GameObject>();
+            foreach (Transform child in root)
+            {
+                children.Add(child.gameObject);
+            }
+
+            return children.ToArray();
+        }
+
+        public static T[] GetChildren<T>(this Transform root)
+            where T : Component
+        {
+            List<T> children = new List<T>();
+            foreach (Transform child in root)
+            {
+                if (child.gameObject.TryGetComponent<T>(out var comp))
+                {
+                    children.Add(comp);
+                }
+            }
+
+            return children.ToArray();
+        }
+
         public static bool TrySearchComponent<T>(this Transform root, out T value)
             where T : Component
         {

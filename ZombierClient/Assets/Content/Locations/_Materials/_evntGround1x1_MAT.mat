@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: _ground1x1
+  m_Name: _evntGround1x1_MAT
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: _NORMALMAP _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 4
@@ -48,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: ed0c2c8a99e92e14ba740ac8aa428288, type: 3}
+        m_Texture: {fileID: 2800000, guid: 382df89af99b9f2459dd19206e68a63d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -108,7 +108,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ed0c2c8a99e92e14ba740ac8aa428288, type: 3}
+        m_Texture: {fileID: 2800000, guid: 382df89af99b9f2459dd19206e68a63d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:

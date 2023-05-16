@@ -14,10 +14,15 @@ namespace Prototype.Controller
         public GameObject WallPrefab;
         public GameObject[] ObstaclePrefabs;
         public GameObject ExitPrefab;
+        //
+        public GameObject EnvGroundPrefab;
+        public GameObject[] EnvObstaclePrefabs;
 
         public Transform GroundTransform;
         public Transform WallsTransform;
         public Transform ObstaclesTransform;
+        public Transform EnvGroundTransform;
+        public Transform EnvObstaclesTransform;
         //
         private enum TileType
         {
@@ -69,8 +74,16 @@ namespace Prototype.Controller
         [SerializeField] private int _maxRoomHeight = 50;
         [SerializeField] private int _minObstaclesCount = 10;
         [SerializeField] private int _maxObstaclesCount = 40;
-        [SerializeField] private int _obstaclesCount;
+        [SerializeField] private int _minEnvObstacleCount = 10;
+        [SerializeField] private int _maxEnvObstacleCount = 30;
+        [SerializeField] private int _minRoomEntryWidth = 4;
         [SerializeField] private GameObject _exitGO;
+
+        [SerializeField] private int _envSurroundSize = 10;
+        private int _minX;
+        private int _maxX;
+        private int _minY;
+        private int _maxY;
 
         private DescRoomGround _exitRoom;
 
@@ -79,6 +92,8 @@ namespace Prototype.Controller
         [SerializeField] private List<GameObject> _walls;
         [SerializeField] private List<GameObject> _wallsGfx;
         [SerializeField] private List<GameObject> _obstaclesGfx;
+        [SerializeField] private List<GameObject> _envGroundQuadsGfx;
+        [SerializeField] private List<GameObject> _envObstaclesGfx;
 
         private Vector2Int _firstRoomPosition2D;
 
@@ -96,9 +111,18 @@ namespace Prototype.Controller
             _groundQuadsGfx = new List<GameObject>();
             _wallsGfx = new List<GameObject>();
             _obstaclesGfx = new List<GameObject>();
-            InitGroundMap();
-            InitWallsMap();
-            InitObstaclesMap();
+            _envGroundQuadsGfx = new List<GameObject>();
+            _envObstaclesGfx = new List<GameObject>();
+
+            _minX = _maxLevelSize;
+            _maxX = 0;
+            _minY = _maxLevelSize;
+            _maxY = 0;
+
+            InitMap(ref _groundMap);
+            InitMap(ref _wallsMap);
+            InitMap(ref _obstaclesMap);
+
             _roomCount = _maxRoomCount;
         }
 
@@ -124,7 +148,9 @@ namespace Prototype.Controller
                 PlaceExit(_exitRoom);
 
                 GenerateWalls();
-                GenerateObstacles();
+                GenerateObstacles(ObstaclePrefabs, TileType.Obstacle, TileType.Ground, _minObstaclesCount, _maxObstaclesCount, _obstaclesGfx, 0f);
+                GenerateEnvGround();
+                GenerateObstacles(EnvObstaclePrefabs, TileType.EnvironmentObstacle, TileType.EnvironmentGround, _minEnvObstacleCount, _maxEnvObstacleCount, _envObstaclesGfx, 1f);
 
                 GroundTransform.position -= firstRoomPosition;
                 MeshCombiner.ObjectsToCombine = _groundQuadsGfx.ToArray();
@@ -143,42 +169,26 @@ namespace Prototype.Controller
 
                 _exitGO.transform.position -= firstRoomPosition;
 
+                EnvGroundTransform.transform.position -= firstRoomPosition;
+                MeshCombiner.ObjectsToCombine = _envGroundQuadsGfx.ToArray();
+                GameObject envGroundGO = MeshCombiner.Combine("EnvironmentGroundMesh");
+
+                EnvObstaclesTransform.transform.position -= firstRoomPosition;
+                MeshCombiner.ObjectsToCombine = _envObstaclesGfx.ToArray();
+                GameObject envObstaclesGO = MeshCombiner.Combine("EnvironmentObstaclesMesh");
+
                 _roomCount--;
             }
         }
 
-        private void InitGroundMap()
+        private void InitMap(ref TileType[,] map)
         {
-            _groundMap = new TileType[_maxLevelSize, _maxLevelSize];
+            map = new TileType[_maxLevelSize, _maxLevelSize];
             for (int w = 0; w < _maxLevelSize; ++w)
             {
                 for (int h = 0; h < _maxLevelSize; ++h)
                 {
-                    _groundMap[w, h] = TileType.Empty;
-                }
-            }
-        }
-
-        private void InitWallsMap()
-        {
-            _wallsMap = new TileType[_maxLevelSize, _maxLevelSize];
-            for (int w = 0; w < _maxLevelSize; ++w)
-            {
-                for (int h = 0; h < _maxLevelSize; ++h)
-                {
-                    _wallsMap[w, h] = TileType.Empty;
-                }
-            }
-        }
-
-        private void InitObstaclesMap()
-        {
-            _obstaclesMap = new TileType[_maxLevelSize, _maxLevelSize];
-            for (int w = 0; w < _maxLevelSize; ++w)
-            {
-                for (int h = 0; h < _maxLevelSize; ++h)
-                {
-                    _obstaclesMap[w, h] = TileType.Empty;
+                    map[w, h] = TileType.Empty;
                 }
             }
         }
@@ -201,32 +211,32 @@ namespace Prototype.Controller
             }
         }
 
-        private void GenerateObstacles()
+        private void GenerateObstacles(GameObject[] obstaclesPrefabs, TileType obstacleType, TileType groundType, int minCnt, int maxCnt, List<GameObject> gfxList, float yOffset)
         {
-            _obstaclesCount = Random.Range(_minObstaclesCount, _maxObstaclesCount);
+            int counter = Random.Range(minCnt, maxCnt);
             List<Vector2Int> groundCells = new List<Vector2Int>();
             for (int w = 0; w < _maxLevelSize; ++w)
             {
                 for (int h = 0; h < _maxLevelSize; ++h)
                 {
-                    if (_groundMap[w, h] == TileType.Ground)
+                    if (_groundMap[w, h] == groundType)
                     {
                         groundCells.Add(new Vector2Int(w, h));
                     }
                 }
             }
 
-            while (_obstaclesCount > 0)
+            while (counter > 0)
             {
-                PlaceNextObstacle(groundCells);
-                --_obstaclesCount;
+                PlaceNextObstacle(groundCells, obstaclesPrefabs, obstacleType, groundType, gfxList, yOffset);
+                --counter;
             }
         }
 
-        private void PlaceNextObstacle(List<Vector2Int> groundCells)
+        private void PlaceNextObstacle(List<Vector2Int> groundCells, GameObject[] obstaclesPrefabs, TileType obstacleType, TileType groundType, List<GameObject> gfxList, float yOffset)
         {
             int iterations = 100;
-            GameObject prefab = ObstaclePrefabs[Random.Range(0, ObstaclePrefabs.Length)];
+            GameObject prefab = obstaclesPrefabs[Random.Range(0, obstaclesPrefabs.Length)];
             ObstacleComp obstacleComp = prefab.GetComponent<ObstacleComp>();
             Vector2Int size = new Vector2Int(Mathf.CeilToInt(obstacleComp.Bounds.size.x), Mathf.CeilToInt(obstacleComp.Bounds.size.y));
             int[] rotationsY = new int[4] { 0, 90, 180, 270 };
@@ -239,23 +249,23 @@ namespace Prototype.Controller
             while (iterations > 0)
             {
                 Vector2Int position = groundCells[Random.Range(0, groundCells.Count)];
-                if (CanPlaceObstacleAt(position.x, position.y, size))
+                if (CanPlaceObstacleOn(groundType, position.x, position.y, size))
                 {
                     Quaternion rot = Quaternion.Euler(0f, rotY, 0f);
-                    GameObject instance = Instantiate(prefab, new Vector3(position.x, 0f, position.y), rot, ObstaclesTransform);
+                    GameObject instance = Instantiate(prefab, new Vector3(position.x, yOffset, position.y), rot, ObstaclesTransform);
 
                     for (int w = -size.x / 2; w < size.x / 2 + size.x % 2; ++w)
                     {
                         for (int h = -size.y / 2; h < size.y / 2 + size.y % 2; ++h)
                         {
-                            _obstaclesMap[position.x + w, position.y + h] = TileType.Obstacle;
+                            _obstaclesMap[position.x + w, position.y + h] = obstacleType;
                         }
                     }
 
                     for (int i = 0; i < instance.transform.childCount; ++i)
                     {
                         var child = instance.transform.GetChild(i);
-                        _obstaclesGfx.Add(child.gameObject);
+                        gfxList.Add(child.gameObject);
                     }
 
                     return;
@@ -264,10 +274,10 @@ namespace Prototype.Controller
                 --iterations;
             }
 
-            throw new System.Exception("Can't find a valid place for obstacle!");
+            Debug.LogWarning("Can't find a valid place for obstacle");
         }
 
-        private bool CanPlaceObstacleAt(int x, int y, Vector2Int size)
+        private bool CanPlaceObstacleOn(TileType tileType, int x, int y, Vector2Int size)
         {
             int xBlockOffset = 4;
             int yBlockOffset = 4;
@@ -275,7 +285,7 @@ namespace Prototype.Controller
             {
                 for (int h = -size.y / 2 - yBlockOffset; h < size.y / 2 + yBlockOffset; ++h)
                 {
-                    if (!IsCellEquals(TileType.Ground, _groundMap, x + w, y + h) ||
+                    if (!IsCellEquals(tileType, _groundMap, x + w, y + h) ||
                         IsCellEquals(TileType.Wall, _wallsMap, x + w, y + h) ||
                         !IsCellEmpty(_obstaclesMap, x + w, y + h))
                     {
@@ -349,6 +359,7 @@ namespace Prototype.Controller
         private Vector2Int GetNewRoomPosition(DescRoomGround prevRoom, int newRoomWidth, int newRoomHeight)
         {
             List<Vector2Int> potentialPositions = new List<Vector2Int>();
+
             for (int side = 0; side < prevRoom.IsClosed.Length; ++side)
             {
                 if (prevRoom.IsClosed[side])
@@ -372,7 +383,7 @@ namespace Prototype.Controller
                         yOffset = prevRoom.Height;
                     }
 
-                    for (int xOffset = -(newRoomWidth - 1); xOffset < prevRoom.Width; ++xOffset)
+                    for (int xOffset = -(newRoomWidth - 1) + _minRoomEntryWidth; xOffset < Mathf.Max(prevRoom.Width - _minRoomEntryWidth, 1); ++xOffset)
                     {
                         int x = prevRoom.Position.x + xOffset;
                         int y = prevRoom.Position.y + yOffset;
@@ -401,7 +412,7 @@ namespace Prototype.Controller
                         xOffset = prevRoom.Width;
                     }
 
-                    for (int yOffset = -(newRoomHeight - 1); yOffset < prevRoom.Height; ++yOffset)
+                    for (int yOffset = -(newRoomHeight - 1) + _minRoomEntryWidth; yOffset < Mathf.Max(prevRoom.Height - _minRoomEntryWidth, 1); ++yOffset)
                     {
                         int x = prevRoom.Position.x + xOffset;
                         int y = prevRoom.Position.y + yOffset;
@@ -477,10 +488,40 @@ namespace Prototype.Controller
                         room.transform);
                     GameObject quadGfx = instance.transform.GetChild(0).gameObject;
                     _groundQuadsGfx.Add(quadGfx);
+
+                    _minX = Mathf.Min(_minX, position.x);
+                    _maxX = Mathf.Max(_maxX, position.x);
+                    _minY = Mathf.Min(_minY, position.y);
+                    _maxY = Mathf.Max(_maxY, position.y);
                 }
             }
             room.transform.SetParent(GroundTransform);
             _roomGrounds.Add(room);
+        }
+
+        private void GenerateEnvGround()
+        {
+            int minX = Mathf.Max(0, _minX - _envSurroundSize);
+            int maxX = Mathf.Min(_maxLevelSize, _maxX + _envSurroundSize);
+            int minY = Mathf.Max(0, _minY - _envSurroundSize);
+            int maxY = Mathf.Min(_maxLevelSize, _maxY + _envSurroundSize);
+
+            for (int x = minX; x < maxX; ++x)
+            {
+                for (int y = minY; y < maxY; ++y)
+                {
+                    if (IsCellEmpty(_groundMap, x, y))
+                    {
+                        _groundMap[x, y] = TileType.EnvironmentGround;
+                        var instance = Instantiate(
+                            EnvGroundPrefab,
+                            new Vector3(x, 1f, y),
+                            Quaternion.identity,
+                            EnvGroundTransform);
+                        _envGroundQuadsGfx.Add(instance.transform.GetChild(0).gameObject);
+                    }
+                }
+            }
         }
 
         private void OnDisable()
@@ -499,6 +540,8 @@ namespace Prototype.Controller
             _lastRoomIndex = 0;
             _roomCount = 0;
             _obstaclesGfx = null;
+            _envGroundQuadsGfx = null;
+            _envObstaclesGfx = null;
         }
     }
 }

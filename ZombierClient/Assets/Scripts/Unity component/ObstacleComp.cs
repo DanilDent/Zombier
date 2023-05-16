@@ -3,6 +3,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class ObstacleComp : MonoBehaviour
 {
+    public bool ShouldRecalcBounds = false;
     public bool DrawGizmos = false;
     public Bounds Bounds;
     public float BoundsScale = 1f;
@@ -28,15 +29,18 @@ public class ObstacleComp : MonoBehaviour
 
     public void RecalBounds()
     {
-        Bounds = new Bounds(transform.position, Vector3.one);
-        var collidres = GetComponentsInChildren<Collider>();
-
-        foreach (var collider in collidres)
+        if (ShouldRecalcBounds)
         {
-            Bounds.Encapsulate(collider.bounds);
-        }
+            Bounds = new Bounds(transform.position, Vector3.one);
+            var collidres = GetComponentsInChildren<Collider>();
 
-        Bounds.Expand(BoundsScale);
+            foreach (var collider in collidres)
+            {
+                Bounds.Encapsulate(collider.bounds);
+            }
+
+            Bounds.Expand(BoundsScale);
+        }
     }
 
     private void OnDrawGizmos()

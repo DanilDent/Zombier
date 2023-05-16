@@ -66,7 +66,7 @@ namespace Prototype.LevelGeneration
             int iterations = 100;
             GameObject prefab = obstaclesPrefabs[Random.Range(0, obstaclesPrefabs.Length)];
             ObstacleComp obstacleComp = prefab.GetComponent<ObstacleComp>();
-            Vector2Int size = new Vector2Int(Mathf.CeilToInt(obstacleComp.Bounds.size.x), Mathf.CeilToInt(obstacleComp.Bounds.size.y));
+            Vector2Int size = new Vector2Int(Mathf.CeilToInt(obstacleComp.Bounds.size.x), Mathf.CeilToInt(obstacleComp.Bounds.size.z));
             int[] rotationsY = new int[4] { 0, 90, 180, 270 };
             int rotY = rotationsY[Random.Range(0, rotationsY.Length)];
             if (rotY == 90 || rotY == 270)

@@ -54,6 +54,8 @@ namespace Prototype.LevelGeneration
                 _maxEnvObstacleCount);
             envGround.transform.SetParent(environment.transform);
             envObstacles.transform.SetParent(environment.transform);
+            float environmentYOffset = 0f;
+            environment.transform.position += Vector3.up * environmentYOffset;
 
             GameObject levelInstance = Object.Instantiate(_locationData.LocationLevelPrefab);
             NavMeshSurface navMeshSurface = levelInstance.GetComponentInChildren<NavMeshSurface>();
@@ -64,6 +66,9 @@ namespace Prototype.LevelGeneration
             exit.transform.SetParent(navMeshSurface.transform);
             walls.transform.SetParent(navMeshSurface.transform);
             obstacles.transform.SetParent(navMeshSurface.transform);
+
+            Vector3 levelOffset = new Vector3(-_firstRoomWidth / 2, 0f, -_levelGeneratorData.SpawnPosY);
+            levelInstance.transform.position += levelOffset;
 
             navMeshSurface.BuildNavMesh();
         }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2394632132745611181}
   - component: {fileID: 2394632132745611187}
   m_Layer: 0
-  m_Name: EnvObstacle1
+  m_Name: EnvObstacle0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,10 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89eaf82c2cabafb4e9c54c8e335ad548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShouldRecalcBounds: 0
   DrawGizmos: 1
   Bounds:
-    m_Center: {x: 0, y: 1.25, z: 0}
-    m_Extent: {x: 1, y: 2.25, z: 1.75}
+    m_Center: {x: 0, y: 2.5, z: 0}
+    m_Extent: {x: 0.4, y: 2.5, z: 0.39}
   BoundsScale: 1
 --- !u!1 &2577669211139532827
 GameObject:

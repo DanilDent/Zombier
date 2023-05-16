@@ -1,21 +1,18 @@
 using Prototype;
 using Prototype.Data;
 using UnityEngine;
-using UnityEngine.AI;
 using Zenject;
 
 public class LevelModel : MonoBehaviour
 {
     [Inject]
-    public void Construct(GameplaySessionData session, NavMeshSurface navmesh, MarkerLevelExitPoint exitPoint)
+    public void Construct(GameplaySessionData session, MarkerLevelExitPoint exitPoint)
     {
         _session = session;
-        Navmesh = navmesh;
         ExitPoint = exitPoint;
     }
 
     // Injected
-    public NavMeshSurface Navmesh { get; private set; }
     public MarkerLevelExitPoint ExitPoint { get; private set; }
     // Properties
     public EnemySpawnData EnemySpawnData

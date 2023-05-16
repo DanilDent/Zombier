@@ -30,7 +30,7 @@ namespace Prototype.LevelGeneration
             _roomCount = 0;
         }
 
-        public void GenerateLevel()
+        public GameObject GenerateLevel()
         {
             GameObject ground = GenerateGround();
             GameObject exit = GenerateExit();
@@ -71,6 +71,8 @@ namespace Prototype.LevelGeneration
             levelInstance.transform.position += levelOffset;
 
             navMeshSurface.BuildNavMesh();
+
+            return levelInstance;
         }
 
         #region Private

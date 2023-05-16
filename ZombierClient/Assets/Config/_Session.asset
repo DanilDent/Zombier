@@ -15,6 +15,8 @@ MonoBehaviour:
   Player: {fileID: 11400000, guid: 4c6a17247fd25b84bb1eda3b59e77e1d, type: 2}
   CurrentLevelIndex: 0
   Location: {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}
+  LevelGeneratorConfig: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
+    type: 2}
   EnemyPrefab: {fileID: 5157989920299459421, guid: f6413bf18c5396146ba010d82e6dffba,
     type: 3}
   EnemyProjectilePrefab: {fileID: 4399411131317001658, guid: 859f4d5677b0b474c9cc85d33a878119,

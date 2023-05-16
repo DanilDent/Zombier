@@ -2,6 +2,7 @@ using Cinemachine;
 using Prototype.Controller;
 using Prototype.Data;
 using Prototype.Extensions;
+using Prototype.LevelGeneration;
 using Prototype.Model;
 using Prototype.ObjectPool;
 using Prototype.Service;
@@ -101,14 +102,12 @@ namespace Prototype
             //// Game entities
 
             // Level
-            Container.Bind<LevelModel>()
-                .FromComponentInNewPrefab(_session.Location.Levels[_session.CurrentLevelIndex].LevelPrefab)
-                .UnderTransform(GetMarker<MarkerLevel>)
-                .AsSingle()
-                .OnInstantiated<LevelModel>(BuildNavmesh)
-                .NonLazy();
-            Container.Bind<NavMeshSurface>().FromComponentInChildren().AsSingle();
             Container.Bind<MarkerLevelExitPoint>().FromComponentInChildren().AsSingle();
+            GameObject levelGameObject = GenerateLevel();
+            Container.Bind<LevelModel>()
+                .FromNewComponentOn(levelGameObject)
+                .AsSingle()
+                .NonLazy();
 
             // Player
             Container.Bind<PlayerModel>()
@@ -233,17 +232,21 @@ namespace Prototype
             return transform.GetComponentInChildren<T>().transform;
         }
 
-        private void BuildNavmesh(InjectContext context, LevelModel level)
-        {
-            if (level.Navmesh != null)
-            {
-                level.Navmesh.BuildNavMesh();
-            }
-        }
-
         private void SetPlayerPositionToZero(InjectContext context, PlayerModel player)
         {
             player.transform.position = Vector3.zero;
+        }
+
+        private GameObject GenerateLevel()
+        {
+            LevelGenerator levelGenerator = new LevelGenerator(
+                _session.LevelGeneratorConfig,
+                _session.Location,
+                _session.Location.Levels[_session.CurrentLevelIndex]);
+
+            GameObject levelInstance = levelGenerator.GenerateLevel();
+            levelInstance.transform.SetParent(GetMarker<MarkerLevel>());
+            return levelInstance;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Prototype.Model;
+﻿using Prototype.LevelGeneration;
+using Prototype.Model;
 using Prototype.View;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Prototype.Data
 
         public int CurrentLevelIndex;
         public LocationData Location;
+        public LevelGeneratorData LevelGeneratorConfig;
         public EnemyModel EnemyPrefab;
         public EnemyProjectileModel EnemyProjectilePrefab;
         public HitBloodSplashVFXView HitVFXPrefab;

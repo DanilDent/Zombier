@@ -1,4 +1,5 @@
-﻿using Prototype.MeshCombine;
+﻿using Prototype.Data;
+using Prototype.MeshCombine;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,12 +56,8 @@ namespace Prototype.Controller
         //
 
         // TODO: external config, move to Scriptable object
-        public GameObject GroundPrefab;
-        public GameObject WallPrefab;
-        public GameObject[] ObstaclePrefabs;
-        public GameObject ExitPrefab;
-        public GameObject EnvGroundPrefab;
-        public GameObject[] EnvObstaclePrefabs;
+        [SerializeField] private LocationData _locationData;
+        [SerializeField] private LevelData _levelData;
         public int MaxRoomCount = 1;
         //
 
@@ -116,6 +113,13 @@ namespace Prototype.Controller
         // TODO: move to constructor
         private void OnEnable()
         {
+            _groundTransform = new GameObject("GroundTransform").transform;
+            _wallsTransform = new GameObject("WallsTransform").transform;
+            _obstaclesTransform = new GameObject("ObstaclesTransform").transform;
+            _envGroundTransform = new GameObject("EnvGroundTransform").transform;
+            _envObstaclesTransform = new GameObject("EnvObstaclesTransform").transform;
+            _exitTransform = new GameObject("ExitTransform").transform;
+
             _roomGrounds = new List<GameObject>();
             _walls = new List<GameObject>();
             _groundQuadsGfx = new List<GameObject>();
@@ -159,9 +163,9 @@ namespace Prototype.Controller
                 PlaceExit(_exitRoom);
 
                 GenerateWalls();
-                GenerateObstacles(ObstaclePrefabs, TileType.Obstacle, TileType.Ground, _minObstaclesCount, _maxObstaclesCount, _obstaclesGfx, 0f);
+                GenerateObstacles(_locationData.ObstaclePrefabs, TileType.Obstacle, TileType.Ground, _minObstaclesCount, _maxObstaclesCount, _obstaclesGfx, 0f);
                 GenerateEnvGround();
-                GenerateObstacles(EnvObstaclePrefabs, TileType.EnvironmentObstacle, TileType.EnvironmentGround, _minEnvObstacleCount, _maxEnvObstacleCount, _envObstaclesGfx, 1f);
+                GenerateObstacles(_locationData.EnvObstaclePrefabs, TileType.EnvironmentObstacle, TileType.EnvironmentGround, _minEnvObstacleCount, _maxEnvObstacleCount, _envObstaclesGfx, 1f);
 
                 _groundTransform.position -= levelOffset;
                 MeshCombiner.ObjectsToCombine = _groundQuadsGfx.ToArray();
@@ -210,8 +214,8 @@ namespace Prototype.Controller
             int posY = exitRoom.Position.y + exitRoom.Height;
 
             Vector3 exitPosition = new Vector3(posX, 0f, posY);
-            _exitTransform = Instantiate(ExitPrefab, exitPosition, Quaternion.identity).transform;
-            var gfx = ExitPrefab.transform.GetChild(0);
+            _exitTransform = Instantiate(_locationData.ExitPrefab, exitPosition, Quaternion.identity).transform;
+            var gfx = _locationData.ExitPrefab.transform.GetChild(0);
             Vector2Int size = new Vector2Int(Mathf.CeilToInt(gfx.transform.localScale.x), Mathf.CeilToInt(gfx.transform.localScale.z));
             for (int w = -size.x / 2; w < size.x / 2 + size.x % 2; ++w)
             {
@@ -325,7 +329,7 @@ namespace Prototype.Controller
                                 {
                                     _wallsMap[w + x, h + y] = TileType.Wall;
                                     Vector3 position = new Vector3(w + x, 0f, h + y);
-                                    var instance = Instantiate(WallPrefab, position, Quaternion.identity, _wallsTransform);
+                                    var instance = Instantiate(_locationData.WallPrefab, position, Quaternion.identity, _wallsTransform);
                                     _walls.Add(instance);
                                     var wallGfx = instance.transform.GetChild(0).gameObject;
                                     _wallsGfx.Add(wallGfx);
@@ -495,7 +499,7 @@ namespace Prototype.Controller
                     Vector2Int position = new Vector2Int(desc.Position.x + w, desc.Position.y + h);
                     _groundMap[position.x, position.y] = TileType.Ground;
                     var instance = Instantiate(
-                        GroundPrefab,
+                        _locationData.GroundPrefab,
                         new Vector3(position.x, 0f, position.y),
                         Quaternion.identity,
                         room.transform);
@@ -527,7 +531,7 @@ namespace Prototype.Controller
                     {
                         _groundMap[x, y] = TileType.EnvironmentGround;
                         var instance = Instantiate(
-                            EnvGroundPrefab,
+                            _locationData.EnvGroundPrefab,
                             new Vector3(x, 1f, y),
                             Quaternion.identity,
                             _envGroundTransform);

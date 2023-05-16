@@ -7,5 +7,6 @@ namespace Prototype.Data
     {
         public LevelModel LevelPrefab;
         public EnemySpawnData EnemySpawnData;
+        public int LevelSize;
     }
 }

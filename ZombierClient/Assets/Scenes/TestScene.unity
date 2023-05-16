@@ -453,8 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MeshCombiner: {fileID: 947406855}
   _locationData: {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}
-  _levelData: {fileID: 0}
-  MaxRoomCount: 1
+  _levelData: {fileID: 11400000, guid: 99766ccd872a4814284ebdb4ca70b63c, type: 2}
   _maxLevelSize: 1000
   _minRoomWidth: 10
   _maxRoomWidth: 30

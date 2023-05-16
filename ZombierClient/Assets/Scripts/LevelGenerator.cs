@@ -58,7 +58,6 @@ namespace Prototype.Controller
         // TODO: external config, move to Scriptable object
         [SerializeField] private LocationData _locationData;
         [SerializeField] private LevelData _levelData;
-        public int MaxRoomCount = 1;
         //
 
         // Private class variables, need this in order the class logic to work
@@ -137,13 +136,13 @@ namespace Prototype.Controller
             InitMap(ref _wallsMap);
             InitMap(ref _obstaclesMap);
 
-            _roomCount = MaxRoomCount;
+            _roomCount = _levelData.LevelSize;
         }
 
         // TODO: Move to single public Method, should return GameObject for Level View
         private void Update()
         {
-            if (_roomCount == MaxRoomCount)
+            if (_roomCount == _levelData.LevelSize)
             {
                 GenerateFirstRoomGround();
             }

@@ -14,7 +14,7 @@ namespace Prototype.View
         // Public
 
         [Inject]
-        public void Construct(IdData id, GameplayEventService eventService)
+        public void Construct(IdData id, GameEventService eventService)
         {
             _id = id;
             _eventService = eventService;
@@ -24,7 +24,7 @@ namespace Prototype.View
 
         // Injected
         private IdData _id;
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         // From inspector
         [SerializeField] private Image _imgFiller;
         [SerializeField] private Image _imgFillerFollower;
@@ -44,7 +44,7 @@ namespace Prototype.View
             _eventService.PlayerDeath -= HandlePlayerDeath;
         }
 
-        private void HandleDamaged(object sender, GameplayEventService.DamagedEventArgs e)
+        private void HandleDamaged(object sender, GameEventService.DamagedEventArgs e)
         {
             if (_id == e.EntityId)
             {
@@ -53,7 +53,7 @@ namespace Prototype.View
             }
         }
 
-        private void HandleEnemyDeath(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        private void HandleEnemyDeath(object sender, GameEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast && _id == cast.Id)
             {

@@ -13,7 +13,7 @@ namespace Prototype.Controller
         public RangeAttackStrategy(
             EnemyModel enemy,
             PlayerModel player,
-            GameplayEventService eventService,
+            GameEventService eventService,
             MonoObjectPool<EnemyProjectileModel> projectilePool)
         {
             _player = player;
@@ -47,7 +47,7 @@ namespace Prototype.Controller
 
                 if (Vector3.Distance(_enemy.transform.position, _player.transform.position) < _enemy.AttackRange)
                 {
-                    _eventService.OnEnemyAttack(new GameplayEventService.EnemyAttackEventArgs { EntityId = _enemy.Id });
+                    _eventService.OnEnemyAttack(new GameEventService.EnemyAttackEventArgs { EntityId = _enemy.Id });
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace Prototype.Controller
         // Private
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private PlayerModel _player;
         private MonoObjectPool<EnemyProjectileModel> _projectilePool;
         // From factory
@@ -64,7 +64,7 @@ namespace Prototype.Controller
         private float _attackTimer;
         private float _attackTimerMax;
 
-        private void HandleAttackAnimationEvent(object sender, GameplayEventService.EnemyAttackAnimationEventArgs e)
+        private void HandleAttackAnimationEvent(object sender, GameEventService.EnemyAttackAnimationEventArgs e)
         {
             if (_enemy.Id == e.EntityId)
             {

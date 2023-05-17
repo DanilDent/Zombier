@@ -9,7 +9,7 @@ namespace Prototype.Controller
     {
         // Public
 
-        public MeleeAttackStrategy(EnemyModel enemy, PlayerModel player, GameplayEventService eventService)
+        public MeleeAttackStrategy(EnemyModel enemy, PlayerModel player, GameEventService eventService)
         {
             // Injected
             _enemy = enemy;
@@ -41,7 +41,7 @@ namespace Prototype.Controller
 
                 if (Vector3.Distance(_enemy.transform.position, _player.transform.position) < _enemy.AttackRange)
                 {
-                    _eventService.OnEnemyAttack(new GameplayEventService.EnemyAttackEventArgs { EntityId = _enemy.Id });
+                    _eventService.OnEnemyAttack(new GameEventService.EnemyAttackEventArgs { EntityId = _enemy.Id });
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace Prototype.Controller
         // Private
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private PlayerModel _player;
         // From factory
         private EnemyModel _enemy;
@@ -57,13 +57,13 @@ namespace Prototype.Controller
         private float _attackTimer;
         private float _attackTimerMax;
 
-        private void HandleAttackAnimationEvent(object sender, GameplayEventService.EnemyAttackAnimationEventArgs e)
+        private void HandleAttackAnimationEvent(object sender, GameEventService.EnemyAttackAnimationEventArgs e)
         {
             if (_enemy.Id == e.EntityId)
             {
                 if (Vector3.Distance(_enemy.transform.position, _player.transform.position) < _enemy.AttackRange)
                 {
-                    _eventService.OnAttacked(new GameplayEventService.AttackedEventArgs { Attacker = _enemy, Defender = _player });
+                    _eventService.OnAttacked(new GameEventService.AttackedEventArgs { Attacker = _enemy, Defender = _player });
                 }
             }
         }

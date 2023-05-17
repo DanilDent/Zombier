@@ -17,7 +17,7 @@ namespace Prototype.Controller
             PlayerModel player,
             List<EnemyModel> enemies,
             MonoObjectPool<PlayerProjectileModel> projectilePool,
-            GameplayEventService eventService)
+            GameEventService eventService)
         {
             _player = player;
             _enemies = enemies;
@@ -33,7 +33,7 @@ namespace Prototype.Controller
         private PlayerModel _player;
         private List<EnemyModel> _enemies;
         private MonoObjectPool<PlayerProjectileModel> _projectilePool;
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         //
         private float _timer;
         private float _timerMax;

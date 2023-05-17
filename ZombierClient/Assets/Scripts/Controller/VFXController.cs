@@ -13,7 +13,7 @@ namespace Prototype.Controller
 
         [Inject]
         public void Construct(
-            GameplayEventService eventService,
+            GameEventService eventService,
             MonoObjectPool<HitBloodSplashVFXView> hitVFXPool,
             MonoObjectPool<DeathBloodSplashVFXView> deathVFXPool)
         {
@@ -25,7 +25,7 @@ namespace Prototype.Controller
         // Private
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private MonoObjectPool<HitBloodSplashVFXView> _hitVFXPool;
         private MonoObjectPool<DeathBloodSplashVFXView> _deathVFXPool;
 
@@ -41,13 +41,13 @@ namespace Prototype.Controller
             _eventService.EnemyDeathInstant -= HandleDeathVFX;
         }
 
-        private void HandleHitVFX(object sender, GameplayEventService.EnemyHitEventArgs e)
+        private void HandleHitVFX(object sender, GameEventService.EnemyHitEventArgs e)
         {
             HitBloodSplashVFXView instance = _hitVFXPool.Create(e.HitPosition + Vector3.up * Random.Range(-0.2f, 0.2f), Quaternion.identity);
             StartCoroutine(_hitVFXPool.Destroy(instance, instance.Duration));
         }
 
-        private void HandleDeathVFX(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        private void HandleDeathVFX(object sender, GameEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast)
             {

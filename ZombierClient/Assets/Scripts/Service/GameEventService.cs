@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Prototype.Service
 {
-    public class GameplayEventService
+    public class GameEventService
     {
         #region Events
 
@@ -27,6 +27,9 @@ namespace Prototype.Service
         public event EventHandler<EnemyHitEventArgs> EnemyHit;
         public event EventHandler<EnemyAttackEventArgs> EnemyAttack;
         public event EventHandler<EnemyAttackAnimationEventArgs> EnemyAttackAnimationEvent;
+
+        public event EventHandler LevelCleared;
+        public event EventHandler PlayerEnteredExit;
 
         // Common game events
         public event EventHandler Reset;
@@ -90,6 +93,16 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnLevelCleared()
+        {
+            LevelCleared?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnPlayerEnteredExit()
+        {
+            PlayerEnteredExit?.Invoke(this, EventArgs.Empty);
+        }
 
         public void OnPlayerStartFight()
         {

@@ -8,7 +8,7 @@ namespace Prototype.View
     public class GameUIView : MonoBehaviour
     {
         [Inject]
-        public void Construct(FloatingJoystick joystick, GameplayEventService eventService)
+        public void Construct(FloatingJoystick joystick, GameEventService eventService)
         {
             _joystick = joystick;
             _eventService = eventService;
@@ -16,7 +16,7 @@ namespace Prototype.View
 
         // Injected
         private FloatingJoystick _joystick;
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
 
         private void OnEnable()
         {

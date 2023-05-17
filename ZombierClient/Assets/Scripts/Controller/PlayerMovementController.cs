@@ -7,16 +7,16 @@ namespace Prototype.Controller
 {
     public class PlayerMovementController : MonoBehaviour
     {
-        private GameplayInputService _inputService;
-        private GameplayEventService _eventService;
+        private GameInputService _inputService;
+        private GameEventService _eventService;
         private PlayerModel _playerModel;
 
         private Vector3 _currentMovement;
 
         [Inject]
         public void Construct(
-            GameplayInputService inputService,
-            GameplayEventService eventService,
+            GameInputService inputService,
+            GameEventService eventService,
             PlayerModel playerModel)
         {
             _inputService = inputService;
@@ -45,7 +45,7 @@ namespace Prototype.Controller
 
             CharacterController characterController = _playerModel.GetComponent<CharacterController>();
             characterController.Move(_currentMovement * _playerModel.Speed * Time.deltaTime);
-            _eventService.OnPlayerMoved(new GameplayEventService.PlayerMovedEventArgs { Movement = new Vector3(_currentMovement.x, 0f, _currentMovement.z) });
+            _eventService.OnPlayerMoved(new GameEventService.PlayerMovedEventArgs { Movement = new Vector3(_currentMovement.x, 0f, _currentMovement.z) });
         }
 
         private void HandleRotationNoFight()
@@ -92,7 +92,7 @@ namespace Prototype.Controller
 
         private void OnDisable()
         {
-            _eventService.OnPlayerMoved(new GameplayEventService.PlayerMovedEventArgs { Movement = Vector3.zero });
+            _eventService.OnPlayerMoved(new GameEventService.PlayerMovedEventArgs { Movement = Vector3.zero });
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Prototype.View
         // Public
 
         [Inject]
-        public void Construct(IdData id, GameplayEventService eventService, Animator animator)
+        public void Construct(IdData id, GameEventService eventService, Animator animator)
         {
             _id = id;
             _eventService = eventService;
@@ -23,7 +23,7 @@ namespace Prototype.View
 
         public void OnAttackAnimationEvent()
         {
-            _eventService.OnEnemyAttackAnimationEvent(new GameplayEventService.EnemyAttackAnimationEventArgs { EntityId = _id });
+            _eventService.OnEnemyAttackAnimationEvent(new GameEventService.EnemyAttackAnimationEventArgs { EntityId = _id });
         }
 
         public void OnHitEndAnimationEvent()
@@ -33,7 +33,7 @@ namespace Prototype.View
 
         public void OnDeathAnimationEvent()
         {
-            _eventService.OnEnemyDeathAnimationEvent(new GameplayEventService.EnemyDeathAnimationEventArgs { EntityId = _id });
+            _eventService.OnEnemyDeathAnimationEvent(new GameEventService.EnemyDeathAnimationEventArgs { EntityId = _id });
         }
 
         // Private
@@ -80,7 +80,7 @@ namespace Prototype.View
 
         // Injected
         private IdData _id;
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private Animator _animator;
         //
         private int _velocityHash;
@@ -91,7 +91,7 @@ namespace Prototype.View
         private int _deathTrigger;
         private int _hitLayerIndex;
 
-        private void HandleMovementAnimation(object sender, GameplayEventService.EnemyMovedEventArgs e)
+        private void HandleMovementAnimation(object sender, GameEventService.EnemyMovedEventArgs e)
         {
             if (_id == e.Id)
             {
@@ -99,7 +99,7 @@ namespace Prototype.View
             }
         }
 
-        private void HandleHitAnimation(object sender, GameplayEventService.EnemyHitEventArgs e)
+        private void HandleHitAnimation(object sender, GameEventService.EnemyHitEventArgs e)
         {
             if (_id == e.EntityId)
             {
@@ -118,7 +118,7 @@ namespace Prototype.View
             }
         }
 
-        private void HandleEnemyAttackAnimation(object sender, GameplayEventService.EnemyAttackEventArgs e)
+        private void HandleEnemyAttackAnimation(object sender, GameEventService.EnemyAttackEventArgs e)
         {
             if (_id == e.EntityId)
             {
@@ -127,7 +127,7 @@ namespace Prototype.View
             }
         }
 
-        private void HandleDeathAnimaiton(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        private void HandleDeathAnimaiton(object sender, GameEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast && _id == cast.Id)
             {

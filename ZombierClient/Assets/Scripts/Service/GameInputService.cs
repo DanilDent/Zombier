@@ -3,12 +3,12 @@ using Zenject;
 
 namespace Prototype.Service
 {
-    public class GameplayInputService
+    public class GameInputService
     {
         private FloatingJoystick _joystick;
 
         [Inject]
-        public GameplayInputService(FloatingJoystick joystick)
+        public GameInputService(FloatingJoystick joystick)
         {
             _joystick = joystick;
         }

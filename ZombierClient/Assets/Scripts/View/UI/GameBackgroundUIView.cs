@@ -10,13 +10,13 @@ namespace Prototype.View
     public class GameBackgroundUIView : MonoBehaviour
     {
         [Inject]
-        public void Construct(GameplayEventService eventService)
+        public void Construct(GameEventService eventService)
         {
             _eventService = eventService;
         }
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         // From inspector
         [SerializeField] private Image _img;
         private Color _defaultColor;
@@ -34,7 +34,7 @@ namespace Prototype.View
             _eventService.Damaged -= HandleDamaged;
         }
 
-        private void HandleDamaged(object sender, GameplayEventService.DamagedEventArgs e)
+        private void HandleDamaged(object sender, GameEventService.DamagedEventArgs e)
         {
             if (e.DamagedEntity is PlayerModel && e.DamageValue > 0f)
             {

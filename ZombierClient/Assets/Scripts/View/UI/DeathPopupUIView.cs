@@ -9,14 +9,14 @@ namespace Prototype.View
     public class DeathPopupUIView : MonoBehaviour
     {
         [Inject]
-        public void Construct(GameUIEventService uiEventService, GameplayEventService eventService)
+        public void Construct(GameUIEventService uiEventService, GameEventService eventService)
         {
             _uiEventService = uiEventService;
             _eventService = eventService;
         }
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private GameUIEventService _uiEventService;
         // From inspector
         [SerializeField] private RectTransform _viewRoot;

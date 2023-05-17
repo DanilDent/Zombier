@@ -12,7 +12,7 @@ namespace Prototype.View
         [SerializeField] private Image _imgProgressBar;
         [SerializeField] private TextMeshProUGUI _textProgressBar;
         private float _timer;
-        private float _timerMax = .1f;
+        private float _timerMax = .5f;
         private int _dotsCount = 1;
 
         private void Update()

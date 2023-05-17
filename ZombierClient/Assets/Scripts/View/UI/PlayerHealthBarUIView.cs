@@ -13,7 +13,7 @@ namespace Prototype.View
         // Public
 
         [Inject]
-        public void Construct(GameplayEventService eventService)
+        public void Construct(GameEventService eventService)
         {
             _eventService = eventService;
         }
@@ -21,7 +21,7 @@ namespace Prototype.View
         // Private
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         // From inspector
         [SerializeField] private Image _imgFiller;
         [SerializeField] private Image _imgFillerFollower;
@@ -37,7 +37,7 @@ namespace Prototype.View
             _eventService.Damaged -= HandleDamaged;
         }
 
-        private void HandleDamaged(object sender, GameplayEventService.DamagedEventArgs e)
+        private void HandleDamaged(object sender, GameEventService.DamagedEventArgs e)
         {
             if (e.DamagedEntity is PlayerModel player)
             {

@@ -11,7 +11,7 @@ namespace Prototype.Controller
     {
         // Public
         [Inject]
-        public void Construct(GameplayEventService eventService, List<EnemyModel> enemies, PlayerModel player)
+        public void Construct(GameEventService eventService, List<EnemyModel> enemies, PlayerModel player)
         {
             _eventService = eventService;
             _enemies = enemies;
@@ -21,7 +21,7 @@ namespace Prototype.Controller
         // Private
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private List<EnemyModel> _enemies;
         private PlayerModel _player;
         //
@@ -78,7 +78,7 @@ namespace Prototype.Controller
                     throw new NotImplementedException($"Enemy {enemy} is in unknown state {enemy.CurrentState}");
             }
 
-            _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.MaxSpeed });
+            _eventService.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentSpeed / enemy.MaxSpeed });
         }
 
         private void SyncAgentWithTransform(EnemyModel enemy)
@@ -169,7 +169,7 @@ namespace Prototype.Controller
 
             foreach (var enemy in _enemies)
             {
-                _eventService.OnEnemyMoved(new GameplayEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = 0f });
+                _eventService.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = 0f });
                 enemy.Rigidbody.velocity = Vector3.zero;
             }
         }

@@ -12,7 +12,7 @@ namespace Prototype.View
         // Public 
 
         [Inject]
-        public void Construct(GameplayEventService eventService, Rig aimRig)
+        public void Construct(GameEventService eventService, Rig aimRig)
         {
             _eventService = eventService;
             _aimRig = aimRig;
@@ -28,7 +28,7 @@ namespace Prototype.View
         // Dependencies
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private Rig _aimRig;
         //
 
@@ -92,7 +92,7 @@ namespace Prototype.View
             _eventService.PlayerRevive -= HandlePlayerRevive;
         }
 
-        private void HandleMovementAnimations(object sender, GameplayEventService.PlayerMovedEventArgs e)
+        private void HandleMovementAnimations(object sender, GameEventService.PlayerMovedEventArgs e)
         {
             switch (_state)
             {

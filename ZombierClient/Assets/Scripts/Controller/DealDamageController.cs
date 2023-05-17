@@ -8,7 +8,7 @@ using Zenject;
 public class DealDamageController : MonoBehaviour
 {
     [Inject]
-    public void Construct(GameplayEventService eventService)
+    public void Construct(GameEventService eventService)
     {
         _eventService = eventService;
     }
@@ -23,9 +23,9 @@ public class DealDamageController : MonoBehaviour
         _eventService.Attacked -= HandleDamagedEvent;
     }
 
-    private GameplayEventService _eventService;
+    private GameEventService _eventService;
 
-    private void HandleDamagedEvent(object sender, GameplayEventService.AttackedEventArgs e)
+    private void HandleDamagedEvent(object sender, GameEventService.AttackedEventArgs e)
     {
         IDamaging attacker = e.Attacker;
         IDamageable defender = e.Defender;
@@ -46,7 +46,7 @@ public class DealDamageController : MonoBehaviour
 
         IdData entityId = defender is EnemyModel cast ? cast.Id : IdData.Empty;
 
-        _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs
+        _eventService.OnDamaged(new GameEventService.DamagedEventArgs
         {
             EntityId = entityId,
             DamagedEntity = defender,
@@ -61,11 +61,11 @@ public class DealDamageController : MonoBehaviour
                 float noAnimDeathChance = 0.5f;
                 if (Helpers.TryRandom(noAnimDeathChance))
                 {
-                    _eventService.OnEnemyDeathInstant(new GameplayEventService.EnemyDeathEventArgs { Entity = defender });
+                    _eventService.OnEnemyDeathInstant(new GameEventService.EnemyDeathEventArgs { Entity = defender });
                 }
                 else
                 {
-                    _eventService.OnEnemyDeath(new GameplayEventService.EnemyDeathEventArgs { Entity = defender });
+                    _eventService.OnEnemyDeath(new GameEventService.EnemyDeathEventArgs { Entity = defender });
                 }
             }
             else

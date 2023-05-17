@@ -15,7 +15,7 @@ namespace Prototype.Controller
         public CameraController(
             CinemachineVirtualCamera virtualCamera,
             PlayerModel player,
-            GameplayEventService eventService,
+            GameEventService eventService,
             GameUIEventService uiEventService)
         {
             _virtualCamera = virtualCamera;
@@ -42,7 +42,7 @@ namespace Prototype.Controller
         // Injected
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerModel _player;
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private GameUIEventService _uiEventService;
         //
         private CinemachineBasicMultiChannelPerlin _noise;

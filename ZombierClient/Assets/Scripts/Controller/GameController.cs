@@ -11,7 +11,7 @@ namespace Prototype.Controller
     {
         [Inject]
         public void Construct(
-            GameplayEventService eventService,
+            GameEventService eventService,
             PlayerModel player,
             // Controllers
             DealDamageController dealDamageController,
@@ -40,7 +40,7 @@ namespace Prototype.Controller
             _vfxController = vfxController;
         }
 
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private PlayerModel _player;
         // Controllers
         private DealDamageController _dealDamageController;
@@ -70,7 +70,7 @@ namespace Prototype.Controller
             // Init player
             _player.Health = _player.MaxHealth;
             // Use this call to update player HealthBar
-            _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs
+            _eventService.OnDamaged(new GameEventService.DamagedEventArgs
             {
                 DamagedEntity = _player,
                 DamageValue = 0f,
@@ -118,7 +118,7 @@ namespace Prototype.Controller
         private void HandlePlayerRevive(object sender, EventArgs e)
         {
             _player.Health = _player.MaxHealth;
-            _eventService.OnDamaged(new GameplayEventService.DamagedEventArgs
+            _eventService.OnDamaged(new GameEventService.DamagedEventArgs
             {
                 DamagedEntity = _player,
                 DamageValue = 0f,

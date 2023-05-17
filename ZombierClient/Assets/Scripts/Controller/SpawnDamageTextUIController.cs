@@ -13,7 +13,7 @@ namespace Prototype.Controller
         // Public
 
         [Inject]
-        public void Construct(GameplayEventService eventService, MonoObjectPool<DamageTextUIView> damageTextPool)
+        public void Construct(GameEventService eventService, MonoObjectPool<DamageTextUIView> damageTextPool)
         {
             _eventService = eventService;
             _damageTextPool = damageTextPool;
@@ -22,7 +22,7 @@ namespace Prototype.Controller
         // Private
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private MonoObjectPool<DamageTextUIView> _damageTextPool;
         //
         [SerializeField] private DescRandomRange _displayDuration;
@@ -52,7 +52,7 @@ namespace Prototype.Controller
             _damageTextList = null;
         }
 
-        private void HandleDamaged(object sender, GameplayEventService.DamagedEventArgs e)
+        private void HandleDamaged(object sender, GameEventService.DamagedEventArgs e)
         {
             if (e.DamagedEntity is Component cast && e.DamageValue > 0)
             {

@@ -22,7 +22,7 @@ namespace Prototype.Controller
             EnemyModel.Factory enemyFactory,
             PlayerModel player,
             List<EnemyModel> enemies,
-            GameplayEventService eventService)
+            GameEventService eventService)
         {
             _level = level;
             _enemyFactory = enemyFactory;
@@ -69,7 +69,7 @@ namespace Prototype.Controller
         // Dependencies
 
         // Injected
-        GameplayEventService _eventService;
+        GameEventService _eventService;
         private LevelModel _level;
         private EnemyModel.Factory _enemyFactory;
         private PlayerModel _player;
@@ -86,9 +86,9 @@ namespace Prototype.Controller
         private void OnEnable()
         {
             // Events
-            _eventService.EnemyDeath += HandleDeath;
-            _eventService.EnemyDeathAnimationEvent += HandleDeathAnimationEvent;
-            _eventService.EnemyDeathInstant += HandleDeathInstant;
+            _eventService.EnemyDeath += HandleEnemyDeath;
+            _eventService.EnemyDeathAnimationEvent += HandleEnemyDeathAnimationEvent;
+            _eventService.EnemyDeathInstant += HandleEnemyDeathInstant;
             //
             float distancePlayerToExit = Vector3.Distance(_player.transform.position, _level.ExitPoint.transform.position);
             _allowedCenterPointRange = distancePlayerToExit - _minDistanceFromPlayer - _maxSampleDistance;
@@ -97,9 +97,9 @@ namespace Prototype.Controller
 
         private void OnDisable()
         {
-            _eventService.EnemyDeath -= HandleDeath;
-            _eventService.EnemyDeathAnimationEvent -= HandleDeathAnimationEvent;
-            _eventService.EnemyDeathInstant -= HandleDeathInstant;
+            _eventService.EnemyDeath -= HandleEnemyDeath;
+            _eventService.EnemyDeathAnimationEvent -= HandleEnemyDeathAnimationEvent;
+            _eventService.EnemyDeathInstant -= HandleEnemyDeathInstant;
         }
 
         private void Update()
@@ -139,7 +139,7 @@ namespace Prototype.Controller
             return false;
         }
 
-        private void HandleDeath(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        private void HandleEnemyDeath(object sender, GameEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast)
             {
@@ -149,10 +149,15 @@ namespace Prototype.Controller
                 cast.Rigidbody.useGravity = false;
                 cast.GetComponent<Collider>().enabled = false;
                 _enemiesToDestroy.Add(cast);
+
+                if (_enemies.Count == 0)
+                {
+                    _eventService.OnLevelCleared();
+                }
             }
         }
 
-        private void HandleDeathInstant(object sender, GameplayEventService.EnemyDeathEventArgs e)
+        private void HandleEnemyDeathInstant(object sender, GameEventService.EnemyDeathEventArgs e)
         {
             if (e.Entity is EnemyModel cast)
             {
@@ -162,10 +167,15 @@ namespace Prototype.Controller
                 cast.Rigidbody.useGravity = false;
                 cast.GetComponent<Collider>().enabled = false;
                 Destroy(cast.gameObject, 0.1f);
+
+                if (_enemies.Count == 0)
+                {
+                    _eventService.OnLevelCleared();
+                }
             }
         }
 
-        private void HandleDeathAnimationEvent(object sender, GameplayEventService.EnemyDeathAnimationEventArgs e)
+        private void HandleEnemyDeathAnimationEvent(object sender, GameEventService.EnemyDeathAnimationEventArgs e)
         {
             EnemyModel toDestroy = _enemiesToDestroy.FirstOrDefault(_ => _.Id == e.EntityId);
             float destroyDelay = 1f;

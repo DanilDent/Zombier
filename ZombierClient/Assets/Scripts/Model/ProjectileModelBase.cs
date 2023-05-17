@@ -10,7 +10,7 @@ namespace Prototype.Model
         // Public
 
         [Inject]
-        public void Construct(GameplayEventService eventService, Rigidbody rigidbody)
+        public void Construct(GameEventService eventService, Rigidbody rigidbody)
         {
             _eventService = eventService;
             _rigidbody = rigidbody;
@@ -24,7 +24,7 @@ namespace Prototype.Model
         // Dependencies
 
         // Injected
-        protected GameplayEventService _eventService;
+        protected GameEventService _eventService;
         protected Rigidbody _rigidbody;
         //
 

@@ -13,7 +13,7 @@ namespace Prototype.Controller
 
         [Inject]
         public void Construct(
-           GameplayEventService eventService,
+           GameEventService eventService,
            PlayerModel player,
            List<EnemyModel> enemies)
         {
@@ -27,7 +27,7 @@ namespace Prototype.Controller
         // Dependencies
 
         // Injected
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private PlayerModel _player;
         [SerializeField] private List<EnemyModel> _enemies;
         //

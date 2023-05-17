@@ -9,7 +9,7 @@ namespace Prototype.View
     public class MuzzleFlashVFXView : MonoBehaviour
     {
         [Inject]
-        public void Construct(GameplayEventService eventService, List<ParticleSystem> particleSystems)
+        public void Construct(GameEventService eventService, List<ParticleSystem> particleSystems)
         {
             _eventService = eventService;
             _particleSystems = particleSystems;
@@ -36,7 +36,7 @@ namespace Prototype.View
             }
         }
 
-        private GameplayEventService _eventService;
+        private GameEventService _eventService;
         private List<ParticleSystem> _particleSystems;
     }
 }

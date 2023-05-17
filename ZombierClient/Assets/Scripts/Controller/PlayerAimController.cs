@@ -113,6 +113,7 @@ namespace Prototype.Controller
                         // Player doesn't have a target
                         _player.CurrentState = PlayerModel.State.NoFight;
                         UpdateCurrentTarget(null);
+                        _eventService.OnPlayerStopFight();
                     }
                 }
 
@@ -179,7 +180,7 @@ namespace Prototype.Controller
 
         private void HandleEnemyPreDestroyed(object sender, EventArgs e)
         {
-            UpdatePlayerState();
+            UpdateTargetHandle(_player.DefaultTargetPoint);
         }
 
         private void OnDisable()

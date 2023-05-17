@@ -31,6 +31,8 @@ namespace Prototype.Controller
             _eventService = eventService;
         }
 
+        public int EnemyCount => _enemies.Count;
+
         public void SpawnEnemies()
         {
             int countLeftToSpawn = Random.Range(_level.EnemySpawnData.MinEnemyCount, _level.EnemySpawnData.MaxEnemyCount + 1);

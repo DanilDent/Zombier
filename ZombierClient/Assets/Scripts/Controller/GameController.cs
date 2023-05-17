@@ -11,6 +11,7 @@ namespace Prototype.Controller
     {
         [Inject]
         public void Construct(
+            GameplaySessionData session,
             GameEventService eventService,
             PlayerModel player,
             // Controllers
@@ -25,6 +26,7 @@ namespace Prototype.Controller
             SpawnDamageTextUIController spawnDamageTextUIController,
             VFXController vfxController)
         {
+            _session = session;
             _eventService = eventService;
             _player = player;
             // Controllers
@@ -40,6 +42,7 @@ namespace Prototype.Controller
             _vfxController = vfxController;
         }
 
+        private GameplaySessionData _session;
         private GameEventService _eventService;
         private PlayerModel _player;
         // Controllers
@@ -59,6 +62,7 @@ namespace Prototype.Controller
             _eventService.PlayerDeath += HandlePlayerDeath;
             _eventService.PlayerRevive += HandlePlayerRevive;
             _eventService.Reset += HandleReset;
+            _eventService.PlayerEnteredExit += HandlePlayerEnteredExit;
         }
 
         private void Start()
@@ -68,7 +72,7 @@ namespace Prototype.Controller
             InitGame();
 
             // Init player
-            _player.Health = _player.MaxHealth;
+            _player.Health = _session.CurrentLevelIndex == 0 ? _player.MaxHealth : _player.Health;
             // Use this call to update player HealthBar
             _eventService.OnDamaged(new GameEventService.DamagedEventArgs
             {
@@ -133,11 +137,24 @@ namespace Prototype.Controller
             SceneLoaderService.Load(SceneLoaderService.Scene.Game);
         }
 
+        private void HandlePlayerEnteredExit(object sender, EventArgs e)
+        {
+            if (_enemySpawnController.EnemyCount == 0)
+            {
+                _session.CurrentLevelIndex++;
+                if (_session.CurrentLevelIndex < _session.Location.Levels.Length)
+                {
+                    SceneLoaderService.Load(SceneLoaderService.Scene.Game);
+                }
+            }
+        }
+
         private void OnDisable()
         {
             _eventService.PlayerDeath -= HandlePlayerDeath;
             _eventService.PlayerRevive -= HandlePlayerRevive;
             _eventService.Reset -= HandleReset;
+            _eventService.PlayerEnteredExit -= HandlePlayerEnteredExit;
         }
     }
 }

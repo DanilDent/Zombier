@@ -1,4 +1,5 @@
 using Prototype.Data;
+using Prototype.Service;
 using UnityEngine;
 using Zenject;
 
@@ -12,11 +13,13 @@ namespace Prototype.Model
         [Inject]
         public void Construct(
             GameplaySessionData session,
+            GameEventService eventService,
             WeaponModel weaponModel,
             MarkerDefaulTargetPoint targetPoint,
             TargetHandleModel targetHandle)
         {
             _data = session.Player;
+            _eventService = eventService;
             _weaponModel = weaponModel;
             _targetPoint = targetPoint;
             _targetHandle = targetHandle;
@@ -61,6 +64,7 @@ namespace Prototype.Model
         // Dependencies
 
         // Injected
+        private GameEventService _eventService;
         private WeaponModel _weaponModel;
         private MarkerDefaulTargetPoint _targetPoint;
         [SerializeField] private TargetHandleModel _targetHandle;
@@ -80,6 +84,14 @@ namespace Prototype.Model
                 }
 
                 _damage[dmg.Type] += dmg;
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.TryGetComponent<MarkerLevelExitPoint>(out var exit))
+            {
+                _eventService.OnPlayerEnteredExit();
             }
         }
     }

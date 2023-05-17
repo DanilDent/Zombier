@@ -29,7 +29,7 @@ namespace Prototype.Service
         public event EventHandler<EnemyAttackEventArgs> EnemyAttack;
         public event EventHandler<EnemyAttackAnimationEventArgs> EnemyAttackAnimationEvent;
 
-        public event EventHandler LevelCleared;
+        public event EventHandler<LevelClearedEventArgs> LevelCleared;
         public event EventHandler PlayerEnteredExit;
 
         // Common game events
@@ -38,6 +38,11 @@ namespace Prototype.Service
         #endregion
 
         #region EventArgs
+
+        public class LevelClearedEventArgs : EventArgs
+        {
+            public bool IsLastLevel;
+        }
 
         public class PlayerMovedEventArgs : EventArgs
         {
@@ -100,9 +105,9 @@ namespace Prototype.Service
             EnemyPreDestroyed?.Invoke(this, EventArgs.Empty);
         }
 
-        public void OnLevelCleared()
+        public void OnLevelCleared(LevelClearedEventArgs e)
         {
-            LevelCleared?.Invoke(this, EventArgs.Empty);
+            LevelCleared?.Invoke(this, e);
         }
 
         public void OnPlayerEnteredExit()

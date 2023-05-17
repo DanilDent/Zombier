@@ -18,12 +18,14 @@ namespace Prototype.Controller
 
         [Inject]
         public void Construct(
+            GameplaySessionData session,
             LevelModel level,
             EnemyModel.Factory enemyFactory,
             PlayerModel player,
             List<EnemyModel> enemies,
             GameEventService eventService)
         {
+            _session = session;
             _level = level;
             _enemyFactory = enemyFactory;
             _player = player;
@@ -71,6 +73,7 @@ namespace Prototype.Controller
         // Dependencies
 
         // Injected
+        GameplaySessionData _session;
         GameEventService _eventService;
         private LevelModel _level;
         private EnemyModel.Factory _enemyFactory;
@@ -154,7 +157,10 @@ namespace Prototype.Controller
 
                 if (_enemies.Count == 0)
                 {
-                    _eventService.OnLevelCleared();
+                    _eventService.OnLevelCleared(new GameEventService.LevelClearedEventArgs
+                    {
+                        IsLastLevel = _session.CurrentLevelIndex == _session.Location.Levels.Length - 1
+                    });
                 }
             }
         }
@@ -173,7 +179,10 @@ namespace Prototype.Controller
 
                 if (_enemies.Count == 0)
                 {
-                    _eventService.OnLevelCleared();
+                    _eventService.OnLevelCleared(new GameEventService.LevelClearedEventArgs
+                    {
+                        IsLastLevel = _session.CurrentLevelIndex == _session.Location.Levels.Length - 1
+                    });
                 }
             }
         }

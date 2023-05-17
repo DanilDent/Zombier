@@ -12,6 +12,7 @@ namespace Prototype.Service
             Game,
             App,
             Loading,
+            Results,
         }
 
 

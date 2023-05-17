@@ -146,6 +146,11 @@ namespace Prototype.Controller
                 {
                     SceneLoaderService.Load(SceneLoaderService.Scene.Game);
                 }
+                else
+                {
+                    _session.CurrentLevelIndex = 0;
+                    SceneLoaderService.Load(SceneLoaderService.Scene.Results);
+                }
             }
         }
 

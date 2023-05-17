@@ -1,6 +1,6 @@
 using DG.Tweening;
 using Prototype.Service;
-using System;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -24,13 +24,18 @@ namespace Prototype.View
             _eventService.LevelCleared -= HandleLevelCleared;
         }
 
+        private const string LOCATION_CLEARED = "Location Cleared";
+        private const string LEVEL_CLEARED = "Level Cleared";
         // Injected
         private GameEventService _eventService;
         // From inspector
         [SerializeField] private RectTransform _viewRoot;
+        [SerializeField] private TextMeshProUGUI _levelClearedText;
 
-        private void HandleLevelCleared(object sender, EventArgs e)
+        private void HandleLevelCleared(object sender, GameEventService.LevelClearedEventArgs e)
         {
+            _levelClearedText.text = e.IsLastLevel ? LOCATION_CLEARED : LEVEL_CLEARED;
+
             _viewRoot.gameObject.SetActive(true);
 
             Sequence sequence = DOTween.Sequence();

@@ -65,7 +65,7 @@ namespace Prototype.LevelGeneration
             ground.transform.SetParent(navMeshSurface.transform);
             exit.transform.SetParent(navMeshSurface.transform);
             walls.transform.SetParent(navMeshSurface.transform);
-            obstacles.transform.SetParent(navMeshSurface.transform);
+            obstacles?.transform.SetParent(navMeshSurface.transform);
 
             Vector3 levelOffset = new Vector3(-_firstRoomWidth / 2, 0f, -_levelGeneratorData.SpawnPosY);
             levelInstance.transform.position += levelOffset;

@@ -166,6 +166,7 @@ namespace Prototype.Controller
                 cast.Rigidbody.velocity = Vector3.zero;
                 cast.Rigidbody.useGravity = false;
                 cast.GetComponent<Collider>().enabled = false;
+                _eventService.OnEnemyPreDestroyed();
                 Destroy(cast.gameObject, 0.1f);
 
                 if (_enemies.Count == 0)
@@ -179,6 +180,7 @@ namespace Prototype.Controller
         {
             EnemyModel toDestroy = _enemiesToDestroy.FirstOrDefault(_ => _.Id == e.EntityId);
             float destroyDelay = 1f;
+            _eventService.OnEnemyPreDestroyed();
             Destroy(toDestroy.gameObject, destroyDelay);
         }
 

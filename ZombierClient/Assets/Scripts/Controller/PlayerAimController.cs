@@ -1,5 +1,6 @@
 using Prototype.Model;
 using Prototype.Service;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,14 +32,14 @@ namespace Prototype.Controller
         private PlayerModel _player;
         [SerializeField] private List<EnemyModel> _enemies;
         //
-        private Vector3 _currentMovement;
         private IEnumerator _targetTransitionCoroutine = null;
-        private IEnumerator _updateStateCoroutine = null;
         [SerializeField] private float _targetTranstiionMultiplier = 9f;
         [SerializeField] private float _stateUpdateRate = 0.1f;
 
         private void OnEnable()
         {
+            _eventService.EnemyPreDestroyed += HandleEnemyPreDestroyed;
+
             StartCoroutine(UpdatePlayerState());
         }
 
@@ -107,6 +108,12 @@ namespace Prototype.Controller
                         UpdateCurrentTarget(null);
                         _eventService.OnPlayerStopFight();
                     }
+                    else
+                    {
+                        // Player doesn't have a target
+                        _player.CurrentState = PlayerModel.State.NoFight;
+                        UpdateCurrentTarget(null);
+                    }
                 }
 
                 yield return new WaitForSeconds(_stateUpdateRate);
@@ -170,6 +177,11 @@ namespace Prototype.Controller
             handle.transform.localPosition = Vector3.zero;
         }
 
+        private void HandleEnemyPreDestroyed(object sender, EventArgs e)
+        {
+            UpdatePlayerState();
+        }
+
         private void OnDisable()
         {
             StopAllCoroutines();
@@ -181,7 +193,10 @@ namespace Prototype.Controller
             _player.TargetHandle.transform.localEulerAngles = Vector3.zero;
             _player.TargetHandle.transform.localPosition = Vector3.zero;
 
+            _eventService.EnemyPreDestroyed -= HandleEnemyPreDestroyed;
+
             _eventService.OnPlayerStopFight();
+
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Prototype.Service
         public event EventHandler<DamagedEventArgs> Damaged;
         public event EventHandler<EnemyDeathEventArgs> EnemyDeath;
         public event EventHandler<EnemyDeathEventArgs> EnemyDeathInstant;
+        public event EventHandler EnemyPreDestroyed;
         public event EventHandler<EnemyDeathAnimationEventArgs> EnemyDeathAnimationEvent;
 
         public event EventHandler<EnemyMovedEventArgs> EnemyMoved;
@@ -93,6 +94,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnEnemyPreDestroyed()
+        {
+            EnemyPreDestroyed?.Invoke(this, EventArgs.Empty);
+        }
 
         public void OnLevelCleared()
         {

@@ -81,21 +81,18 @@ namespace Prototype.MeshCombine
                     _objectsToCombine[i].GetComponent<Renderer>().material = material;
                 }
 
-                // Combine each mesh marked as static
-                int staticCount = 0;
+                // Combine each mesh 
+                int count = 0;
                 CombineInstance[] combine = new CombineInstance[_objectsToCombine.Count];
                 for (int i = 0; i < _objectsToCombine.Count; i++)
                 {
-                    if (_objectsToCombine[i].isStatic)
-                    {
-                        staticCount++;
-                        combine[i].mesh = _objectsToCombine[i].GetComponent<MeshFilter>().mesh;
-                        combine[i].transform = _objectsToCombine[i].transform.localToWorldMatrix;
-                    }
+                    count++;
+                    combine[i].mesh = _objectsToCombine[i].GetComponent<MeshFilter>().mesh;
+                    combine[i].transform = _objectsToCombine[i].transform.localToWorldMatrix;
                 }
 
                 // Create a mesh filter and renderer
-                if (staticCount > 1)
+                if (count > 0)
                 {
                     resultGO = new GameObject();
                     resultGO.isStatic = true;
@@ -110,12 +107,9 @@ namespace Prototype.MeshCombine
                     // Disable all the static object renderers
                     for (int i = 0; i < _objectsToCombine.Count; i++)
                     {
-                        if (_objectsToCombine[i].isStatic)
-                        {
-                            _objectsToCombine[i].GetComponent<MeshFilter>().mesh = null;
-                            _objectsToCombine[i].GetComponent<Renderer>().material = null;
-                            _objectsToCombine[i].GetComponent<Renderer>().enabled = false;
-                        }
+                        _objectsToCombine[i].GetComponent<MeshFilter>().mesh = null;
+                        _objectsToCombine[i].GetComponent<Renderer>().material = null;
+                        _objectsToCombine[i].GetComponent<Renderer>().enabled = false;
                     }
                 }
 

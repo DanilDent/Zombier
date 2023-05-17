@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Prototype.View
 {
-    public class ProjectileTrailView : MonoBehaviour
+    public class ProjectileTrailVFXView : MonoBehaviour
     {
         public ProjectileTrailData ProjectileTrailData;
 

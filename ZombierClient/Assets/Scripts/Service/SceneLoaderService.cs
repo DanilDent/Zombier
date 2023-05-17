@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,6 @@ namespace Prototype.Service
             Loading,
         }
 
-        private static Action _onLoaderCallback;
 
         public static void Load(Scene scene)
         {
@@ -26,7 +26,8 @@ namespace Prototype.Service
             // Set the loader callback action to load the target scene
             _onLoaderCallback = () =>
             {
-                SceneManager.LoadScene(scene.ToString());
+                GameObject loadingGameObject = new GameObject("Loading Game Object");
+                loadingGameObject.AddComponent<LoadingMonoBehaviour>().StartCoroutine(LoadSceneAsync(scene));
             };
 
             // Load the loading scene
@@ -41,6 +42,33 @@ namespace Prototype.Service
             {
                 _onLoaderCallback();
                 _onLoaderCallback = null;
+            }
+        }
+
+        public static float GetLoadingProgress()
+        {
+            if (_asyncOperation != null)
+            {
+                return _asyncOperation.progress;
+            }
+
+            return 1f;
+        }
+
+        private class LoadingMonoBehaviour : MonoBehaviour { }
+
+        private static Action _onLoaderCallback;
+        private static AsyncOperation _asyncOperation;
+
+        private static IEnumerator LoadSceneAsync(Scene scene)
+        {
+            yield return null;
+
+            _asyncOperation = SceneManager.LoadSceneAsync(scene.ToString());
+
+            while (!_asyncOperation.isDone)
+            {
+                yield return null;
             }
         }
     }

@@ -36,6 +36,15 @@ namespace Prototype.Controller
             }
         }
 
+        private void OnDisable()
+        {
+            foreach (var enemy in _enemies)
+            {
+                enemy.CurrentAttackStrategy.Unsubscribe();
+                enemy.CurrentAttackStrategy = null;
+            }
+        }
+
         private void Update()
         {
             foreach (var enemy in _enemies)

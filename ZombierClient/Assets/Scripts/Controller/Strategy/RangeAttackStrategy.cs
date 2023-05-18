@@ -27,10 +27,15 @@ namespace Prototype.Controller
             _attackTimerMax = 1f / rps;
 
             // Events
+            Subscribe();
+        }
+
+        public void Subscribe()
+        {
             _eventService.EnemyAttackAnimationEvent += HandleAttackAnimationEvent;
         }
 
-        ~RangeAttackStrategy()
+        public void Unsubscribe()
         {
             _eventService.EnemyAttackAnimationEvent -= HandleAttackAnimationEvent;
         }

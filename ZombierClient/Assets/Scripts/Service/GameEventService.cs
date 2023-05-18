@@ -34,6 +34,8 @@ namespace Prototype.Service
 
         // Common game events
         public event EventHandler Reset;
+        public event EventHandler GamePause;
+        public event EventHandler GameUnpause;
 
         #endregion
 
@@ -99,6 +101,16 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnGamePause()
+        {
+            GamePause?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnGameUnpause()
+        {
+            GameUnpause?.Invoke(this, EventArgs.Empty);
+        }
 
         public void OnEnemyPreDestroyed()
         {

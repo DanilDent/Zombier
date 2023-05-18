@@ -1970,7 +1970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fpsCounter:
     enabled: 1
-    anchor: 1
+    anchor: 3
     color: {r: 0.33333334, g: 0.85490197, b: 0.4, a: 1}
     style: 1
     updateInterval: 0.5
@@ -2001,7 +2001,7 @@ MonoBehaviour:
     colorRender: {r: 0.654902, g: 0.43137255, b: 0.81960785, a: 1}
   memoryCounter:
     enabled: 1
-    anchor: 1
+    anchor: 3
     color: {r: 0.91764706, g: 0.93333334, b: 0.39607844, a: 1}
     style: 1
     updateInterval: 1
@@ -2050,11 +2050,11 @@ MonoBehaviour:
   outlineDistance: {x: 1, y: -1}
   autoScale: 1
   scaleFactor: 1
-  labelsFont: {fileID: 12800000, guid: fb80074802966ad438ec681fae1be1c2, type: 3}
+  labelsFont: {fileID: 12800000, guid: b8af58820f69b474e8f63dc40a702fbc, type: 3}
   fontSize: 19
   lineSpacing: 1
   countersSpacing: 0
-  paddingOffset: {x: 5, y: 5}
+  paddingOffset: {x: 2.19, y: 17.74}
   pixelPerfect: 1
   sortingOrder: 10000
   lookAndFeelFoldout: 1

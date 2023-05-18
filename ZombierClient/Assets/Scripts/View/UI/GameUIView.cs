@@ -68,7 +68,7 @@ namespace Prototype.View
 
         private void HandleCurrentLevelChanged(object sender, GameEventService.CurrentLevelChangedEventArgs e)
         {
-            _textCurrentLevel.text = CURRENT_LEVEL_TEXT + e.Value;
+            _textCurrentLevel.text = CURRENT_LEVEL_TEXT + e.Value + " / " + e.MaxValue;
         }
     }
 }

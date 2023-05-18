@@ -46,6 +46,7 @@ namespace Prototype.Service
         public class CurrentLevelChangedEventArgs : EventArgs
         {
             public int Value;
+            public int MaxValue;
         }
 
         public class LevelClearedEventArgs : EventArgs

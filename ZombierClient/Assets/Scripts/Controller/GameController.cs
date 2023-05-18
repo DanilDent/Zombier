@@ -84,7 +84,11 @@ namespace Prototype.Controller
                 IsCrit = false
             });
 
-            _eventService.OnCurrentLevelChanged(new GameEventService.CurrentLevelChangedEventArgs { Value = _session.CurrentLevelIndex + 1 });
+            _eventService.OnCurrentLevelChanged(new GameEventService.CurrentLevelChangedEventArgs
+            {
+                Value = _session.CurrentLevelIndex + 1,
+                MaxValue = _session.Location.Levels.Length
+            });
         }
 
         private void InitGame()

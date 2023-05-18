@@ -42,8 +42,16 @@ namespace Prototype.View
             if (e.DamagedEntity is PlayerModel player)
             {
                 _imgFiller.fillAmount = player.Health / player.MaxHealth;
-                float followDuration = 1f;
-                DOTween.To(() => _imgFillerFollower.fillAmount, x => _imgFillerFollower.fillAmount = x, _imgFiller.fillAmount, followDuration);
+                if (e.DamageValue > 0)
+                {
+                    float followDuration = 1f;
+                    DOTween.To(() => _imgFillerFollower.fillAmount, x => _imgFillerFollower.fillAmount = x, _imgFiller.fillAmount, followDuration);
+                }
+                else
+                {
+                    _imgFillerFollower.fillAmount = _imgFiller.fillAmount;
+                }
+
 
                 _text.SetText($"{(int)player.Health}/{(int)player.MaxHealth}");
             }

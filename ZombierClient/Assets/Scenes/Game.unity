@@ -250,9 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7936db315c3f19145a17b1c52f8367d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectilePoolSize: 20
-  _levelGeneratorConfig: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
-    type: 2}
+  _gameConfig: {fileID: 11400000, guid: 8d69f20e8b3a12e48892b72506e64240, type: 2}
 --- !u!1 &225224270
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,8 +22,7 @@ namespace Prototype
         // Injected
         [Inject] private AppData _appData;
         // From inspector
-        [SerializeField] private int _projectilePoolSize = 10;
-        [SerializeField] private LevelGeneratorData _levelGeneratorConfig;
+        [SerializeField] private GameConfigData _gameConfig;
 
         public override void InstallBindings()
         {
@@ -86,9 +85,9 @@ namespace Prototype
                 {
                     if (obj is MonoObjectPool<DamageTextUIView> pool)
                     {
-                        var prefab = _appData.Session.DamageTextUIPrefab;
+                        var prefab = _gameConfig.DamageTextUIPrefab;
                         var tranfromContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
-                        pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
                     }
                 })
                 .NonLazy();
@@ -139,7 +138,7 @@ namespace Prototype
                     {
                         var prefab = _appData.Session.Player.Weapon.ProjectileData.Prefab as PlayerProjectileModel;
                         var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
-                        pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
                     }
                 })
                 .NonLazy();
@@ -150,9 +149,9 @@ namespace Prototype
                  {
                      if (obj is MonoObjectPool<EnemyProjectileModel> pool)
                      {
-                         var prefab = _appData.Session.EnemyProjectilePrefab;
+                         var prefab = _gameConfig.EnemyProjectilePrefab;
                          var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
-                         pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                         pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
                      }
                  })
                 .NonLazy();
@@ -161,7 +160,7 @@ namespace Prototype
             // Enemy
             Container.BindFactory<IdData, EnemyData, EnemyModel, EnemyModel.Factory>()
                 .FromSubContainerResolve()
-                .ByNewPrefabInstaller<EnemyInstaller>(_appData.Session.EnemyPrefab)
+                .ByNewPrefabInstaller<EnemyInstaller>(_gameConfig.EnemyPrefab)
                 .UnderTransform(GetMarker<MarkerEnemies>());
 
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>().
@@ -186,9 +185,9 @@ namespace Prototype
                 {
                     if (obj is MonoObjectPool<HitBloodSplashVFXView> pool)
                     {
-                        var prefab = _appData.Session.HitVFXPrefab;
+                        var prefab = _gameConfig.HitVFXPrefab;
                         var tranfromContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
-                        pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
                     }
                 })
                 .NonLazy();
@@ -198,9 +197,9 @@ namespace Prototype
                {
                    if (obj is MonoObjectPool<DeathBloodSplashVFXView> pool)
                    {
-                       var prefab = _appData.Session.DeathVFXPrefab;
+                       var prefab = _gameConfig.DeathVFXPrefab;
                        var tranfromContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
-                       pool.Initialize(prefab, _projectilePoolSize, tranfromContainer);
+                       pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
                    }
                })
                .NonLazy();
@@ -241,7 +240,7 @@ namespace Prototype
         private GameObject GenerateLevel()
         {
             LevelGenerator levelGenerator = new LevelGenerator(
-                _levelGeneratorConfig,
+                _gameConfig.LevelGeneratorConfig,
                 _appData.Session.Location,
                 _appData.Session.Location.Levels[_appData.Session.CurrentLevelIndex]);
 

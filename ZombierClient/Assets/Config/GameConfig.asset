@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ead7ff1f123b9e41af8dde0a41525e2, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  ProjectilesPoolSize: 10
+  LevelGeneratorConfig: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
+    type: 2}
+  EnemyPrefab: {fileID: 5157989920299459421, guid: f6413bf18c5396146ba010d82e6dffba,
+    type: 3}
+  EnemyProjectilePrefab: {fileID: 4399411131317001658, guid: 859f4d5677b0b474c9cc85d33a878119,
+    type: 3}
+  HitVFXPrefab: {fileID: 4372032879626012399, guid: 9836c17714a58f7479e7069c00e52f5b,
+    type: 3}
+  DeathVFXPrefab: {fileID: 1595422084901427750, guid: 08b22b4bf284aed4a8cdf223ee727b9f,
+    type: 3}
+  DamageTextUIPrefab: {fileID: 7527771985142309774, guid: dff3212dbb9c7c24695e065340d3e3a8,
+    type: 3}

@@ -250,8 +250,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7936db315c3f19145a17b1c52f8367d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _session: {fileID: 11400000, guid: a91cc4208b05708489c53eb9673c42eb, type: 2}
   _projectilePoolSize: 20
+  _levelGeneratorConfig: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
+    type: 2}
 --- !u!1 &225224270
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9856bc2f4011cbf4e8b23d290064fad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chaseRange: 15
+  _chaseRange: 150
   _destUpdateRate: 0.1
 --- !u!1 &312246234
 GameObject:

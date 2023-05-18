@@ -18,7 +18,7 @@ namespace Prototype.Controller
 
         [Inject]
         public void Construct(
-            GameplaySessionData session,
+            GameSessionData session,
             LevelModel level,
             EnemyModel.Factory enemyFactory,
             PlayerModel player,
@@ -73,7 +73,7 @@ namespace Prototype.Controller
         // Dependencies
 
         // Injected
-        GameplaySessionData _session;
+        GameSessionData _session;
         GameEventService _eventService;
         private LevelModel _level;
         private EnemyModel.Factory _enemyFactory;

@@ -21,5 +21,9 @@ namespace Prototype.Data
         [NonSerialized] [OdinSerialize] public DescDamage Resists;
 
         public WeaponData Weapon;
+
+        public int CurrentLevel;
+        public int CurrentExp;
+        public int[] LevelUpExpThresholds;
     }
 }

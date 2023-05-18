@@ -75,7 +75,7 @@ namespace Prototype.Service
 
         public class EnemyDeathEventArgs : EventArgs
         {
-            public IDamageable Entity;
+            public EnemyModel Entity;
         }
 
         public class EnemyDeathAnimationEventArgs : EventArgs

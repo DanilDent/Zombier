@@ -23,5 +23,6 @@ namespace Prototype.Data
 
         public WeaponData Weapon;
         public List<DescAttackStrategy> AttackStrategies;
+        public int ExpReward;
     }
 }

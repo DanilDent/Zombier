@@ -11,7 +11,7 @@ namespace Prototype.Controller
     {
         [Inject]
         public void Construct(
-            GameplaySessionData session,
+            GameSessionData session,
             GameEventService eventService,
             PlayerModel player,
             // Controllers
@@ -42,7 +42,7 @@ namespace Prototype.Controller
             _vfxController = vfxController;
         }
 
-        private GameplaySessionData _session;
+        private GameSessionData _session;
         private GameEventService _eventService;
         private PlayerModel _player;
         // Controllers
@@ -170,6 +170,20 @@ namespace Prototype.Controller
         private void HandleGameUnpause(object sender, EventArgs e)
         {
             Time.timeScale = 1f;
+        }
+
+        private void HandleEnemyDeath(object sender, GameEventService.EnemyDeathEventArgs e)
+        {
+
+        }
+
+        private void HandleEnemyDeathInstant(object sender, GameEventService.EnemyDeathEventArgs e)
+        {
+
+        }
+
+        private void AddExpToPlayer(int exp)
+        {
         }
 
         private void OnDisable()

@@ -9,7 +9,7 @@ namespace Prototype.Model
         // Public 
 
         [Inject]
-        public void Construct(GameplaySessionData session, MarkerShootingPointPlayer shootingPoint)
+        public void Construct(GameSessionData session, MarkerShootingPointPlayer shootingPoint)
         {
             _weaponData = session.Player.Weapon;
             _shootingPoint = shootingPoint;

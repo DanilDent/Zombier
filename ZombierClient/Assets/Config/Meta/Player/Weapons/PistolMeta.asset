@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cd7654f8bfabf64eadd175069a75177, type: 3}
-  m_Name: Player
+  m_Script: {fileID: 11500000, guid: e81823000e49d4347b418407194d47c7, type: 3}
+  m_Name: PistolMeta
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -35,52 +35,16 @@ MonoBehaviour:
       Data: 0
     - Name: Chance
       Entry: 4
-      Data: 0
-    - Name: _valueRange
-      Entry: 7
-      Data: Prototype.Data.DescRandomRange, Assembly-CSharp
-    - Name: Min
-      Entry: 4
-      Data: 0
-    - Name: Max
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: Resists
-      Entry: 7
-      Data: 1|Prototype.Data.DescDamage, Assembly-CSharp
-    - Name: 
-      Entry: 12
       Data: 1
-    - Name: 
-      Entry: 7
-      Data: Prototype.Data.DescDamageType, Assembly-CSharp
-    - Name: Type
-      Entry: 3
-      Data: 0
-    - Name: Chance
-      Entry: 4
-      Data: 0
     - Name: _valueRange
       Entry: 7
       Data: Prototype.Data.DescRandomRange, Assembly-CSharp
     - Name: Min
       Entry: 4
-      Data: 0
+      Data: 12
     - Name: Max
       Entry: 4
-      Data: 0
+      Data: 15
     - Name: 
       Entry: 8
       Data: 
@@ -93,11 +57,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  PlayerPrefab: {fileID: 5860778791831712981, guid: eaf5bb002bbd61549a21f5276edcf3ef,
-    type: 3}
-  MaxSpeed: 5.28
-  CritChance: 0.4
-  CritMultiplier: 2
-  Health: 100
-  MaxHealth: 100
-  Weapon: {fileID: 11400000, guid: 3bd8745d607e42046a47ff64e1d77733, type: 2}
+  AttackRateRPM: 100
+  AttackRange: 10
+  Thrust: 500
+  Recoil: 0
+  ProjectileData: {fileID: 11400000, guid: 7c6e8c6526ce2d24bbe77d0dc787ea70, type: 2}

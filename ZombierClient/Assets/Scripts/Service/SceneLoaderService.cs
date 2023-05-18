@@ -9,8 +9,8 @@ namespace Prototype.Service
     {
         public enum Scene
         {
+            MainMenu,
             Game,
-            App,
             Loading,
             Results,
         }

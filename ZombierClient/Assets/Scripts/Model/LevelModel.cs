@@ -6,7 +6,7 @@ using Zenject;
 public class LevelModel : MonoBehaviour
 {
     [Inject]
-    public void Construct(GameplaySessionData session, MarkerLevelExitPoint exitPoint)
+    public void Construct(GameSessionData session, MarkerLevelExitPoint exitPoint)
     {
         _session = session;
         ExitPoint = exitPoint;
@@ -22,5 +22,5 @@ public class LevelModel : MonoBehaviour
     }
 
     // Private
-    private GameplaySessionData _session;
+    private GameSessionData _session;
 }

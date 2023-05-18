@@ -19,14 +19,14 @@ namespace Prototype
 {
     public class GameInstaller : MonoInstaller
     {
-        [SerializeField] private GameplaySessionData _session;
+        [SerializeField] private GameSessionData _session;
         //
         [SerializeField] private int _projectilePoolSize = 10;
 
         public override void InstallBindings()
         {
             // Config
-            Container.Bind<GameplaySessionData>().FromInstance(_session).AsSingle();
+            Container.Bind<GameSessionData>().FromInstance(_session).AsSingle();
             // !Config
 
             // Unity components

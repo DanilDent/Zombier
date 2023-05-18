@@ -12,7 +12,7 @@ namespace Prototype.Model
 
         [Inject]
         public void Construct(
-            GameplaySessionData session,
+            GameSessionData session,
             GameEventService eventService,
             WeaponModel weaponModel,
             MarkerDefaulTargetPoint targetPoint,
@@ -47,6 +47,9 @@ namespace Prototype.Model
         public DescDamage Resists => _data.Resists;
         // !IDamageable
 
+
+        public int CurrentLevel => _data.CurrentLevel;
+        public int CurrentExp { get => _data.CurrentExp; set => _data.CurrentExp = value; }
         public WeaponModel WeaponModel => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;

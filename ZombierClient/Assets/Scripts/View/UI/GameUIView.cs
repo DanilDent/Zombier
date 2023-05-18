@@ -53,6 +53,7 @@ namespace Prototype.View
         {
             _joystick.gameObject.SetActive(false);
             _eventService.OnGamePause();
+            _eventService.OnShowSettings();
         }
 
         private void HandleGameUnpause(object sender, EventArgs e)

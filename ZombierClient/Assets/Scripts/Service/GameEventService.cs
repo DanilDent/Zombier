@@ -36,6 +36,7 @@ namespace Prototype.Service
         public event EventHandler Reset;
         public event EventHandler GamePause;
         public event EventHandler GameUnpause;
+        public event EventHandler ShowSettings;
 
         #endregion
 
@@ -101,6 +102,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnShowSettings()
+        {
+            ShowSettings?.Invoke(this, EventArgs.Empty);
+        }
 
         public void OnGamePause()
         {

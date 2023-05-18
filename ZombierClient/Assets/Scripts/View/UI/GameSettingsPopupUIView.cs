@@ -22,16 +22,14 @@ namespace Prototype.View
 
         private void OnEnable()
         {
-            _eventService.GamePause += HandleGamePause;
-            _eventService.GameUnpause += HandleGameUnpause;
+            _eventService.ShowSettings += HandleShowSettings;
             //
             _btnClose.onClick.AddListener(OnClose);
         }
 
         private void OnDisable()
         {
-            _eventService.GamePause -= HandleGamePause;
-            _eventService.GameUnpause -= HandleGameUnpause;
+            _eventService.ShowSettings -= HandleShowSettings;
             //
             _btnClose.onClick.RemoveAllListeners();
         }
@@ -42,14 +40,9 @@ namespace Prototype.View
             _eventService.OnGameUnpause();
         }
 
-        private void HandleGamePause(object sender, EventArgs e)
+        private void HandleShowSettings(object sender, EventArgs e)
         {
             _viewRoot.gameObject.SetActive(true);
-        }
-
-        private void HandleGameUnpause(object sender, EventArgs e)
-        {
-            _viewRoot.gameObject.SetActive(false);
         }
     }
 }

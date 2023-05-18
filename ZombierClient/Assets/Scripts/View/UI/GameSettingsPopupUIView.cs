@@ -14,6 +14,7 @@ namespace Prototype.View
             _eventService = eventService;
         }
 
+        //
         [SerializeField] private RectTransform _viewRoot;
         [SerializeField] private Button _btnClose;
 

@@ -37,10 +37,16 @@ namespace Prototype.Service
         public event EventHandler GamePause;
         public event EventHandler GameUnpause;
         public event EventHandler ShowSettings;
+        public event EventHandler<CurrentLevelChangedEventArgs> CurrentLevelChanged;
 
         #endregion
 
         #region EventArgs
+
+        public class CurrentLevelChangedEventArgs : EventArgs
+        {
+            public int Value;
+        }
 
         public class LevelClearedEventArgs : EventArgs
         {
@@ -102,6 +108,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnCurrentLevelChanged(CurrentLevelChangedEventArgs e)
+        {
+            CurrentLevelChanged?.Invoke(this, e);
+        }
 
         public void OnShowSettings()
         {

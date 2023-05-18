@@ -83,6 +83,8 @@ namespace Prototype.Controller
                 EntityId = IdData.Empty,
                 IsCrit = false
             });
+
+            _eventService.OnCurrentLevelChanged(new GameEventService.CurrentLevelChangedEventArgs { Value = _session.CurrentLevelIndex + 1 });
         }
 
         private void InitGame()

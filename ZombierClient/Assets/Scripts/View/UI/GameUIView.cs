@@ -1,5 +1,6 @@
 using Prototype.Service;
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -15,17 +16,20 @@ namespace Prototype.View
             _eventService = eventService;
         }
 
+        private const string CURRENT_LEVEL_TEXT = "Current level: ";
         // Injected
         private FloatingJoystick _joystick;
         private GameEventService _eventService;
         // From inspector
         [SerializeField] private Button _btnPause;
+        [SerializeField] private TextMeshProUGUI _textCurrentLevel;
 
         private void OnEnable()
         {
             _eventService.PlayerDeath += HandlePlayerDeath;
             _eventService.PlayerRevive += HandlePlayerRevive;
             _eventService.GameUnpause += HandleGameUnpause;
+            _eventService.CurrentLevelChanged += HandleCurrentLevelChanged;
             //
             _btnPause.onClick.AddListener(OnPause);
         }
@@ -35,6 +39,7 @@ namespace Prototype.View
             _eventService.PlayerDeath -= HandlePlayerDeath;
             _eventService.PlayerRevive -= HandlePlayerRevive;
             _eventService.GameUnpause -= HandleGameUnpause;
+            _eventService.CurrentLevelChanged -= HandleCurrentLevelChanged;
             //
             _btnPause.onClick.RemoveAllListeners();
         }
@@ -59,6 +64,11 @@ namespace Prototype.View
         private void HandleGameUnpause(object sender, EventArgs e)
         {
             _joystick.gameObject.SetActive(true);
+        }
+
+        private void HandleCurrentLevelChanged(object sender, GameEventService.CurrentLevelChangedEventArgs e)
+        {
+            _textCurrentLevel.text = CURRENT_LEVEL_TEXT + e.Value;
         }
     }
 }

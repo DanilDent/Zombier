@@ -32,7 +32,8 @@ namespace Prototype.Controller
 
             _eventService.OnPlayerLevelChanged(new GameEventService.PlayerLevelChangedEventArgs
             {
-                Level = _player.CurrentLevel + 1
+                Level = _player.CurrentLevel + 1,
+                SavedLevelUps = _player.SavedLevelUpCounter
             });
         }
 
@@ -56,10 +57,12 @@ namespace Prototype.Controller
             {
                 _player.CurrentExp -= _player.CurrentLevelExpThreshold;
                 _player.CurrentLevel++;
+                _player.SavedLevelUpCounter++;
                 Debug.Log($"Player Level Up: {_player.CurrentLevel}");
                 _eventService.OnPlayerLevelChanged(new GameEventService.PlayerLevelChangedEventArgs
                 {
-                    Level = _player.CurrentLevel + 1
+                    Level = _player.CurrentLevel + 1,
+                    SavedLevelUps = _player.SavedLevelUpCounter
                 });
             }
 

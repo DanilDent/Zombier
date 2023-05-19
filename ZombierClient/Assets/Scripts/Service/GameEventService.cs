@@ -48,6 +48,7 @@ namespace Prototype.Service
         public class PlayerLevelChangedEventArgs : EventArgs
         {
             public int Level;
+            public int SavedLevelUps;
         }
 
         public class PlayerCurrentExpChangedEventArgs : EventArgs

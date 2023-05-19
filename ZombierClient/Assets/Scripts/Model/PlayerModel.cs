@@ -51,6 +51,7 @@ namespace Prototype.Model
 
 
         public int CurrentLevel { get => _playerSession.CurrentLevel; set => _playerSession.CurrentLevel = value; }
+        public int SavedLevelUpCounter { get => _playerSession.SavedLevelUpCounter; set => _playerSession.SavedLevelUpCounter = value; }
         public int CurrentExp { get => _playerSession.CurrentExp; set => _playerSession.CurrentExp = value; }
         public int CurrentLevelExpThreshold => _playerMeta.LevelExpThresholds[CurrentLevel];
         public WeaponModel WeaponModel => _weaponModel;

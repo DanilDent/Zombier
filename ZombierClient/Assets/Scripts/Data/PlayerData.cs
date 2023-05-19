@@ -23,6 +23,7 @@ namespace Prototype.Data
         public WeaponData Weapon;
 
         public int CurrentLevel;
+        public int SavedLevelUpCounter;
         public int CurrentExp;
         public int[] LevelExpThresholds;
     }

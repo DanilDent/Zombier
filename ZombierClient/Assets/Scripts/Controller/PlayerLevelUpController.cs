@@ -22,6 +22,15 @@ namespace Prototype.Controller
         private GameEventService _eventService;
         private PlayerModel _player;
 
+        private void Start()
+        {
+            _eventService.OnPlayerCurrentExpChanged(new GameEventService.PlayerCurrentExpChangedEventArgs
+            {
+                CurrentExp = _player.CurrentExp,
+                MaxExp = _player.CurrentLevelExpThreshold
+            });
+        }
+
         private void OnEnable()
         {
             _eventService.EnemyDeath += HandleEnemyDeath;
@@ -44,6 +53,11 @@ namespace Prototype.Controller
                 _player.CurrentLevel++;
                 Debug.Log($"Player Level Up: {_player.CurrentLevel}");
             }
+            _eventService.OnPlayerCurrentExpChanged(new GameEventService.PlayerCurrentExpChangedEventArgs
+            {
+                CurrentExp = _player.CurrentExp,
+                MaxExp = _player.CurrentLevelExpThreshold
+            });
         }
     }
 }

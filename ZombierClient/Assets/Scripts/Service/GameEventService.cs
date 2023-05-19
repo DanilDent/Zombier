@@ -16,6 +16,7 @@ namespace Prototype.Service
         public event EventHandler<PlayerMovedEventArgs> PlayerMoved;
         public event EventHandler PlayerShoot;
         public event EventHandler PlayerShootAnimationEvent;
+        public event EventHandler<PlayerCurrentExpChangedEventArgs> PlayerCurrentExpChanged;
 
         public event EventHandler<AttackedEventArgs> Attacked;
         public event EventHandler<DamagedEventArgs> Damaged;
@@ -42,6 +43,12 @@ namespace Prototype.Service
         #endregion
 
         #region EventArgs
+
+        public class PlayerCurrentExpChangedEventArgs : EventArgs
+        {
+            public int CurrentExp;
+            public int MaxExp;
+        }
 
         public class CurrentLevelChangedEventArgs : EventArgs
         {
@@ -109,6 +116,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnPlayerCurrentExpChanged(PlayerCurrentExpChangedEventArgs e)
+        {
+            PlayerCurrentExpChanged?.Invoke(this, e);
+        }
 
         public void OnCurrentLevelChanged(CurrentLevelChangedEventArgs e)
         {

@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: ' 100 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: a99482db70da56f458fae2fa5db81804, type: 2}
@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278206207
-  m_fontColor: {r: 1, g: 0.24206921, b: 0, a: 1}
+    rgba: 4278249215
+  m_fontColor: {r: 1, g: 0.903612, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.25
-  m_fontSizeBase: 0.25
+  m_fontSize: 0.15
+  m_fontSizeBase: 0.15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -147,9 +147,9 @@ GameObject:
   - component: {fileID: 5288352921876884211}
   - component: {fileID: 5288352921876884208}
   - component: {fileID: 5288352921876884220}
-  - component: {fileID: 7527771985142309774}
+  - component: {fileID: 430088471165934049}
   m_Layer: 5
-  m_Name: DamageTextUI
+  m_Name: ExpTextUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &5288352921876884208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mode: 2
---- !u!114 &7527771985142309774
+--- !u!114 &430088471165934049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5288352921876884209}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de693893b2d41714fadbbf9a9f79fcec, type: 3}
+  m_Script: {fileID: 11500000, guid: e92c6feb92e486d4c82cb5718e59c040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flyDistance: 1
+  _flyDistance: 0.5

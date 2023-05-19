@@ -41,10 +41,10 @@ MonoBehaviour:
       Data: Prototype.Data.DescRandomRange, Assembly-CSharp
     - Name: Min
       Entry: 4
-      Data: 25
+      Data: 4
     - Name: Max
       Entry: 4
-      Data: 35
+      Data: 7
     - Name: 
       Entry: 8
       Data: 

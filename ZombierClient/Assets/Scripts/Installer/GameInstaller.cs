@@ -68,6 +68,15 @@ namespace Prototype
             Container.Bind<RectTransform>().FromComponentInChildren()
                 .AsTransient()
                 .WhenInjectedInto<DamageTextUIView>();
+
+            Container.Bind<TextMeshProUGUI>()
+                .FromComponentInChildren()
+                .AsTransient()
+                .WhenInjectedInto<ExpTextUIView>();
+
+            Container.Bind<RectTransform>().FromComponentInChildren()
+                .AsTransient()
+                .WhenInjectedInto<ExpTextUIView>();
             // !Unity UI components
 
             // Camera
@@ -89,6 +98,22 @@ namespace Prototype
                     if (obj is MonoObjectPool<DamageTextUIView> pool)
                     {
                         var prefab = _gameConfig.DamageTextUIPrefab;
+                        var tranfromContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
+                    }
+                })
+                .NonLazy();
+
+            Container.BindFactory<UnityEngine.Object, ExpTextUIView, PoolObjectFactory<ExpTextUIView>>()
+                .FromFactory<PrefabFactory<ExpTextUIView>>();
+
+            Container.Bind<MonoObjectPool<ExpTextUIView>>()
+                .AsSingle()
+                .OnInstantiated((ctx, obj) =>
+                {
+                    if (obj is MonoObjectPool<ExpTextUIView> pool)
+                    {
+                        var prefab = _gameConfig.ExpTextUIPrefab;
                         var tranfromContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
                         pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
                     }
@@ -212,11 +237,12 @@ namespace Prototype
             Container.Bind<PlayerMovementController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<PlayerAimController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<PlayerShootController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<PlayerLevelUpController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<DealDamageController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<EnemyAttackController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<EnemyChaseController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<EnemyMovementController>().FromComponentInHierarchy(true).AsSingle();
-            Container.Bind<SpawnDamageTextUIController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<SpawnWorldCanvasUIText>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
             // !Gameplay Controllers
 

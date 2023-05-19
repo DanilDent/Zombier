@@ -15,5 +15,6 @@ namespace Prototype.Data
         public HitBloodSplashVFXView HitVFXPrefab;
         public DeathBloodSplashVFXView DeathVFXPrefab;
         public DamageTextUIView DamageTextUIPrefab;
+        public ExpTextUIView ExpTextUIPrefab;
     }
 }

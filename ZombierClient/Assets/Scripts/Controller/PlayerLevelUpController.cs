@@ -38,6 +38,12 @@ namespace Prototype.Controller
         {
             _player.CurrentExp += e.Entity.ExpReward;
             Debug.Log($"Player current exp: {_player.CurrentExp}");
+            if (_player.CurrentExp >= _player.CurrentLevelExpThreshold)
+            {
+                _player.CurrentExp -= _player.CurrentLevelExpThreshold;
+                _player.CurrentLevel++;
+                Debug.Log($"Player Level Up: {_player.CurrentLevel}");
+            }
         }
     }
 }

@@ -23,7 +23,8 @@ namespace Prototype.Controller
             PlayerAimController playerAimController,
             PlayerMovementController playerMovementController,
             PlayerShootController playerShootController,
-            SpawnDamageTextUIController spawnDamageTextUIController,
+            PlayerLevelUpController playerLevelUpController,
+            SpawnWorldCanvasUIText spawnDamageTextUIController,
             VFXController vfxController)
         {
             _session = session;
@@ -38,6 +39,7 @@ namespace Prototype.Controller
             _playerAimController = playerAimController;
             _playerMovementController = playerMovementController;
             _playerShootController = playerShootController;
+            _playerLevelUpController = playerLevelUpController;
             _spawnDamageTextUIController = spawnDamageTextUIController;
             _vfxController = vfxController;
         }
@@ -54,7 +56,8 @@ namespace Prototype.Controller
         private PlayerAimController _playerAimController;
         private PlayerMovementController _playerMovementController;
         private PlayerShootController _playerShootController;
-        private SpawnDamageTextUIController _spawnDamageTextUIController;
+        private PlayerLevelUpController _playerLevelUpController;
+        private SpawnWorldCanvasUIText _spawnDamageTextUIController;
         private VFXController _vfxController;
 
         private void OnEnable()
@@ -104,6 +107,7 @@ namespace Prototype.Controller
             _playerAimController.gameObject.SetActive(true);
             _playerMovementController.gameObject.SetActive(true);
             _playerShootController.gameObject.SetActive(true);
+            _playerLevelUpController.gameObject.SetActive(true);
             _spawnDamageTextUIController.gameObject.SetActive(true);
             _vfxController.gameObject.SetActive(true);
         }
@@ -118,6 +122,7 @@ namespace Prototype.Controller
             _playerAimController.gameObject.SetActive(enabled);
             _playerMovementController.gameObject.SetActive(enabled);
             _playerShootController.gameObject.SetActive(enabled);
+            _playerLevelUpController.gameObject.SetActive(enabled);
             _spawnDamageTextUIController.gameObject.SetActive(enabled);
             _vfxController.gameObject.SetActive(enabled);
         }

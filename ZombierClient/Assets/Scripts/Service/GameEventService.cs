@@ -17,6 +17,7 @@ namespace Prototype.Service
         public event EventHandler PlayerShoot;
         public event EventHandler PlayerShootAnimationEvent;
         public event EventHandler<PlayerCurrentExpChangedEventArgs> PlayerCurrentExpChanged;
+        public event EventHandler<PlayerLevelChangedEventArgs> PlayerLevelChanged;
 
         public event EventHandler<AttackedEventArgs> Attacked;
         public event EventHandler<DamagedEventArgs> Damaged;
@@ -43,6 +44,11 @@ namespace Prototype.Service
         #endregion
 
         #region EventArgs
+
+        public class PlayerLevelChangedEventArgs : EventArgs
+        {
+            public int Level;
+        }
 
         public class PlayerCurrentExpChangedEventArgs : EventArgs
         {
@@ -116,6 +122,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnPlayerLevelChanged(PlayerLevelChangedEventArgs e)
+        {
+            PlayerLevelChanged?.Invoke(this, e);
+        }
 
         public void OnPlayerCurrentExpChanged(PlayerCurrentExpChangedEventArgs e)
         {

@@ -1,11 +1,21 @@
 ﻿using Prototype.Service;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Prototype.View
 {
     public class ButtonMainMenuUIView : MonoBehaviour
     {
+        [Inject]
+        public void Construct(GameEventService eventService)
+        {
+            _eventService = eventService;
+        }
+
+        // Injected
+        private GameEventService _eventService;
+        // From inspector
         [SerializeField] private Button _button;
 
         private void OnEnable()
@@ -20,6 +30,7 @@ namespace Prototype.View
 
         private void OnClick()
         {
+            _eventService.OnGameUnpause();
             SceneLoaderService.Load(SceneLoaderService.Scene.MainMenu);
         }
     }

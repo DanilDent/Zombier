@@ -33,12 +33,21 @@ MonoBehaviour:
     - Name: Type
       Entry: 3
       Data: 0
-    - Name: Value
-      Entry: 4
-      Data: 0
     - Name: Chance
       Entry: 4
       Data: 0
+    - Name: _valueRange
+      Entry: 7
+      Data: Prototype.Data.DescRandomRange, Assembly-CSharp
+    - Name: Min
+      Entry: 4
+      Data: 0
+    - Name: Max
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -60,12 +69,21 @@ MonoBehaviour:
     - Name: Type
       Entry: 3
       Data: 0
-    - Name: Value
-      Entry: 4
-      Data: 0
     - Name: Chance
       Entry: 4
       Data: 0
+    - Name: _valueRange
+      Entry: 7
+      Data: Prototype.Data.DescRandomRange, Assembly-CSharp
+    - Name: Min
+      Entry: 4
+      Data: 0
+    - Name: Max
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -85,3 +103,4 @@ MonoBehaviour:
   Weapon: {fileID: 11400000, guid: cce01ccfc419c9a4a80eb9cd09ddb572, type: 2}
   AttackStrategies:
   - Type: 1
+  ExpReward: 50

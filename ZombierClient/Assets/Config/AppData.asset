@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7c5a07eb9e1cb479269cb33c0f8d28, type: 3}
   m_Name: AppData
   m_EditorClassIdentifier: 
-  Meta: {fileID: 0}
+  Meta: {fileID: 11400000, guid: a569733117d103249a8669786f99a75f, type: 2}
   User: {fileID: 0}
   Session: {fileID: 11400000, guid: a91cc4208b05708489c53eb9673c42eb, type: 2}

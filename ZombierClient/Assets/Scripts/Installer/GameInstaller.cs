@@ -2,6 +2,7 @@ using Cinemachine;
 using Prototype.Controller;
 using Prototype.Data;
 using Prototype.Extensions;
+using Prototype.Factory;
 using Prototype.LevelGeneration;
 using Prototype.Model;
 using Prototype.ObjectPool;
@@ -35,10 +36,12 @@ namespace Prototype
             Container.Bind<CharacterController>().FromComponentInChildren().AsTransient();
             Container.Bind<Rigidbody>().FromComponentInChildren().AsTransient();
             Container.Bind<NavMeshAgent>().FromComponentInChildren().AsTransient();
+            // Markers
             Container.Bind<MarkerTargetPoint>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerView>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerShootingPointPlayer>().FromComponentInChildren().AsTransient();
             Container.Bind<MarkerGround>().FromComponentInHierarchy().AsCached();
+            Container.Bind<MarkerLevel>().FromComponentInHierarchy().AsSingle();
 
             Container.Bind<Camera>().FromComponentInHierarchy().AsSingle();
             // !Unity components
@@ -103,11 +106,11 @@ namespace Prototype
 
             // Level
             Container.Bind<MarkerLevelExitPoint>().FromComponentInChildren().AsSingle();
-            GameObject levelGameObject = GenerateLevel();
-            Container.Bind<LevelModel>()
-                .FromNewComponentOn(levelGameObject)
-                .AsSingle()
-                .NonLazy();
+
+            Container.Bind<LevelGeneratorData>().FromInstance(_gameConfig.LevelGeneratorConfig).AsSingle();
+            Container.Bind<LocationData>().FromInstance(_appData.Session.Location).AsSingle();
+            Container.Bind<LevelData>().FromInstance(_appData.Session.Location.Levels[_appData.Session.CurrentLevelIndex]);
+            Container.Bind<LevelModel>().FromFactory<ProceduralLevelFactory>().AsSingle().NonLazy();
 
             // Player
             Container.Bind<PlayerModel>()
@@ -235,18 +238,6 @@ namespace Prototype
         private void SetPlayerPositionToZero(InjectContext context, PlayerModel player)
         {
             player.transform.position = Vector3.zero;
-        }
-
-        private GameObject GenerateLevel()
-        {
-            LevelGenerator levelGenerator = new LevelGenerator(
-                _gameConfig.LevelGeneratorConfig,
-                _appData.Session.Location,
-                _appData.Session.Location.Levels[_appData.Session.CurrentLevelIndex]);
-
-            GameObject levelInstance = levelGenerator.GenerateLevel();
-            levelInstance.transform.SetParent(GetMarker<MarkerLevel>());
-            return levelInstance;
         }
     }
 }

@@ -12,13 +12,15 @@ namespace Prototype.Model
 
         [Inject]
         public void Construct(
+            MetaData meta,
             GameSessionData session,
             GameEventService eventService,
             WeaponModel weaponModel,
             MarkerDefaulTargetPoint targetPoint,
             TargetHandleModel targetHandle)
         {
-            _data = session.Player;
+            _playerMeta = meta.Player;
+            _playerSession = session.Player;
             _eventService = eventService;
             _weaponModel = weaponModel;
             _targetPoint = targetPoint;
@@ -37,26 +39,27 @@ namespace Prototype.Model
 
         // IDamaging
         public DescDamage Damage => _damage;
-        public float CritChance { get => _data.CritChance; set => _data.CritChance = value; }
-        public float CritMultiplier { get => _data.CritMultiplier; set => _data.CritMultiplier = value; }
+        public float CritChance { get => _playerSession.CritChance; set => _playerSession.CritChance = value; }
+        public float CritMultiplier { get => _playerSession.CritMultiplier; set => _playerSession.CritMultiplier = value; }
         // !IDamaging
 
         // IDamageable
-        public float Health { get => _data.Health; set => _data.Health = value; }
-        public float MaxHealth { get => _data.MaxHealth; set => _data.MaxHealth = value; }
-        public DescDamage Resists => _data.Resists;
+        public float Health { get => _playerSession.Health; set => _playerSession.Health = value; }
+        public float MaxHealth { get => _playerSession.MaxHealth; set => _playerSession.MaxHealth = value; }
+        public DescDamage Resists => _playerSession.Resists;
         // !IDamageable
 
 
-        public int CurrentLevel => _data.CurrentLevel;
-        public int CurrentExp { get => _data.CurrentExp; set => _data.CurrentExp = value; }
+        public int CurrentLevel => _playerSession.CurrentLevel;
+        public int CurrentExp { get => _playerSession.CurrentExp; set => _playerSession.CurrentExp = value; }
+        public int CurrentLevelExpThreshold => _playerMeta.LevelExpThresholds[CurrentLevel];
         public WeaponModel WeaponModel => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
         public float Speed
         {
-            get => _data.MaxSpeed;
-            set => _data.MaxSpeed = value;
+            get => _playerSession.MaxSpeed;
+            set => _playerSession.MaxSpeed = value;
         }
         public float RotationSpeed => _rotationSpeed;
         public State CurrentState { get; set; }
@@ -72,14 +75,15 @@ namespace Prototype.Model
         private MarkerDefaulTargetPoint _targetPoint;
         [SerializeField] private TargetHandleModel _targetHandle;
         //
-        [SerializeField] private PlayerData _data;
+        private PlayerData _playerMeta;
+        private PlayerData _playerSession;
         [SerializeField] private float _rotationSpeed = 9f;
         [SerializeField] private EnemyModel _currentTarget;
         private DescDamage _damage;
 
         private void RecalcDamage()
         {
-            foreach (DescDamageType dmg in _data.Weapon.Damage)
+            foreach (DescDamageType dmg in _playerSession.Weapon.Damage)
             {
                 if (_damage.FindIndex(_ => _.Type == dmg.Type) == -1)
                 {

@@ -55,6 +55,7 @@ namespace Prototype.Model
         public DescDamage Resists => _data.Resists;
         // !IDamageable
 
+        public int ExpReward => _data.ExpReward;
         public float MaxSpeed => _data.MaxSpeed;
         public float AttackRange => _data.Weapon.AttackRange;
         public List<DescAttackStrategy> AttackStrategies => _data.AttackStrategies;

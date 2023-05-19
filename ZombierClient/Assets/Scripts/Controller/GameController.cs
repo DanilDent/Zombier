@@ -172,20 +172,6 @@ namespace Prototype.Controller
             Time.timeScale = 1f;
         }
 
-        private void HandleEnemyDeath(object sender, GameEventService.EnemyDeathEventArgs e)
-        {
-
-        }
-
-        private void HandleEnemyDeathInstant(object sender, GameEventService.EnemyDeathEventArgs e)
-        {
-
-        }
-
-        private void AddExpToPlayer(int exp)
-        {
-        }
-
         private void OnDisable()
         {
             _eventService.PlayerDeath -= HandlePlayerDeath;

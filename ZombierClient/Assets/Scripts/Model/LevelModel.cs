@@ -12,6 +12,8 @@ public class LevelModel : MonoBehaviour
         ExitPoint = exitPoint;
     }
 
+    public class Factory : PlaceholderFactory<LevelModel> { }
+
     // Injected
     public MarkerLevelExitPoint ExitPoint { get; private set; }
     // Properties

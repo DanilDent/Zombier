@@ -73,7 +73,5 @@ public class DealDamageController : MonoBehaviour
                 _eventService.OnPlayerDeath();
             }
         }
-
-        Debug.Log($"{defender}'s Health: {defender.Health}");
     }
 }

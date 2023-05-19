@@ -24,6 +24,6 @@ namespace Prototype.Data
 
         public int CurrentLevel;
         public int CurrentExp;
-        public int[] LevelUpExpThresholds;
+        public int[] LevelExpThresholds;
     }
 }

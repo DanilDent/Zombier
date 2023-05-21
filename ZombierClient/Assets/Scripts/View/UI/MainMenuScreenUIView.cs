@@ -1,4 +1,3 @@
-using Prototype.Service;
 using UnityEngine;
 using UnityEngine.UI;
 

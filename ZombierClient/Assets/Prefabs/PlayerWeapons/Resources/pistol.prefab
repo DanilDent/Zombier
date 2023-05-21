@@ -88,7 +88,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1812f760fc5c0b4d95c1557d0b25b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponData: {fileID: 11400000, guid: 3bd8745d607e42046a47ff64e1d77733, type: 2}
 --- !u!1 &7843491790610483304
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +304,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ac7dc685e5bc47b4a8d2277116e1f355, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: ac7dc685e5bc47b4a8d2277116e1f355, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: ac7dc685e5bc47b4a8d2277116e1f355, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800004, guid: ac7dc685e5bc47b4a8d2277116e1f355, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800006, guid: ac7dc685e5bc47b4a8d2277116e1f355, type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

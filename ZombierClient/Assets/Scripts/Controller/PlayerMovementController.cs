@@ -12,6 +12,7 @@ namespace Prototype.Controller
         private PlayerModel _playerModel;
 
         private Vector3 _currentMovement;
+        private CharacterController _characterController;
 
         [Inject]
         public void Construct(
@@ -22,6 +23,11 @@ namespace Prototype.Controller
             _inputService = inputService;
             _eventService = eventService;
             _playerModel = playerModel;
+        }
+
+        private void Awake()
+        {
+            _characterController = _playerModel.GetComponent<CharacterController>();
         }
 
         private void Update()
@@ -42,9 +48,7 @@ namespace Prototype.Controller
         private void HandleMovement()
         {
             HandleGravity();
-
-            CharacterController characterController = _playerModel.GetComponent<CharacterController>();
-            characterController.Move(_currentMovement * _playerModel.Speed * Time.deltaTime);
+            _characterController.Move(_currentMovement * _playerModel.Speed * Time.deltaTime);
             _eventService.OnPlayerMoved(new GameEventService.PlayerMovedEventArgs { Movement = new Vector3(_currentMovement.x, 0f, _currentMovement.z) });
         }
 
@@ -86,7 +90,7 @@ namespace Prototype.Controller
 
         private void HandleGravity()
         {
-            float gravity = -9.8f;
+            float gravity = _characterController.isGrounded ? -.05f : -9.8f;
             _currentMovement.y = gravity;
         }
 

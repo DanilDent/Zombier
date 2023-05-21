@@ -1,4 +1,3 @@
-using Prototype.Service;
 using System;
 using TMPro;
 using UnityEngine;
@@ -15,13 +14,14 @@ namespace Prototype.View
         private float _timerMax = .5f;
         private int _dotsCount = 1;
 
+
         private void Update()
         {
             float progress = SceneLoaderService.GetLoadingProgress();
             _imgProgressBar.fillAmount = progress;
             _textProgressBar.text = $"{Math.Round(progress, 2) * 100}%";
 
-            _timer -= Time.deltaTime;
+            _timer -= Time.unscaledDeltaTime;
             if (_timer < 0)
             {
                 _timer = _timerMax;

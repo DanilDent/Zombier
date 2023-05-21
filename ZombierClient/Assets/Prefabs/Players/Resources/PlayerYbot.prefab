@@ -138,7 +138,7 @@ CharacterController:
   m_Radius: 0.26
   m_SlopeLimit: 0
   m_StepOffset: 0
-  m_SkinWidth: 0.2
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: -0.01, y: 1, z: 0.1}
 --- !u!114 &5860778791831712981
@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetHandle: {fileID: 0}
-  _data: {fileID: 0}
   _rotationSpeed: 9
   _currentTarget: {fileID: 0}
 --- !u!114 &5095879419988921717

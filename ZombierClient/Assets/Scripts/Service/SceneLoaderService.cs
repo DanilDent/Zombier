@@ -1,75 +1,104 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Prototype.Service
+public static class SceneLoaderService
 {
-    public static class SceneLoaderService
+    public enum Scene
     {
-        public enum Scene
+        MainMenu,
+        Game,
+        Loading,
+        Results
+    }
+
+    private static bool isSceneLoading = false;
+    private static int _loadingFrames = 10;
+    private static AsyncOperation _loadingOperation;
+    private static AsyncOperation _targetOperation;
+
+    public static int LoadingFrames
+    {
+        get { return _loadingFrames; }
+        set { _loadingFrames = value; }
+    }
+
+    public static void Load(Scene targetScene)
+    {
+        if (!isSceneLoading)
         {
-            MainMenu,
-            Game,
-            Loading,
-            Results,
+            isSceneLoading = true;
+            CoroutineRunner.Instance.StartCoroutine(LoadSceneCoroutine(targetScene));
+        }
+    }
+
+    public static float GetLoadingProgress()
+    {
+        if (_targetOperation != null)
+        {
+            return _targetOperation.progress;
         }
 
+        return 1f;
+    }
 
-        public static void Load(Scene scene)
+    private static IEnumerator LoadSceneCoroutine(Scene targetScene)
+    {
+        GameObject sceneContextObject = GameObject.Find("SceneContext");
+        if (sceneContextObject != null)
         {
-            GameObject sc = GameObject.Find("SceneContext");
-            if (sc != null)
-            {
-                UnityEngine.Object.Destroy(sc);
-            }
-
-            // Set the loader callback action to load the target scene
-            _onLoaderCallback = () =>
-            {
-                GameObject loadingGameObject = new GameObject("Loading Game Object");
-                loadingGameObject.AddComponent<LoadingMonoBehaviour>().StartCoroutine(LoadSceneAsync(scene));
-            };
-
-            // Load the loading scene
-            SceneManager.LoadScene(Scene.Loading.ToString());
+            Object.Destroy(sceneContextObject);
         }
 
-        public static void LoaderCallback()
+        float progress = 0f;
+
+        _loadingOperation = SceneManager.LoadSceneAsync(Scene.Loading.ToString());
+        _loadingOperation.allowSceneActivation = false;
+
+        progress = _loadingOperation.progress;
+        while (_loadingOperation.progress < .9f)
         {
-            // Triggered after the first Update which lets the screen refresh
-            // Execute the loader callback action which will load the target scene
-            if (_onLoaderCallback != null)
-            {
-                _onLoaderCallback();
-                _onLoaderCallback = null;
-            }
-        }
-
-        public static float GetLoadingProgress()
-        {
-            if (_asyncOperation != null)
-            {
-                return _asyncOperation.progress;
-            }
-
-            return 1f;
-        }
-
-        private class LoadingMonoBehaviour : MonoBehaviour { }
-
-        private static Action _onLoaderCallback;
-        private static AsyncOperation _asyncOperation;
-
-        private static IEnumerator LoadSceneAsync(Scene scene)
-        {
+            progress = _loadingOperation.progress;
             yield return null;
+        }
 
-            _asyncOperation = SceneManager.LoadSceneAsync(scene.ToString());
+        _loadingOperation.allowSceneActivation = true;
 
-            while (!_asyncOperation.isDone)
+        _targetOperation = SceneManager.LoadSceneAsync(targetScene.ToString(), LoadSceneMode.Additive);
+        _targetOperation.allowSceneActivation = false;
+
+        progress = _targetOperation.progress;
+        while (_targetOperation.progress < .9f)
+        {
+            progress = _targetOperation.progress;
+            yield return null;
+        }
+
+        _targetOperation.allowSceneActivation = true;
+
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(5f);
+
+        SceneManager.UnloadSceneAsync(Scene.Loading.ToString());
+        isSceneLoading = false;
+        Time.timeScale = 1f;
+        Object.Destroy(CoroutineRunner.Instance.gameObject);
+    }
+
+    private class CoroutineRunner : MonoBehaviour
+    {
+        private static CoroutineRunner instance;
+        public static CoroutineRunner Instance
+        {
+            get
             {
-                yield return null;
+                if (instance == null)
+                {
+                    GameObject gameObject = new GameObject("CoroutineRunner");
+                    instance = gameObject.AddComponent<CoroutineRunner>();
+                    DontDestroyOnLoad(gameObject);
+                }
+                return instance;
             }
         }
     }

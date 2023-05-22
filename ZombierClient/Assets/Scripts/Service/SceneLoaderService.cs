@@ -9,15 +9,11 @@ using UnityEngine.SceneManagement;
 
 namespace Prototype.Service
 {
+    // TODO: Separate transition animations logic from scene loading logic
+    // for possible reuse in future projects
     public class SceneLoaderService
     {
-        private bool isSceneLoading = false;
-        private AsyncOperation _loadingOperation;
-        private AsyncOperation _targetOperation;
-        private Dictionary<Tuple<Scene, Scene>, Func<Scene, IEnumerator>> _transitionsGraph;
-        private AppEventService _appEventService;
-
-        private Scene _currentScene;
+        // Public
 
         public SceneLoaderService(AppEventService appEventService)
         {
@@ -51,6 +47,43 @@ namespace Prototype.Service
             _appEventService.LoadScene -= HandleLoadScene;
         }
 
+        public float GetLoadingProgress()
+        {
+            if (_targetOperation != null)
+            {
+                return _targetOperation.progress;
+            }
+
+            return 1f;
+        }
+
+        private class CoroutineRunner : MonoBehaviour
+        {
+            private static CoroutineRunner instance;
+            public static CoroutineRunner Instance
+            {
+                get
+                {
+                    if (instance == null)
+                    {
+                        GameObject gameObject = new GameObject("CoroutineRunner");
+                        instance = gameObject.AddComponent<CoroutineRunner>();
+                        DontDestroyOnLoad(gameObject);
+                    }
+                    return instance;
+                }
+            }
+        }
+
+        // Injected
+        private AppEventService _appEventService;
+        // Internal variables
+        private bool isSceneLoading = false;
+        private AsyncOperation _loadingOperation;
+        private AsyncOperation _targetOperation;
+        private Dictionary<Tuple<Scene, Scene>, Func<Scene, IEnumerator>> _transitionsGraph;
+        private Scene _currentScene;
+
         private void HandleLoadScene(object sender, LoadSceneEventArgs e)
         {
             Load(e.To);
@@ -82,15 +115,7 @@ namespace Prototype.Service
             }
         }
 
-        public float GetLoadingProgress()
-        {
-            if (_targetOperation != null)
-            {
-                return _targetOperation.progress;
-            }
-
-            return 1f;
-        }
+        #region Transition Coroutines
 
         private IEnumerator LoadWithLoadingScreen(Scene targetSceneName)
         {
@@ -371,25 +396,6 @@ namespace Prototype.Service
             Time.timeScale = 1f;
             UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
         }
-
-
-        private class CoroutineRunner : MonoBehaviour
-        {
-            private static CoroutineRunner instance;
-            public static CoroutineRunner Instance
-            {
-                get
-                {
-                    if (instance == null)
-                    {
-                        GameObject gameObject = new GameObject("CoroutineRunner");
-                        instance = gameObject.AddComponent<CoroutineRunner>();
-                        DontDestroyOnLoad(gameObject);
-                    }
-                    return instance;
-                }
-            }
-        }
+        #endregion
     }
-
 }

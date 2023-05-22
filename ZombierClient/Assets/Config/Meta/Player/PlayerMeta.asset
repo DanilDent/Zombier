@@ -93,8 +93,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  PlayerPrefab: {fileID: 5860778791831712981, guid: eaf5bb002bbd61549a21f5276edcf3ef,
-    type: 3}
+  PlayerPrefabAssetPath: PlayerYbot
   MaxSpeed: 5.28
   CritChance: 0.4
   CritMultiplier: 2

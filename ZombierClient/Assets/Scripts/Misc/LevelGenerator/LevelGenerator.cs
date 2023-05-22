@@ -19,6 +19,7 @@ namespace Prototype.LevelGeneration
             _levelData = levelData;
 
             _meshCombiner = new MeshCombiner();
+            LoadResources();
             Init();
         }
 
@@ -35,9 +36,10 @@ namespace Prototype.LevelGeneration
             GameObject ground = GenerateGround();
             GameObject exit = GenerateExit();
             GameObject walls = GenerateWalls();
+
             GameObject obstacles = GenerateObstacles(
                 "Obstacles",
-                _locationData.ObstaclePrefabs,
+                _obstaclePrefabs,
                 TileType.Obstacle,
                 TileType.Ground,
                 _minObstacleCount,
@@ -45,9 +47,10 @@ namespace Prototype.LevelGeneration
 
             GameObject environment = new GameObject("Environment");
             GameObject envGround = GenerateEnvGround();
+
             GameObject envObstacles = GenerateObstacles(
                 "EnvironmentObstacles",
-                _locationData.EnvObstaclePrefabs,
+                _envObstaclePrefabs,
                 TileType.EnvironmentObstacle,
                 TileType.EnvironmentGround,
                 _minEnvObstacleCount,
@@ -57,7 +60,8 @@ namespace Prototype.LevelGeneration
             float environmentYOffset = 0f;
             environment.transform.position += Vector3.up * environmentYOffset;
 
-            GameObject levelInstance = Object.Instantiate(_locationData.LocationLevelPrefab);
+            var locationLevelPrefab = Resources.Load<GameObject>(_locationData.LocationLevelPrefabAssetPath);
+            GameObject levelInstance = Object.Instantiate(locationLevelPrefab);
             NavMeshSurface navMeshSurface = levelInstance.GetComponentInChildren<NavMeshSurface>();
 
             environment.transform.SetParent(levelInstance.transform);
@@ -79,18 +83,34 @@ namespace Prototype.LevelGeneration
 
         private const string NOT_WALKABLE = "Not Walkable";
         // Injected
-        private MeshCombiner _meshCombiner;
-        // Config
         private LocationData _locationData;
         private LevelData _levelData;
         private LevelGeneratorData _levelGeneratorData;
         //
+        private MeshCombiner _meshCombiner;
         private Transform _tempTransform;
         private List<GameObject> _tempGameObjects;
         private int _minX;
         private int _maxX;
         private int _minY;
         private int _maxY;
+        //
+        private GameObject _groundPrefab;
+        private GameObject _wallPrefab;
+        private GameObject[] _obstaclePrefabs;
+        private GameObject _exitPrefab;
+        private GameObject _envGroundPrefab;
+        private GameObject[] _envObstaclePrefabs;
+
+        private void LoadResources()
+        {
+            _groundPrefab = Resources.Load<GameObject>(_locationData.GroundPrefabAssetPath);
+            _wallPrefab = Resources.Load<GameObject>(_locationData.WallPrefabAssetPath);
+            _obstaclePrefabs = Resources.LoadAll<GameObject>(_locationData.ObstaclePrefabsAssetPath);
+            _exitPrefab = Resources.Load<GameObject>(_locationData.ExitPrefabAssetPath);
+            _envGroundPrefab = Resources.Load<GameObject>(_locationData.EnvGroundPrefabAssetPath);
+            _envObstaclePrefabs = Resources.LoadAll<GameObject>(_locationData.EnvObstaclePrefabsAssetPath);
+        }
 
         private void Init()
         {
@@ -121,9 +141,10 @@ namespace Prototype.LevelGeneration
             int posY = exitRoom.Position.y + exitRoom.Height;
 
             Vector3 exitPosition = new Vector3(posX, 0f, posY);
-            GameObject instance = Object.Instantiate(_locationData.ExitPrefab, exitPosition, Quaternion.identity);
+
+            GameObject instance = Object.Instantiate(_exitPrefab, exitPosition, Quaternion.identity);
             instance.name = "Exit";
-            var gfx = _locationData.ExitPrefab.transform.GetChild(0);
+            var gfx = _exitPrefab.transform.GetChild(0);
             Vector2Int size = new Vector2Int(Mathf.CeilToInt(gfx.transform.localScale.x), Mathf.CeilToInt(gfx.transform.localScale.z));
             for (int xOffset = -size.x / 2; xOffset < size.x / 2 + size.x % 2; ++xOffset)
             {
@@ -137,7 +158,6 @@ namespace Prototype.LevelGeneration
             NavMeshModifier navMeshModifier = instance.AddComponent<NavMeshModifier>();
             navMeshModifier.overrideArea = true;
             navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);
-
 
             return instance;
         }

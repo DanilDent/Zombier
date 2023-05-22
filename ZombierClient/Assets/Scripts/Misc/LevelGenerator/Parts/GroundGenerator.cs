@@ -211,7 +211,7 @@ namespace Prototype.LevelGeneration
                     Vector2Int position = new Vector2Int(desc.Position.x + xOffset, desc.Position.y + yOffset);
                     _groundMap[position.x, position.y] = TileType.Ground;
                     GameObject instance = Object.Instantiate(
-                        _locationData.GroundPrefab,
+                        _groundPrefab,
                         new Vector3(position.x, 0f, position.y),
                         Quaternion.identity,
                         _tempTransform);
@@ -244,7 +244,7 @@ namespace Prototype.LevelGeneration
                     {
                         _groundMap[x, y] = TileType.EnvironmentGround;
                         var instance = Object.Instantiate(
-                            _locationData.EnvGroundPrefab,
+                            _envGroundPrefab,
                             new Vector3(x, 1f, y),
                             Quaternion.identity,
                             _tempTransform);

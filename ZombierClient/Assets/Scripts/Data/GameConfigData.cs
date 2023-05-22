@@ -1,6 +1,4 @@
 ﻿using Prototype.LevelGeneration;
-using Prototype.Model;
-using Prototype.View;
 using UnityEngine;
 
 namespace Prototype.Data
@@ -10,11 +8,11 @@ namespace Prototype.Data
     {
         public int ProjectilesPoolSize = 10;
         public LevelGeneratorData LevelGeneratorConfig;
-        public EnemyModel EnemyPrefab;
-        public EnemyProjectileModel EnemyProjectilePrefab;
-        public HitBloodSplashVFXView HitVFXPrefab;
-        public DeathBloodSplashVFXView DeathVFXPrefab;
-        public DamageTextUIView DamageTextUIPrefab;
-        public ExpTextUIView ExpTextUIPrefab;
+        public string EnemyPrefabAssetPath;
+        public string EnemyProjectilePrefabAssetPath;
+        public string HitVFXPrefabAssetPath;
+        public string DeathVFXPrefabAssetPath;
+        public string DamageTextUIPrefabAssetPath;
+        public string ExpTextUIPrefabAssetPath;
     }
 }

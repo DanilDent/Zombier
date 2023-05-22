@@ -28,7 +28,7 @@ namespace Prototype.LevelGeneration
                                 {
                                     _wallsMap[x + xOffset, y + yOffset] = TileType.Wall;
                                     Vector3 position = new Vector3(x + xOffset, 0f, y + yOffset);
-                                    var instance = Object.Instantiate(_locationData.WallPrefab, position, Quaternion.identity, _tempTransform);
+                                    var instance = Object.Instantiate(_wallPrefab, position, Quaternion.identity, _tempTransform);
                                     _tempGameObjects.Add(instance);
                                 }
                             }

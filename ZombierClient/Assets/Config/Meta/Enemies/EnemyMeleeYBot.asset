@@ -93,8 +93,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  ViewPrefab: {fileID: 5222615015262736570, guid: 9b9ad4d1919c8f9489b9dd0a9ca2b167,
-    type: 3}
+  ViewAssetPath: MeleeEnemyYBotView
   MaxSpeed: 1.8
   CritChance: 0
   CritMultiplier: 0

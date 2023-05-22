@@ -1,5 +1,4 @@
-﻿using Prototype.Model;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace Prototype.Data
     [CreateAssetMenu(fileName = "New Player Data", menuName = "Data/Player Data")]
     public class PlayerData : SerializedScriptableObject
     {
-        public PlayerModel PlayerPrefab;
+        public string PlayerPrefabAssetPath;
         public float MaxSpeed;
 
         [NonSerialized] [OdinSerialize] public DescDamage Damage;

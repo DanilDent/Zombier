@@ -15,20 +15,10 @@ MonoBehaviour:
   Levels:
   - {fileID: 11400000, guid: 99766ccd872a4814284ebdb4ca70b63c, type: 2}
   - {fileID: 11400000, guid: 0108c94d765396f4f8f8f408398868b6, type: 2}
-  LocationLevelPrefab: {fileID: 7719846440799544518, guid: 926621657f7893e4985c1d4c09d72e37,
-    type: 3}
-  GroundPrefab: {fileID: 3340660246493937519, guid: 44d6373658fc6664a92dc2084482554c,
-    type: 3}
-  WallPrefab: {fileID: 857066205283941797, guid: aa8dfeba6f7f0f342a837c4755b09dd8,
-    type: 3}
-  ObstaclePrefabs:
-  - {fileID: 3749927636919883976, guid: ccd6fb70bb5fa454e95d633b303bf4af, type: 3}
-  - {fileID: 3730744119038026343, guid: 9e2fe5a7a8a0ade4799226f04ea091f2, type: 3}
-  - {fileID: 2394632132745611180, guid: ce392eb318c11d6469cfdeb7aa45d5da, type: 3}
-  - {fileID: 7912749713684374294, guid: 9f79a6c60143d5942b268fcd066cb59d, type: 3}
-  ExitPrefab: {fileID: 7568773469886889783, guid: 77afbeae3f635394db8c2c30b64e2d8a,
-    type: 3}
-  EnvGroundPrefab: {fileID: 3340660246493937519, guid: 6cef4307ec10f7c49b61e38b23a68393,
-    type: 3}
-  EnvObstaclePrefabs:
-  - {fileID: 2394632132745611180, guid: dc33601f0b58b044388261f89020d45e, type: 3}
+  LocationLevelPrefabAssetPath: Location0Level
+  GroundPrefabAssetPath: Location0Ground
+  WallPrefabAssetPath: Location0Wall
+  ObstaclePrefabsAssetPath: Location0Obstacles
+  ExitPrefabAssetPath: Location0Exit
+  EnvGroundPrefabAssetPath: Environment/Location0EnvironmentGround
+  EnvObstaclePrefabsAssetPath: Environment/Location0EnvObstacles

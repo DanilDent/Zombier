@@ -67,7 +67,7 @@ namespace Prototype.Model
         public Transform TargetPoint => _targetPoint.transform;
         public Transform ShootingPoint => _shootingPoint.transform;
         public float AttackRateRpm => _data.Weapon.AttackRateRPM;
-        public EnemyProjectileModel ProjectilePrefab => _data.Weapon.ProjectileData.Prefab as EnemyProjectileModel;
+        public EnemyProjectileModel ProjectilePrefab => Resources.Load<EnemyProjectileModel>(_data.Weapon.ProjectileData.AssetPath);
         public float Thrust => _data.Weapon.Thrust;
         public float RotationMultiplier => _rotationMultiplier;
         public float Acceleration => _acceleration;

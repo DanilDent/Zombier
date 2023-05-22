@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8ce509f62348149bddd4b3737e86d8, type: 3}
   m_Name: ProjectileRock
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 4399411131317001658, guid: 859f4d5677b0b474c9cc85d33a878119, type: 3}
+  AssetPath: Rock

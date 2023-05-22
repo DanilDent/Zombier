@@ -18,10 +18,10 @@ namespace Prototype
             if (_dataTemplate != null)
             {
                 Container.Bind<EnemyView>()
-                .FromComponentInNewPrefab(_dataTemplate.ViewPrefab)
-                .UnderTransformGroup("View")
-                .AsSingle()
-                .NonLazy();
+                    .FromComponentInNewPrefabResource(_dataTemplate.ViewAssetPath)
+                    .UnderTransformGroup("View")
+                    .AsSingle()
+                    .NonLazy();
             }
         }
 

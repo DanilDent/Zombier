@@ -10,6 +10,7 @@ namespace Prototype.View
         [SerializeField] private TextMeshProUGUI _textLoading;
         [SerializeField] private Image _imgProgressBar;
         [SerializeField] private TextMeshProUGUI _textProgressBar;
+
         private float _timer;
         private float _timerMax = .5f;
         private int _dotsCount = 1;

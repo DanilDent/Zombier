@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using Prototype.View;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,14 +18,25 @@ public static class SceneLoaderService
     }
 
     private static bool isSceneLoading = false;
-    private static int _loadingFrames = 10;
     private static AsyncOperation _loadingOperation;
     private static AsyncOperation _targetOperation;
+    private static Dictionary<Tuple<Scene, Scene>, Func<Scene, IEnumerator>> _transitionsGraph;
 
-    public static int LoadingFrames
+    static SceneLoaderService()
     {
-        get { return _loadingFrames; }
-        set { _loadingFrames = value; }
+        _transitionsGraph = new Dictionary<Tuple<Scene, Scene>, Func<Scene, IEnumerator>>();
+
+        RegisterTransition(Scene.MainMenu, Scene.Game, LoadWithLoadingScreen);
+        RegisterTransition(Scene.Game, Scene.MainMenu, LoadWithLoadingScreen);
+        RegisterTransition(Scene.Game, Scene.Results, LoadWithLoadingScreen);
+        RegisterTransition(Scene.Results, Scene.MainMenu, LoadWithLoadingScreen);
+        RegisterTransition(Scene.Game, Scene.Game, LoadWithLoadingScreen);
+    }
+
+    private static void RegisterTransition(Scene from, Scene to, Func<Scene, IEnumerator> transition)
+    {
+        Tuple<Scene, Scene> tupleKey = new Tuple<Scene, Scene>(from, to);
+        _transitionsGraph.Add(tupleKey, transition);
     }
 
     public static void Load(Scene targetScene)
@@ -28,7 +44,9 @@ public static class SceneLoaderService
         if (!isSceneLoading)
         {
             isSceneLoading = true;
-            CoroutineRunner.Instance.StartCoroutine(LoadSceneCoroutine(targetScene));
+            Scene currentScene = (Scene)Enum.Parse(typeof(Scene), SceneManager.GetActiveScene().name);
+            var tuple = new Tuple<Scene, Scene>(currentScene, targetScene);
+            CoroutineRunner.Instance.StartCoroutine(_transitionsGraph[tuple](targetScene));
         }
     }
 
@@ -47,18 +65,14 @@ public static class SceneLoaderService
         GameObject sceneContextObject = GameObject.Find("SceneContext");
         if (sceneContextObject != null)
         {
-            Object.Destroy(sceneContextObject);
+            UnityEngine.Object.Destroy(sceneContextObject);
         }
-
-        float progress = 0f;
 
         _loadingOperation = SceneManager.LoadSceneAsync(Scene.Loading.ToString());
         _loadingOperation.allowSceneActivation = false;
 
-        progress = _loadingOperation.progress;
         while (_loadingOperation.progress < .9f)
         {
-            progress = _loadingOperation.progress;
             yield return null;
         }
 
@@ -67,10 +81,63 @@ public static class SceneLoaderService
         _targetOperation = SceneManager.LoadSceneAsync(targetScene.ToString(), LoadSceneMode.Additive);
         _targetOperation.allowSceneActivation = false;
 
-        progress = _targetOperation.progress;
         while (_targetOperation.progress < .9f)
         {
-            progress = _targetOperation.progress;
+            yield return null;
+        }
+
+        _targetOperation.allowSceneActivation = true;
+
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(2f);
+
+        SceneManager.UnloadSceneAsync(Scene.Loading.ToString());
+        isSceneLoading = false;
+        Time.timeScale = 1f;
+        UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
+    }
+
+    private static IEnumerator LoadWithLoadingScreen(Scene targetScene)
+    {
+        GameObject sceneContextObject = GameObject.Find("SceneContext");
+        if (sceneContextObject != null)
+        {
+            UnityEngine.Object.Destroy(sceneContextObject);
+        }
+
+        Scene currentScene = (Scene)Enum.Parse(typeof(Scene), SceneManager.GetActiveScene().name);
+
+        _loadingOperation = SceneManager.LoadSceneAsync(Scene.Loading.ToString(), LoadSceneMode.Additive);
+        _loadingOperation.allowSceneActivation = false;
+
+        while (_loadingOperation.progress < .9f)
+        {
+            yield return null;
+        }
+
+        _loadingOperation.allowSceneActivation = true;
+
+        yield return new WaitUntil(() => SceneManager.GetSceneByName(Scene.Loading.ToString()).isLoaded);
+
+        var loadindScene = SceneManager.GetSceneByName(Scene.Loading.ToString());
+
+        RectTransform loadingScreenRect = loadindScene
+            .GetRootGameObjects().Where(_ => _.GetComponentInChildren<LoadingScreenUIView>() != null)
+            .Select(_ => _.GetComponentInChildren<LoadingScreenUIView>())
+            .FirstOrDefault().GetComponent<RectTransform>();
+        RectTransform loadingScreenCanvasRect = loadingScreenRect.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+
+        yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y - loadingScreenCanvasRect.rect.height, duration: 1f)
+            .From()
+            .WaitForCompletion();
+
+        SceneManager.UnloadSceneAsync(currentScene.ToString());
+
+        _targetOperation = SceneManager.LoadSceneAsync(targetScene.ToString(), LoadSceneMode.Additive);
+        _targetOperation.allowSceneActivation = false;
+
+        while (_targetOperation.progress < .9f)
+        {
             yield return null;
         }
 
@@ -78,11 +145,14 @@ public static class SceneLoaderService
 
         Time.timeScale = 0f;
         yield return new WaitForSecondsRealtime(5f);
+        yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y + loadingScreenCanvasRect.rect.height, duration: 1f)
+            .SetUpdate(UpdateType.Normal, true)
+            .WaitForCompletion();
 
         SceneManager.UnloadSceneAsync(Scene.Loading.ToString());
         isSceneLoading = false;
         Time.timeScale = 1f;
-        Object.Destroy(CoroutineRunner.Instance.gameObject);
+        UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
     }
 
     private class CoroutineRunner : MonoBehaviour

@@ -79,9 +79,9 @@ namespace Prototype.Controller
 
             // Init player
             _player.Health = _session.CurrentLevelIndex == 0 ? _player.MaxHealth : _player.Health;
-            _player.CurrentExp = 0;
-            _player.CurrentLevel = 0;
-            _player.SavedLevelUpCounter = 0;
+            _player.CurrentExp = _session.CurrentLevelIndex == 0 ? 0 : _player.CurrentExp;
+            _player.CurrentLevel = _session.CurrentLevelIndex == 0 ? 0 : _player.CurrentLevel;
+            _player.SavedLevelUpCounter = _session.CurrentLevelIndex == 0 ? 0 : _player.SavedLevelUpCounter;
             // Use this call to update player HealthBar
             _gameEventService.OnDamaged(new GameEventService.DamagedEventArgs
             {

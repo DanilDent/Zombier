@@ -60,51 +60,8 @@ public static class SceneLoaderService
         return 1f;
     }
 
-    private static IEnumerator LoadSceneCoroutine(Scene targetScene)
-    {
-        GameObject sceneContextObject = GameObject.Find("SceneContext");
-        if (sceneContextObject != null)
-        {
-            UnityEngine.Object.Destroy(sceneContextObject);
-        }
-
-        _loadingOperation = SceneManager.LoadSceneAsync(Scene.Loading.ToString());
-        _loadingOperation.allowSceneActivation = false;
-
-        while (_loadingOperation.progress < .9f)
-        {
-            yield return null;
-        }
-
-        _loadingOperation.allowSceneActivation = true;
-
-        _targetOperation = SceneManager.LoadSceneAsync(targetScene.ToString(), LoadSceneMode.Additive);
-        _targetOperation.allowSceneActivation = false;
-
-        while (_targetOperation.progress < .9f)
-        {
-            yield return null;
-        }
-
-        _targetOperation.allowSceneActivation = true;
-
-        Time.timeScale = 0f;
-        yield return new WaitForSecondsRealtime(2f);
-
-        SceneManager.UnloadSceneAsync(Scene.Loading.ToString());
-        isSceneLoading = false;
-        Time.timeScale = 1f;
-        UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
-    }
-
     private static IEnumerator LoadWithLoadingScreen(Scene targetScene)
     {
-        GameObject sceneContextObject = GameObject.Find("SceneContext");
-        if (sceneContextObject != null)
-        {
-            UnityEngine.Object.Destroy(sceneContextObject);
-        }
-
         Scene currentScene = (Scene)Enum.Parse(typeof(Scene), SceneManager.GetActiveScene().name);
 
         _loadingOperation = SceneManager.LoadSceneAsync(Scene.Loading.ToString(), LoadSceneMode.Additive);
@@ -127,9 +84,19 @@ public static class SceneLoaderService
             .FirstOrDefault().GetComponent<RectTransform>();
         RectTransform loadingScreenCanvasRect = loadingScreenRect.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
 
-        yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y - loadingScreenCanvasRect.rect.height, duration: 1f)
+        Camera loadingSceneCamera = loadindScene
+            .GetRootGameObjects().Where(_ => _.GetComponentInChildren<Camera>() != null)
+            .Select(_ => _.GetComponentInChildren<Camera>())
+            .FirstOrDefault().GetComponent<Camera>();
+
+        loadingSceneCamera.enabled = false;
+
+        float transitionDuration = 0.5f;
+        yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y - loadingScreenCanvasRect.rect.height, transitionDuration)
             .From()
             .WaitForCompletion();
+
+        loadingSceneCamera.enabled = true;
 
         SceneManager.UnloadSceneAsync(currentScene.ToString());
 
@@ -144,8 +111,8 @@ public static class SceneLoaderService
         _targetOperation.allowSceneActivation = true;
 
         Time.timeScale = 0f;
-        yield return new WaitForSecondsRealtime(5f);
-        yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y + loadingScreenCanvasRect.rect.height, duration: 1f)
+        yield return new WaitForSecondsRealtime(2f);
+        yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y + loadingScreenCanvasRect.rect.height, transitionDuration)
             .SetUpdate(UpdateType.Normal, true)
             .WaitForCompletion();
 

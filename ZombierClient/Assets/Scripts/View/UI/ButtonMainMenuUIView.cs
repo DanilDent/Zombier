@@ -8,14 +8,12 @@ namespace Prototype.View
     public class ButtonMainMenuUIView : MonoBehaviour
     {
         [Inject]
-        public void Construct(GameEventService eventService, AppEventService appEventService)
+        public void Construct(AppEventService appEventService)
         {
-            _gameEventService = eventService;
             _appEventService = appEventService;
         }
 
         // Injected
-        private GameEventService _gameEventService;
         private AppEventService _appEventService;
         // From inspector
         [SerializeField] private Button _button;
@@ -32,7 +30,7 @@ namespace Prototype.View
 
         private void OnClick()
         {
-            _gameEventService.OnGameUnpause();
+            _appEventService.OnGameUnpause();
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.MainMenu });
         }
     }

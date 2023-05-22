@@ -9,9 +9,10 @@ namespace Prototype.View
     public class GameSettingsPopupUIView : MonoBehaviour
     {
         [Inject]
-        public void Construct(GameEventService eventService)
+        public void Construct(GameEventService gameEventService, AppEventService appEventService)
         {
-            _eventService = eventService;
+            _gameEventService = gameEventService;
+            _appEventService = appEventService;
         }
 
         //
@@ -19,18 +20,19 @@ namespace Prototype.View
         [SerializeField] private Button _btnClose;
 
         // Injected
-        private GameEventService _eventService;
+        private GameEventService _gameEventService;
+        private AppEventService _appEventService;
 
         private void OnEnable()
         {
-            _eventService.ShowSettings += HandleShowSettings;
+            _gameEventService.ShowSettings += HandleShowSettings;
             //
             _btnClose.onClick.AddListener(OnClose);
         }
 
         private void OnDisable()
         {
-            _eventService.ShowSettings -= HandleShowSettings;
+            _gameEventService.ShowSettings -= HandleShowSettings;
             //
             _btnClose.onClick.RemoveAllListeners();
         }
@@ -38,7 +40,7 @@ namespace Prototype.View
         private void OnClose()
         {
             _viewRoot.gameObject.SetActive(false);
-            _eventService.OnGameUnpause();
+            _appEventService.OnGameUnpause();
         }
 
         private void HandleShowSettings(object sender, EventArgs e)

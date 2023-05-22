@@ -8,6 +8,8 @@ namespace Prototype.Service
 
         public event EventHandler CameraOnDeadPlayer;
         public event EventHandler<LoadSceneEventArgs> LoadScene;
+        public event EventHandler GamePause;
+        public event EventHandler GameUnpause;
 
         #endregion
 
@@ -21,6 +23,16 @@ namespace Prototype.Service
         public void OnCameraOnDeadPlayer()
         {
             CameraOnDeadPlayer?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnGamePause()
+        {
+            GamePause?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnGameUnpause()
+        {
+            GameUnpause?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

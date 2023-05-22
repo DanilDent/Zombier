@@ -14,10 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Levels:
   - {fileID: 11400000, guid: 99766ccd872a4814284ebdb4ca70b63c, type: 2}
-  - {fileID: 11400000, guid: 0108c94d765396f4f8f8f408398868b6, type: 2}
-  - {fileID: 11400000, guid: 99ae662824fd3804d971643588c6cc06, type: 2}
-  - {fileID: 11400000, guid: f5eeec549061796498ba561dba14892f, type: 2}
-  - {fileID: 11400000, guid: 1b6001f23e1872d4bb22b65a91e27e81, type: 2}
   LocationLevelPrefab: {fileID: 7719846440799544518, guid: 926621657f7893e4985c1d4c09d72e37,
     type: 3}
   GroundPrefab: {fileID: 3340660246493937519, guid: 44d6373658fc6664a92dc2084482554c,

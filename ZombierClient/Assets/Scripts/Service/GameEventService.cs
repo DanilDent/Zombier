@@ -36,8 +36,7 @@ namespace Prototype.Service
 
         // Common game events
         public event EventHandler Reset;
-        public event EventHandler GamePause;
-        public event EventHandler GameUnpause;
+
         public event EventHandler ShowSettings;
         public event EventHandler<CurrentLevelChangedEventArgs> CurrentLevelChanged;
 
@@ -142,16 +141,6 @@ namespace Prototype.Service
         public void OnShowSettings()
         {
             ShowSettings?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void OnGamePause()
-        {
-            GamePause?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void OnGameUnpause()
-        {
-            GameUnpause?.Invoke(this, EventArgs.Empty);
         }
 
         public void OnEnemyPreDestroyed()

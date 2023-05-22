@@ -10,36 +10,38 @@ namespace Prototype.View
     public class GameUIView : MonoBehaviour
     {
         [Inject]
-        public void Construct(FloatingJoystick joystick, GameEventService eventService)
+        public void Construct(FloatingJoystick joystick, GameEventService eventService, AppEventService appEventService)
         {
             _joystick = joystick;
-            _eventService = eventService;
+            _gameEventService = eventService;
+            _appEventService = appEventService;
         }
 
         private const string CURRENT_LEVEL_TEXT = "Current level: ";
         // Injected
         private FloatingJoystick _joystick;
-        private GameEventService _eventService;
+        private GameEventService _gameEventService;
+        private AppEventService _appEventService;
         // From inspector
         [SerializeField] private Button _btnPause;
         [SerializeField] private TextMeshProUGUI _textCurrentLevel;
 
         private void OnEnable()
         {
-            _eventService.PlayerDeath += HandlePlayerDeath;
-            _eventService.PlayerRevive += HandlePlayerRevive;
-            _eventService.GameUnpause += HandleGameUnpause;
-            _eventService.CurrentLevelChanged += HandleCurrentLevelChanged;
+            _gameEventService.PlayerDeath += HandlePlayerDeath;
+            _gameEventService.PlayerRevive += HandlePlayerRevive;
+            _appEventService.GameUnpause += HandleGameUnpause;
+            _gameEventService.CurrentLevelChanged += HandleCurrentLevelChanged;
             //
             _btnPause.onClick.AddListener(OnPause);
         }
 
         private void OnDisable()
         {
-            _eventService.PlayerDeath -= HandlePlayerDeath;
-            _eventService.PlayerRevive -= HandlePlayerRevive;
-            _eventService.GameUnpause -= HandleGameUnpause;
-            _eventService.CurrentLevelChanged -= HandleCurrentLevelChanged;
+            _gameEventService.PlayerDeath -= HandlePlayerDeath;
+            _gameEventService.PlayerRevive -= HandlePlayerRevive;
+            _appEventService.GameUnpause -= HandleGameUnpause;
+            _gameEventService.CurrentLevelChanged -= HandleCurrentLevelChanged;
             //
             _btnPause.onClick.RemoveAllListeners();
         }
@@ -57,8 +59,8 @@ namespace Prototype.View
         private void OnPause()
         {
             _joystick.gameObject.SetActive(false);
-            _eventService.OnGamePause();
-            _eventService.OnShowSettings();
+            _appEventService.OnGamePause();
+            _gameEventService.OnShowSettings();
         }
 
         private void HandleGameUnpause(object sender, EventArgs e)

@@ -71,8 +71,6 @@ namespace Prototype.Controller
             _gameEventService.PlayerRevive += HandlePlayerRevive;
             _gameEventService.Reset += HandleReset;
             _gameEventService.PlayerEnteredExit += HandlePlayerEnteredExit;
-            _gameEventService.GamePause += HandleGamePause;
-            _gameEventService.GameUnpause += HandleGameUnpause;
         }
 
         private void Start()
@@ -173,24 +171,12 @@ namespace Prototype.Controller
             }
         }
 
-        private void HandleGamePause(object sender, EventArgs e)
-        {
-            Time.timeScale = 0f;
-        }
-
-        private void HandleGameUnpause(object sender, EventArgs e)
-        {
-            Time.timeScale = 1f;
-        }
-
         private void OnDisable()
         {
             _gameEventService.PlayerDeath -= HandlePlayerDeath;
             _gameEventService.PlayerRevive -= HandlePlayerRevive;
             _gameEventService.Reset -= HandleReset;
             _gameEventService.PlayerEnteredExit -= HandlePlayerEnteredExit;
-            _gameEventService.GamePause -= HandleGamePause;
-            _gameEventService.GameUnpause -= HandleGameUnpause;
         }
     }
 }

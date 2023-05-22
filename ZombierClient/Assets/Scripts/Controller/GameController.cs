@@ -77,8 +77,6 @@ namespace Prototype.Controller
 
         private void Start()
         {
-            Application.targetFrameRate = 60;
-
             InitGame();
 
             // Init player

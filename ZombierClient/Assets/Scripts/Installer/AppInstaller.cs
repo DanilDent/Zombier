@@ -1,4 +1,5 @@
-﻿using Prototype.Data;
+﻿using Prototype.Controller;
+using Prototype.Data;
 using Prototype.Service;
 using UnityEngine;
 using Zenject;
@@ -16,6 +17,8 @@ namespace Prototype
 
             Container.Bind<AppEventService>().AsSingle().NonLazy();
             Container.Bind<SceneLoaderService>().AsSingle().NonLazy();
+
+            Container.BindInterfacesTo<AppController>().AsSingle().NonLazy();
         }
     }
 }

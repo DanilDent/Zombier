@@ -2,9 +2,13 @@
 {
     public enum Scene
     {
+        Bootstrap,
         MainMenu,
         Game,
         Loading,
-        Results
+        Results,
+        Inventory,
+        Shop,
+        Footer,
     }
 }

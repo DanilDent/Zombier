@@ -63,7 +63,7 @@ namespace Prototype.Controller
                 }
                 else
                 {
-                    Debug.LogWarning("Can't find random position on navmesh surface");
+                    //Debug.LogWarning("Can't find random position on navmesh surface");
                 }
             }
         }

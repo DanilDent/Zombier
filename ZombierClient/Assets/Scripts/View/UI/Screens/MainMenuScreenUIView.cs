@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Prototype.View
 {
-    public class MainMenuScreenUIView : MonoBehaviour
+    public class MainMenuScreenUIView : ScreenUIViewBase
     {
         [SerializeField] private Button _playButton;
 

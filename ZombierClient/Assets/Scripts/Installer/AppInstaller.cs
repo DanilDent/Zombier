@@ -1,4 +1,5 @@
 ﻿using Prototype.Data;
+using Prototype.Service;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +13,8 @@ namespace Prototype
         {
             Container.Bind<AppData>().FromInstance(_appData).AsSingle();
             Container.Bind<MetaData>().FromInstance(_appData.Meta).AsSingle();
+
+            Container.Bind<AppEventService>().AsSingle();
         }
     }
 }

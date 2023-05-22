@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Prototype.View
 {
-    public class LoadingScreenUIView : MonoBehaviour
+    public class LoadingScreenUIView : ScreenUIViewBase
     {
         [SerializeField] private TextMeshProUGUI _textLoading;
         [SerializeField] private Image _imgProgressBar;

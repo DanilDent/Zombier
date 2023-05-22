@@ -123,7 +123,6 @@ namespace Prototype
 
             // Services
             Container.Bind<GameInputService>().AsSingle();
-            Container.Bind<GameUIEventService>().AsSingle();
             Container.Bind<GameEventService>().AsSingle();
             // !Services
 

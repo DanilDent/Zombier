@@ -60,7 +60,7 @@ public static class SceneLoaderService
         return 1f;
     }
 
-    private static IEnumerator LoadWithLoadingScreen(Scene targetScene)
+    private static IEnumerator LoadWithLoadingScreen(Scene targetSceneName)
     {
         Scene currentScene = (Scene)Enum.Parse(typeof(Scene), SceneManager.GetActiveScene().name);
 
@@ -100,7 +100,7 @@ public static class SceneLoaderService
 
         SceneManager.UnloadSceneAsync(currentScene.ToString());
 
-        _targetOperation = SceneManager.LoadSceneAsync(targetScene.ToString(), LoadSceneMode.Additive);
+        _targetOperation = SceneManager.LoadSceneAsync(targetSceneName.ToString(), LoadSceneMode.Additive);
         _targetOperation.allowSceneActivation = false;
 
         while (_targetOperation.progress < .9f)
@@ -119,6 +119,69 @@ public static class SceneLoaderService
         SceneManager.UnloadSceneAsync(Scene.Loading.ToString());
         isSceneLoading = false;
         Time.timeScale = 1f;
+        UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
+    }
+
+    public static IEnumerator LoadHorizontalTransitionLeft(Scene targetSceneName)
+    {
+        Scene currentSceneName = (Scene)Enum.Parse(typeof(Scene), SceneManager.GetActiveScene().name);
+
+
+        var currentScene = SceneManager.GetSceneByName(targetSceneName.ToString());
+
+        RectTransform currentScreenRect = currentScene
+            .GetRootGameObjects().Where(_ => _.GetComponent<ScreenUIViewBase>() != null)
+            .Select(_ => _.GetComponent<ScreenUIViewBase>())
+            .FirstOrDefault().GetComponent<RectTransform>();
+
+        RectTransform currentScreenCanvasRect = currentScreenRect.GetComponentInParent<Canvas>()
+            .GetComponent<RectTransform>();
+
+        Camera currentSceneCamera = currentScene
+            .GetRootGameObjects().Where(_ => _.GetComponent<Camera>() != null)
+            .Select(_ => _.GetComponent<Camera>())
+            .FirstOrDefault();
+
+
+        _targetOperation = SceneManager.LoadSceneAsync(targetSceneName.ToString(), LoadSceneMode.Additive);
+        _targetOperation.allowSceneActivation = false;
+
+        while (_targetOperation.progress < .9f)
+        {
+            yield return null;
+        }
+
+        _targetOperation.allowSceneActivation = true;
+
+        yield return new WaitUntil(() => SceneManager.GetSceneByName(targetSceneName.ToString()).isLoaded);
+
+        var targetScene = SceneManager.GetSceneByName(targetSceneName.ToString());
+
+        RectTransform targetScreenRect = targetScene
+            .GetRootGameObjects().Where(_ => _.GetComponent<ScreenUIViewBase>() != null)
+            .Select(_ => _.GetComponent<ScreenUIViewBase>())
+            .FirstOrDefault().GetComponent<RectTransform>();
+
+        RectTransform targetScreenCanvasRect = targetScreenRect.GetComponentInParent<Canvas>()
+            .GetComponent<RectTransform>();
+
+        Camera targetSceneCamera = targetScene
+            .GetRootGameObjects().Where(_ => _.GetComponent<Camera>() != null)
+            .Select(_ => _.GetComponent<Camera>())
+            .FirstOrDefault();
+
+        targetSceneCamera.enabled = false;
+
+        float transitionDuration = 0.5f;
+        currentScreenRect.DOAnchorPosX(currentScreenRect.anchoredPosition.x - currentScreenCanvasRect.rect.width, transitionDuration);
+        yield return targetScreenRect.DOAnchorPosX(targetScreenRect.anchoredPosition.x + targetScreenCanvasRect.rect.width, transitionDuration)
+            .From()
+            .WaitForCompletion();
+
+        targetSceneCamera.enabled = true;
+
+        SceneManager.UnloadSceneAsync(currentScene.name);
+        isSceneLoading = false;
         UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
     }
 

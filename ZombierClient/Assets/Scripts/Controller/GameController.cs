@@ -9,10 +9,13 @@ namespace Prototype.Controller
 {
     public class GameController : MonoBehaviour
     {
+        // WIP: Adding all scene transitions, refactoring scene loader service so it now non static class 
+        // which loads scenes by events
         [Inject]
         public void Construct(
             GameSessionData session,
             GameEventService eventService,
+            AppEventService appEventService,
             PlayerModel player,
             // Controllers
             DealDamageController dealDamageController,
@@ -28,7 +31,8 @@ namespace Prototype.Controller
             VFXController vfxController)
         {
             _session = session;
-            _eventService = eventService;
+            _gameEventService = eventService;
+            _appEventService = appEventService;
             _player = player;
             // Controllers
             _dealDamageController = dealDamageController;
@@ -45,7 +49,8 @@ namespace Prototype.Controller
         }
 
         private GameSessionData _session;
-        private GameEventService _eventService;
+        private GameEventService _gameEventService;
+        private AppEventService _appEventService;
         private PlayerModel _player;
         // Controllers
         private DealDamageController _dealDamageController;
@@ -62,12 +67,12 @@ namespace Prototype.Controller
 
         private void OnEnable()
         {
-            _eventService.PlayerDeath += HandlePlayerDeath;
-            _eventService.PlayerRevive += HandlePlayerRevive;
-            _eventService.Reset += HandleReset;
-            _eventService.PlayerEnteredExit += HandlePlayerEnteredExit;
-            _eventService.GamePause += HandleGamePause;
-            _eventService.GameUnpause += HandleGameUnpause;
+            _gameEventService.PlayerDeath += HandlePlayerDeath;
+            _gameEventService.PlayerRevive += HandlePlayerRevive;
+            _gameEventService.Reset += HandleReset;
+            _gameEventService.PlayerEnteredExit += HandlePlayerEnteredExit;
+            _gameEventService.GamePause += HandleGamePause;
+            _gameEventService.GameUnpause += HandleGameUnpause;
         }
 
         private void Start()
@@ -82,7 +87,7 @@ namespace Prototype.Controller
             _player.CurrentLevel = 0;
             _player.SavedLevelUpCounter = 0;
             // Use this call to update player HealthBar
-            _eventService.OnDamaged(new GameEventService.DamagedEventArgs
+            _gameEventService.OnDamaged(new GameEventService.DamagedEventArgs
             {
                 DamagedEntity = _player,
                 DamageValue = 0f,
@@ -90,7 +95,7 @@ namespace Prototype.Controller
                 IsCrit = false
             });
 
-            _eventService.OnCurrentLevelChanged(new GameEventService.CurrentLevelChangedEventArgs
+            _gameEventService.OnCurrentLevelChanged(new GameEventService.CurrentLevelChangedEventArgs
             {
                 Value = _session.CurrentLevelIndex + 1,
                 MaxValue = _session.Location.Levels.Length
@@ -138,7 +143,7 @@ namespace Prototype.Controller
         private void HandlePlayerRevive(object sender, EventArgs e)
         {
             _player.Health = _player.MaxHealth;
-            _eventService.OnDamaged(new GameEventService.DamagedEventArgs
+            _gameEventService.OnDamaged(new GameEventService.DamagedEventArgs
             {
                 DamagedEntity = _player,
                 DamageValue = 0f,
@@ -150,7 +155,7 @@ namespace Prototype.Controller
 
         private void HandleReset(object sender, EventArgs e)
         {
-            SceneLoaderService.Load(SceneLoaderService.Scene.Game);
+            _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
         }
 
         private void HandlePlayerEnteredExit(object sender, EventArgs e)
@@ -160,12 +165,12 @@ namespace Prototype.Controller
                 _session.CurrentLevelIndex++;
                 if (_session.CurrentLevelIndex < _session.Location.Levels.Length)
                 {
-                    SceneLoaderService.Load(SceneLoaderService.Scene.Game);
+                    _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
                 }
                 else
                 {
                     _session.CurrentLevelIndex = 0;
-                    SceneLoaderService.Load(SceneLoaderService.Scene.Results);
+                    _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Results });
                 }
             }
         }
@@ -182,12 +187,12 @@ namespace Prototype.Controller
 
         private void OnDisable()
         {
-            _eventService.PlayerDeath -= HandlePlayerDeath;
-            _eventService.PlayerRevive -= HandlePlayerRevive;
-            _eventService.Reset -= HandleReset;
-            _eventService.PlayerEnteredExit -= HandlePlayerEnteredExit;
-            _eventService.GamePause -= HandleGamePause;
-            _eventService.GameUnpause -= HandleGameUnpause;
+            _gameEventService.PlayerDeath -= HandlePlayerDeath;
+            _gameEventService.PlayerRevive -= HandlePlayerRevive;
+            _gameEventService.Reset -= HandleReset;
+            _gameEventService.PlayerEnteredExit -= HandlePlayerEnteredExit;
+            _gameEventService.GamePause -= HandleGamePause;
+            _gameEventService.GameUnpause -= HandleGameUnpause;
         }
     }
 }

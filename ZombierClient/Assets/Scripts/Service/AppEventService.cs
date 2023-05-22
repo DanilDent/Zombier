@@ -11,15 +11,6 @@ namespace Prototype.Service
 
         #endregion
 
-        #region EventArgs
-
-        public class LoadSceneEventArgs : EventArgs
-        {
-            public SceneLoaderService.Scene To;
-        }
-
-        #endregion
-
         #region Invokers
 
         public void OnLoadScene(LoadSceneEventArgs e)
@@ -34,4 +25,13 @@ namespace Prototype.Service
 
         #endregion
     }
+
+    #region EventArgs
+
+    public class LoadSceneEventArgs : EventArgs
+    {
+        public Scene To;
+    }
+
+    #endregion
 }

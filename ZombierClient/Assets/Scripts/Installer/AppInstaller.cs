@@ -14,7 +14,8 @@ namespace Prototype
             Container.Bind<AppData>().FromInstance(_appData).AsSingle();
             Container.Bind<MetaData>().FromInstance(_appData.Meta).AsSingle();
 
-            Container.Bind<AppEventService>().AsSingle();
+            Container.Bind<AppEventService>().AsSingle().NonLazy();
+            Container.Bind<SceneLoaderService>().AsSingle().NonLazy();
         }
     }
 }

@@ -66,7 +66,7 @@ namespace Prototype.View
 
         private void OnNoResume()
         {
-            _appEventService.OnDontResumeGameSession();
+            _appEventService.OnResetGameSession();
             _resumeSessionPopupRect.gameObject.SetActive(false);
         }
 

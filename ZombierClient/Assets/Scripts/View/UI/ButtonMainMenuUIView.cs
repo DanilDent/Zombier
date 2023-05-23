@@ -30,6 +30,7 @@ namespace Prototype.View
 
         private void OnClick()
         {
+            _appEventService.OnResetGameSession();
             _appEventService.OnGameUnpause();
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.MainMenu });
         }

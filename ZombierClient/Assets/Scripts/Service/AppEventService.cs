@@ -12,24 +12,24 @@ namespace Prototype.Service
         public event EventHandler GamePause;
         public event EventHandler GameUnpause;
         public event EventHandler<PlayEventArgs> Play;
-        public event EventHandler<PlayerPassedLevelEventArgs> PlayerPassedLevel;
 
+        public event EventHandler<PlayerPassedLevelEventArgs> SaveGameSession;
+        public event EventHandler ResetGameSession;
         public event EventHandler UserHasUnfinishedGameSession;
         public event EventHandler ResumeGameSession;
-        public event EventHandler DontResumeGameSession;
 
         #endregion
 
         #region Invokers
 
+        public void OnResetGameSession()
+        {
+            ResetGameSession?.Invoke(this, EventArgs.Empty);
+        }
+
         public void OnResumeGameSession()
         {
             ResumeGameSession?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void OnDontResumeGameSession()
-        {
-            DontResumeGameSession?.Invoke(this, EventArgs.Empty);
         }
 
         public void OnUserHasUnfinishedGameSession()
@@ -37,9 +37,9 @@ namespace Prototype.Service
             UserHasUnfinishedGameSession?.Invoke(this, EventArgs.Empty);
         }
 
-        public void OnPlayerPassedLevel(PlayerPassedLevelEventArgs e)
+        public void OnSaveGameSession(PlayerPassedLevelEventArgs e)
         {
-            PlayerPassedLevel?.Invoke(this, e);
+            SaveGameSession?.Invoke(this, e);
         }
 
         public void OnPlay(PlayEventArgs e)

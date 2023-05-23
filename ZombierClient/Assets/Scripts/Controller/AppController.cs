@@ -7,6 +7,8 @@ using Zenject;
 
 namespace Prototype.Controller
 {
+    // TODO: Move all game data saving logic inside a separate 
+    // SaveAppDataController class
     public class AppController : MonoBehaviour
     {
         [Inject]
@@ -27,9 +29,9 @@ namespace Prototype.Controller
             _appEventService.GamePause += HandleGamePause;
             _appEventService.GameUnpause += HandleGameUnpause;
             _appEventService.Play += HandlePlay;
-            _appEventService.PlayerPassedLevel += HandlePlayerPassedLevel;
+            _appEventService.SaveGameSession += HandleSaveGameSession;
             _appEventService.ResumeGameSession += HandleResumeGameSession;
-            _appEventService.DontResumeGameSession += HandleDontResumeGameSession;
+            _appEventService.ResetGameSession += HandleResetGameSession;
         }
 
         private void Update()
@@ -47,9 +49,9 @@ namespace Prototype.Controller
             _appEventService.GamePause -= HandleGamePause;
             _appEventService.GameUnpause -= HandleGameUnpause;
             _appEventService.Play -= HandlePlay;
-            _appEventService.PlayerPassedLevel -= HandlePlayerPassedLevel;
+            _appEventService.SaveGameSession -= HandleSaveGameSession;
             _appEventService.ResumeGameSession -= HandleResumeGameSession;
-            _appEventService.DontResumeGameSession -= HandleDontResumeGameSession;
+            _appEventService.ResetGameSession -= HandleResetGameSession;
         }
 
         private void OnApplicationPause()
@@ -92,18 +94,20 @@ namespace Prototype.Controller
         private void HandleResumeGameSession(object sender, EventArgs e)
         {
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
+            Debug.Log("Game session resume.");
         }
 
-        private void HandleDontResumeGameSession(object sender, EventArgs e)
+        private void HandleResetGameSession(object sender, EventArgs e)
         {
             _appData.User.GameSession = null;
+            Debug.Log("Game session reset.");
         }
 
-        private void HandlePlayerPassedLevel(object sender, PlayerPassedLevelEventArgs e)
+        private void HandleSaveGameSession(object sender, PlayerPassedLevelEventArgs e)
         {
             _appData.User.GameSession = e.GameSession.Copy();
+            _serializationService.SerializeAppData(_appData);
+            Debug.Log($"App data saved to {_serializationService.PersistentAppDataPath}");
         }
-
-
     }
 }

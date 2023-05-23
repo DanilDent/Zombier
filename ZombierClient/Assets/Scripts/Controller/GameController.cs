@@ -165,12 +165,12 @@ namespace Prototype.Controller
                 _session.CurrentLevelIndex++;
                 if (_session.CurrentLevelIndex < _session.Location.Levels.Length)
                 {
-                    _appEventService.OnPlayerPassedLevel(new PlayerPassedLevelEventArgs { GameSession = _session });
+                    _appEventService.OnSaveGameSession(new PlayerPassedLevelEventArgs { GameSession = _session });
                     _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
                 }
                 else
                 {
-                    _session.CurrentLevelIndex = 0;
+                    _appEventService.OnResetGameSession();
                     _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Results });
                 }
             }

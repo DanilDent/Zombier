@@ -24,33 +24,14 @@ namespace Prototype
         [Inject] private AppData _appData;
         // From inspector
         [SerializeField] private GameConfigData _gameConfig;
-        [SerializeField] private bool _useEditorConfig = true;
+        // Resolved by installer itself
+        private GameSessionData _currentGameSession;
 
         public override void InstallBindings()
         {
-            // TODO: Move all of this logic inside MainMenuScreenController, 
-            // add new session creation logic there Bind just
-            // _appData.Session here
             // Game data
-            if (!_useEditorConfig)
-            {
-                // Use actual serialized game data
-                if (_appData.User.GameSession != null)
-                {
-                    // User has unfinished game session
-                    _appData.Session = _appData.User.GameSession.Copy();
-                }
-                else
-                {
-                    // User haven't started the game session yet, create a new
-                    // TODO: that's not correct session creation logic, it should have default session for each 
-                    // location and difficulty level instead 1 for all of them in meta data, and use appropriate default 
-                    // session inside main menu controller to create a new session
-                    _appData.Session = _appData.Meta.DefaultSession.Copy();
-                }
-            }
-
-            Container.Bind<GameSessionData>().FromInstance(_appData.Session);
+            _currentGameSession = _appData.User.GameSession.Copy();
+            Container.Bind<GameSessionData>().FromInstance(_currentGameSession).AsSingle();
             // !Game data
 
             // Unity components
@@ -154,13 +135,13 @@ namespace Prototype
             Container.Bind<MarkerLevelExitPoint>().FromComponentInChildren().AsSingle();
 
             Container.Bind<LevelGeneratorData>().FromInstance(_gameConfig.LevelGeneratorConfig).AsSingle();
-            Container.Bind<LocationData>().FromInstance(_appData.Session.Location).AsSingle();
-            Container.Bind<LevelData>().FromInstance(_appData.Session.Location.Levels[_appData.Session.CurrentLevelIndex]);
+            Container.Bind<LocationData>().FromInstance(_currentGameSession.Location).AsSingle();
+            Container.Bind<LevelData>().FromInstance(_currentGameSession.Location.Levels[_currentGameSession.CurrentLevelIndex]);
             Container.Bind<LevelModel>().FromFactory<ProceduralLevelFactory>().AsSingle().NonLazy();
 
             // Player
             Container.Bind<PlayerModel>()
-                .FromComponentInNewPrefabResource(_appData.Session.Player.PlayerPrefabAssetPath)
+                .FromComponentInNewPrefabResource(_currentGameSession.Player.PlayerPrefabAssetPath)
                 .WithGameObjectName("Player")
                 .UnderTransform(GetMarker<MarkerEntities>)
                 .AsSingle()
@@ -185,7 +166,7 @@ namespace Prototype
                 {
                     if (obj is MonoObjectPool<PlayerProjectileModel> pool)
                     {
-                        var prefab = Resources.Load<PlayerProjectileModel>(_appData.Session.Player.Weapon.ProjectileData.AssetPath);
+                        var prefab = Resources.Load<PlayerProjectileModel>(_currentGameSession.Player.Weapon.ProjectileData.AssetPath);
                         var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
                         pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
                     }

@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: afdca586b33777c41971ab9c1b6ed5aa, type: 2}
   Locations:
   - {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}
+  DefaultSession: {fileID: 11400000, guid: 97d20242673c7e8439ea0fc4f4951373, type: 2}

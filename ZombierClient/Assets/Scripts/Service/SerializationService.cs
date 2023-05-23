@@ -2,36 +2,51 @@
 using Prototype.Data;
 using System.IO;
 using UnityEngine;
-using Zenject;
 
 namespace Prototype.Service
 {
     public class SerializationService
     {
-        [Inject]
-        public SerializationService(AppEventService appEventService)
-        {
-            _appEventService = appEventService;
-        }
+        private const string APP_DATA_PATH = "/APP_DATA.json";
 
-        private const string GAME_SESSION_PATH = "\\Config\\DataBase\\GAME_SESSION.json";
-        // Injected
-        private AppEventService _appEventService;
-
-        public static string SerializeGameSession(GameSessionData session)
+        public string SerializeAppData(AppData appData)
         {
-            string json = JsonConvert.SerializeObject(session);
-            string fullPath = Application.dataPath + GAME_SESSION_PATH;
+            string fullPath = Application.persistentDataPath + APP_DATA_PATH;
+            string json = JsonConvert.SerializeObject(appData);
             File.WriteAllText(fullPath, json);
             return json;
         }
 
-        public static GameSessionData DeserializeGameSession()
+        public AppData DeserializeAppData()
         {
-            string fullPath = Application.dataPath + GAME_SESSION_PATH;
+            string fullPath = Application.persistentDataPath + APP_DATA_PATH;
             string json = File.ReadAllText(fullPath);
-            GameSessionData session = JsonConvert.DeserializeObject<GameSessionData>(json);
-            return session;
+            AppData appData = JsonConvert.DeserializeObject<AppData>(json);
+            return appData;
         }
+
+        public bool TryDeserializeAppData(out AppData appData)
+        {
+            string fullPath = Application.persistentDataPath + APP_DATA_PATH;
+
+            if (!File.Exists(fullPath))
+            {
+                Debug.LogError("Cannot find app data.");
+                appData = null;
+                return false;
+            }
+
+            string json = File.ReadAllText(fullPath);
+            appData = JsonConvert.DeserializeObject<AppData>(json);
+            return true;
+        }
+
+        public bool AppDataExists()
+        {
+            string fullPath = Application.persistentDataPath + APP_DATA_PATH;
+            return File.Exists(fullPath);
+        }
+
+        public string PersistentAppDataPath => Application.persistentDataPath + APP_DATA_PATH;
     }
 }

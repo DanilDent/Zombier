@@ -11,15 +11,40 @@ namespace Prototype.Service
         public event EventHandler<LoadSceneEventArgs> LoadScene;
         public event EventHandler GamePause;
         public event EventHandler GameUnpause;
-        public event EventHandler<SaveGameSessionEventArgs> SaveGameSession;
+        public event EventHandler<PlayEventArgs> Play;
+        public event EventHandler<PlayerPassedLevelEventArgs> PlayerPassedLevel;
+
+        public event EventHandler UserHasUnfinishedGameSession;
+        public event EventHandler ResumeGameSession;
+        public event EventHandler DontResumeGameSession;
 
         #endregion
 
         #region Invokers
 
-        public void OnSaveGameSession(SaveGameSessionEventArgs e)
+        public void OnResumeGameSession()
         {
-            SaveGameSession?.Invoke(this, e);
+            ResumeGameSession?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnDontResumeGameSession()
+        {
+            DontResumeGameSession?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnUserHasUnfinishedGameSession()
+        {
+            UserHasUnfinishedGameSession?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void OnPlayerPassedLevel(PlayerPassedLevelEventArgs e)
+        {
+            PlayerPassedLevel?.Invoke(this, e);
+        }
+
+        public void OnPlay(PlayEventArgs e)
+        {
+            Play?.Invoke(this, e);
         }
 
         public void OnLoadScene(LoadSceneEventArgs e)
@@ -47,14 +72,19 @@ namespace Prototype.Service
 
     #region EventArgs
 
+    public class PlayerPassedLevelEventArgs : EventArgs
+    {
+        public GameSessionData GameSession;
+    }
+
     public class LoadSceneEventArgs : EventArgs
     {
         public Scene To;
     }
 
-    public class SaveGameSessionEventArgs : EventArgs
+    public class PlayEventArgs : EventArgs
     {
-        public GameSessionData Session;
+        public LocationData LocationData;
     }
 
     #endregion

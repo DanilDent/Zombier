@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a7c5a07eb9e1cb479269cb33c0f8d28, type: 3}
-  m_Name: AppData
+  m_Script: {fileID: 11500000, guid: 11ccde0bcd637124d85301faa3f9e43d, type: 3}
+  m_Name: DefaultSession
   m_EditorClassIdentifier: 
-  Meta: {fileID: 11400000, guid: a569733117d103249a8669786f99a75f, type: 2}
-  User: {fileID: 11400000, guid: c066eaab565253843bf1fcf87c2f883f, type: 2}
+  Player: {fileID: 11400000, guid: 4c6a17247fd25b84bb1eda3b59e77e1d, type: 2}
+  CurrentLevelIndex: 0
+  Location: {fileID: 11400000, guid: 6ceca51fecbd70441903cd6335a7865b, type: 2}

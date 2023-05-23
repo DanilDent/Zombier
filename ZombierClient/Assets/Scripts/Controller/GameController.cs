@@ -1,5 +1,4 @@
 using Prototype.Data;
-using Prototype.Extensions;
 using Prototype.Model;
 using Prototype.Service;
 using System;
@@ -77,34 +76,11 @@ namespace Prototype.Controller
         private void Start()
         {
             InitGame();
-            //InitSessionData();
+            FireInitUIEvents();
         }
 
-        private void Update()
+        private void FireInitUIEvents()
         {
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                var json = SerializationService.SerializeGameSession(_session);
-                Debug.Log("Game session saved.");
-                Debug.Log($"Game session log: {json}");
-            }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                GameSessionData session = SerializationService.DeserializeGameSession();
-                _session = session.Copy();
-                Debug.Log("Game session loaded.");
-                Debug.Log($"Game seesion log: {_session}");
-            }
-        }
-
-        private void InitSession()
-        {
-            // Init player
-            _player.Health = _session.CurrentLevelIndex == 0 ? _player.MaxHealth : _player.Health;
-            _player.CurrentExp = _session.CurrentLevelIndex == 0 ? 0 : _player.CurrentExp;
-            _player.CurrentLevel = _session.CurrentLevelIndex == 0 ? 0 : _player.CurrentLevel;
-            _player.SavedLevelUpCounter = _session.CurrentLevelIndex == 0 ? 0 : _player.SavedLevelUpCounter;
-            // Use this call to update player HealthBar
             _gameEventService.OnDamaged(new GameEventService.DamagedEventArgs
             {
                 DamagedEntity = _player,
@@ -117,6 +93,12 @@ namespace Prototype.Controller
             {
                 Value = _session.CurrentLevelIndex + 1,
                 MaxValue = _session.Location.Levels.Length
+            });
+
+            _gameEventService.OnPlayerCurrentExpChanged(new GameEventService.PlayerCurrentExpChangedEventArgs
+            {
+                CurrentExp = _player.CurrentExp,
+                MaxExp = _player.CurrentLevelExpThreshold
             });
         }
 
@@ -183,6 +165,7 @@ namespace Prototype.Controller
                 _session.CurrentLevelIndex++;
                 if (_session.CurrentLevelIndex < _session.Location.Levels.Length)
                 {
+                    _appEventService.OnPlayerPassedLevel(new PlayerPassedLevelEventArgs { GameSession = _session });
                     _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
                 }
                 else

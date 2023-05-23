@@ -1,4 +1,5 @@
 using Prototype.Data;
+using Prototype.Extensions;
 using Prototype.Model;
 using Prototype.Service;
 using System;
@@ -76,7 +77,28 @@ namespace Prototype.Controller
         private void Start()
         {
             InitGame();
+            //InitSessionData();
+        }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                var json = SerializationService.SerializeGameSession(_session);
+                Debug.Log("Game session saved.");
+                Debug.Log($"Game session log: {json}");
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                GameSessionData session = SerializationService.DeserializeGameSession();
+                _session = session.Copy();
+                Debug.Log("Game session loaded.");
+                Debug.Log($"Game seesion log: {_session}");
+            }
+        }
+
+        private void InitSession()
+        {
             // Init player
             _player.Health = _session.CurrentLevelIndex == 0 ? _player.MaxHealth : _player.Health;
             _player.CurrentExp = _session.CurrentLevelIndex == 0 ? 0 : _player.CurrentExp;

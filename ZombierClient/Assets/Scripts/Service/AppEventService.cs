@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.Data;
+using System;
 
 namespace Prototype.Service
 {
@@ -10,10 +11,16 @@ namespace Prototype.Service
         public event EventHandler<LoadSceneEventArgs> LoadScene;
         public event EventHandler GamePause;
         public event EventHandler GameUnpause;
+        public event EventHandler<SaveGameSessionEventArgs> SaveGameSession;
 
         #endregion
 
         #region Invokers
+
+        public void OnSaveGameSession(SaveGameSessionEventArgs e)
+        {
+            SaveGameSession?.Invoke(this, e);
+        }
 
         public void OnLoadScene(LoadSceneEventArgs e)
         {
@@ -43,6 +50,11 @@ namespace Prototype.Service
     public class LoadSceneEventArgs : EventArgs
     {
         public Scene To;
+    }
+
+    public class SaveGameSessionEventArgs : EventArgs
+    {
+        public GameSessionData Session;
     }
 
     #endregion

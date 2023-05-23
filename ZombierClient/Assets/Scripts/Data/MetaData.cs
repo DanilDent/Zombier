@@ -8,5 +8,6 @@ namespace Prototype.Data
         public PlayerData Player;
         public WeaponData[] PlayerWeapons;
         public LocationData[] Locations;
+        public GameSessionData DefaultSession;
     }
 }

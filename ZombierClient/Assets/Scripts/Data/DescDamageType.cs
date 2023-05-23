@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using UnityEngine;
 
 namespace Prototype.Data
@@ -17,12 +18,13 @@ namespace Prototype.Data
         {
             Type = type;
 
-            _valueRange = new DescRandomRange { Min = 0f, Max = 0f };
+            ValueRange = new DescRandomRange { Min = 0f, Max = 0f };
             Chance = 0;
         }
 
         public DamageType Type;
-        public float Value => UnityEngine.Random.Range(_valueRange.Min, _valueRange.Max);
+        [JsonIgnore] public float Value => UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
+        public DescRandomRange ValueRange;
         public float Chance;
 
         public static DescDamageType operator +(DescDamageType a, DescDamageType b)
@@ -32,7 +34,7 @@ namespace Prototype.Data
                 return new DescDamageType
                 {
                     Type = a.Type,
-                    _valueRange = a._valueRange + b._valueRange,
+                    ValueRange = a.ValueRange + b.ValueRange,
                     Chance = Mathf.Clamp01(a.Chance + b.Chance)
                 };
             }
@@ -44,7 +46,7 @@ namespace Prototype.Data
         {
             return
                 this.Type == other.Type &&
-                this._valueRange == other._valueRange &&
+                this.ValueRange == other.ValueRange &&
                 this.Chance == other.Chance;
         }
 
@@ -61,7 +63,7 @@ namespace Prototype.Data
         {
             int hash = 10007;
             hash = hash * 15377 + (int)Type.GetHashCode();
-            hash = hash * 15377 + (int)_valueRange.GetHashCode();
+            hash = hash * 15377 + (int)ValueRange.GetHashCode();
             hash = hash * 15377 + (int)Chance.GetHashCode();
 
             return hash;
@@ -76,8 +78,5 @@ namespace Prototype.Data
         {
             return !t1.Equals(t2);
         }
-
-        // Private
-        [SerializeField] private DescRandomRange _valueRange;
     }
 }

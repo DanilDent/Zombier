@@ -9,11 +9,22 @@ namespace Prototype
     public class AppInstaller : MonoInstaller
     {
         [SerializeField] private AppData _appData;
+        [SerializeField] private bool _useEditorConfig = true;
 
         public override void InstallBindings()
         {
-            Container.Bind<AppData>().FromInstance(_appData).AsSingle();
-            Container.Bind<MetaData>().FromInstance(_appData.Meta).AsSingle();
+            // App data
+            if (_useEditorConfig)
+            {
+                Container.Bind<AppData>().FromInstance(_appData).AsSingle();
+                Container.Bind<MetaData>().FromInstance(_appData.Meta).AsSingle();
+            }
+            else
+            {
+
+            }
+
+            // !App data
 
             Container.Bind<AppEventService>().AsSingle().NonLazy();
             Container.Bind<SceneLoaderService>().AsSingle().NonLazy();

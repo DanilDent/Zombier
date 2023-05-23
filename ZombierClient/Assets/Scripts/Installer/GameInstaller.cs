@@ -24,12 +24,34 @@ namespace Prototype
         [Inject] private AppData _appData;
         // From inspector
         [SerializeField] private GameConfigData _gameConfig;
+        [SerializeField] private bool _useEditorConfig = true;
 
         public override void InstallBindings()
         {
-            // Config
+            // TODO: Move all of this logic inside MainMenuScreenController, 
+            // add new session creation logic there Bind just
+            // _appData.Session here
+            // Game data
+            if (!_useEditorConfig)
+            {
+                // Use actual serialized game data
+                if (_appData.User.GameSession != null)
+                {
+                    // User has unfinished game session
+                    _appData.Session = _appData.User.GameSession.Copy();
+                }
+                else
+                {
+                    // User haven't started the game session yet, create a new
+                    // TODO: that's not correct session creation logic, it should have default session for each 
+                    // location and difficulty level instead 1 for all of them in meta data, and use appropriate default 
+                    // session inside main menu controller to create a new session
+                    _appData.Session = _appData.Meta.DefaultSession.Copy();
+                }
+            }
+
             Container.Bind<GameSessionData>().FromInstance(_appData.Session);
-            // !Config
+            // !Game data
 
             // Unity components
             Container.Bind<Animator>().FromComponentInChildren().AsTransient();

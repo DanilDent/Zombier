@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using System;
 using UnityEngine;
 
 namespace Prototype.Data
@@ -11,13 +10,13 @@ namespace Prototype.Data
         public string PlayerPrefabAssetPath;
         public float MaxSpeed;
 
-        [NonSerialized] [OdinSerialize] public DescDamage Damage;
+        [OdinSerialize] public DescDamage Damage;
         public float CritChance;
         public float CritMultiplier;
 
         public float Health;
         public float MaxHealth;
-        [NonSerialized] [OdinSerialize] public DescDamage Resists;
+        [OdinSerialize] public DescDamage Resists;
 
         public WeaponData Weapon;
 

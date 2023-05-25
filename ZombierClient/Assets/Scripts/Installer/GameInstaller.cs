@@ -141,7 +141,7 @@ namespace Prototype
 
             // Player
             Container.Bind<PlayerModel>()
-                .FromComponentInNewPrefabResource(_currentGameSession.Player.PlayerPrefabAssetPath)
+                .FromComponentInNewPrefabResource(_currentGameSession.Player.PlayerPrefabAddress)
                 .WithGameObjectName("Player")
                 .UnderTransform(GetMarker<MarkerEntities>)
                 .AsSingle()

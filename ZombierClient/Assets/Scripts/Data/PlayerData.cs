@@ -7,7 +7,7 @@ namespace Prototype.Data
     [CreateAssetMenu(fileName = "New Player Data", menuName = "Data/Player Data")]
     public class PlayerData : SerializedScriptableObject
     {
-        public string PlayerPrefabAssetPath;
+        public string PlayerPrefabAddress;
         public float MaxSpeed;
 
         [OdinSerialize] public DescDamage Damage;

@@ -93,7 +93,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  PlayerPrefabAssetPath: PlayerYbot
+  PlayerPrefabAddress: PlayerYbot
   MaxSpeed: 5.28
   CritChance: 0.4
   CritMultiplier: 2

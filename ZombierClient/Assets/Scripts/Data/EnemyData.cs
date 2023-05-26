@@ -8,7 +8,7 @@ namespace Prototype.Data
     [CreateAssetMenu(fileName = "New Enemy Data", menuName = "Data/Enemy Data")]
     public class EnemyData : SerializedScriptableObject
     {
-        public string ViewAssetPath;
+        public string ViewPrefabAddress;
         public float MaxSpeed;
 
         [OdinSerialize] public DescDamage Damage;

@@ -29,4 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Footer.unity
     guid: 275009d11f2e212438891f9819872f8c
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 8f99c89970529304cb0f634aca68c436,
+      type: 2}

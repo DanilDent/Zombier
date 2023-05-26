@@ -18,7 +18,7 @@ namespace Prototype
             if (_dataTemplate != null)
             {
                 Container.Bind<EnemyView>()
-                    .FromComponentInNewPrefabResource(_dataTemplate.ViewAssetPath)
+                    .FromComponentInNewPrefabResource(_dataTemplate.ViewPrefabAddress)
                     .UnderTransformGroup("View")
                     .AsSingle()
                     .NonLazy();

@@ -26,6 +26,7 @@ namespace Prototype
         [SerializeField] private GameConfigData _gameConfig;
         // Resolved by installer itself
         private GameSessionData _currentGameSession;
+        private AssetLoader<GameObject> _assetLoader;
 
         public override void InstallBindings()
         {
@@ -33,6 +34,17 @@ namespace Prototype
             _currentGameSession = _appData.User.GameSession.Copy();
             Container.Bind<GameSessionData>().FromInstance(_currentGameSession).AsSingle();
             // !Game data
+
+            LoadPrefabs(new List<string>()
+            {
+                _currentGameSession.Player.PlayerPrefabAddress,
+                _gameConfig.EnemyPrefabAddress,
+                _gameConfig.EnemyProjectilePrefabAddress,
+                _gameConfig.HitVFXPrefabAddress,
+                _gameConfig.DeathVFXPrefabAddress,
+                _gameConfig.DamageTextUIPrefabAddress,
+                _gameConfig.ExpTextUIPrefabAddress,
+            });
 
             // Unity components
             Container.Bind<Animator>().FromComponentInChildren().AsTransient();
@@ -90,7 +102,6 @@ namespace Prototype
             // UI 
             Container.Bind<FloatingJoystick>().FromComponentInHierarchy().AsSingle();
 
-
             Container.BindFactory<UnityEngine.Object, DamageTextUIView, PoolObjectFactory<DamageTextUIView>>()
                 .FromFactory<PrefabFactory<DamageTextUIView>>();
 
@@ -100,9 +111,9 @@ namespace Prototype
                 {
                     if (obj is MonoObjectPool<DamageTextUIView> pool)
                     {
-                        var prefab = Resources.Load<DamageTextUIView>(_gameConfig.DamageTextUIPrefabAssetPath);
-                        var tranfromContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
-                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
+                        var prefab = _assetLoader.GetComponent<DamageTextUIView>(_gameConfig.DamageTextUIPrefabAddress);
+                        var transformContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
                     }
                 })
                 .NonLazy();
@@ -116,9 +127,9 @@ namespace Prototype
                 {
                     if (obj is MonoObjectPool<ExpTextUIView> pool)
                     {
-                        var prefab = Resources.Load<ExpTextUIView>(_gameConfig.ExpTextUIPrefabAssetPath);
-                        var tranfromContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
-                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
+                        var prefab = _assetLoader.GetComponent<ExpTextUIView>(_gameConfig.ExpTextUIPrefabAddress);
+                        var transformContainer = transform.GetComponentInChildren<MarkerUIPool>().transform;
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
                     }
                 })
                 .NonLazy();
@@ -141,7 +152,7 @@ namespace Prototype
 
             // Player
             Container.Bind<PlayerModel>()
-                .FromComponentInNewPrefabResource(_currentGameSession.Player.PlayerPrefabAddress)
+                .FromComponentInNewPrefab(_assetLoader.Get(_currentGameSession.Player.PlayerPrefabAddress))
                 .WithGameObjectName("Player")
                 .UnderTransform(GetMarker<MarkerEntities>)
                 .AsSingle()
@@ -167,8 +178,8 @@ namespace Prototype
                     if (obj is MonoObjectPool<PlayerProjectileModel> pool)
                     {
                         var prefab = Resources.Load<PlayerProjectileModel>(_currentGameSession.Player.Weapon.ProjectileData.AssetPath);
-                        var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
-                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
+                        var transformContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
                     }
                 })
                 .NonLazy();
@@ -179,9 +190,9 @@ namespace Prototype
                  {
                      if (obj is MonoObjectPool<EnemyProjectileModel> pool)
                      {
-                         var prefab = Resources.Load<EnemyProjectileModel>(_gameConfig.EnemyProjectilePrefabAssetPath);
-                         var tranfromContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
-                         pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
+                         var prefab = _assetLoader.GetComponent<EnemyProjectileModel>(_gameConfig.EnemyProjectilePrefabAddress);
+                         var transformContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
+                         pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
                      }
                  })
                 .NonLazy();
@@ -190,7 +201,7 @@ namespace Prototype
             // Enemy
             Container.BindFactory<IdData, EnemyData, EnemyModel, EnemyModel.Factory>()
                 .FromSubContainerResolve()
-                .ByNewPrefabResourceInstaller<EnemyInstaller>(_gameConfig.EnemyPrefabAssetPath)
+                .ByNewPrefabInstaller<EnemyInstaller>(_assetLoader.Get(_gameConfig.EnemyPrefabAddress))
                 .UnderTransform(GetMarker<MarkerEnemies>());
 
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>().
@@ -215,9 +226,9 @@ namespace Prototype
                 {
                     if (obj is MonoObjectPool<HitBloodSplashVFXView> pool)
                     {
-                        var prefab = Resources.Load<HitBloodSplashVFXView>(_gameConfig.HitVFXPrefabAssetPath);
-                        var tranfromContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
-                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
+                        var prefab = _assetLoader.GetComponent<HitBloodSplashVFXView>(_gameConfig.HitVFXPrefabAddress);
+                        var transformContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
                     }
                 })
                 .NonLazy();
@@ -227,12 +238,13 @@ namespace Prototype
                {
                    if (obj is MonoObjectPool<DeathBloodSplashVFXView> pool)
                    {
-                       var prefab = Resources.Load<DeathBloodSplashVFXView>(_gameConfig.DeathVFXPrefabAssetPath);
-                       var tranfromContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
-                       pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, tranfromContainer);
+                       var prefab = _assetLoader.GetComponent<DeathBloodSplashVFXView>(_gameConfig.DeathVFXPrefabAddress);
+                       var transformContainer = transform.GetComponentInChildren<MarkerVFX>().transform;
+                       pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
                    }
                })
                .NonLazy();
+            //// !Game entities
 
             // Gameplay Controllers
             Container.Bind<EnemySpawnController>().FromComponentInHierarchy(true).AsSingle();
@@ -247,8 +259,17 @@ namespace Prototype
             Container.Bind<SpawnWorldCanvasUIText>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
             // !Gameplay Controllers
+        }
 
-            //// !Game entities
+        private void OnDestroy()
+        {
+            _assetLoader.Release();
+        }
+
+        private void LoadPrefabs(List<string> addresses)
+        {
+            _assetLoader = new AssetLoader<GameObject>(addresses);
+            _assetLoader.Load();
         }
 
         private Transform GetMarker<T>(InjectContext context)

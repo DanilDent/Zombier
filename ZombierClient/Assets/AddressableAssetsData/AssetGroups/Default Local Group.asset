@@ -52,6 +52,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b9ad4d1919c8f9489b9dd0a9ca2b167
+    m_Address: MeleeEnemyYBotView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fa797d8c5967e7478817abdd9102e4f
+    m_Address: RangeEnemyYBotView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 21b72b8eeb91af34cb25bd1d8c452ee2, type: 2}
   m_SchemaSet:

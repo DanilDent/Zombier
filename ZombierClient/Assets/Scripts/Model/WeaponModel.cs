@@ -40,13 +40,10 @@ namespace Prototype.Model
             }
         }
         public Transform ShootingPoint => _shootingPoint.transform;
-        public PlayerProjectileModel ProjectilePrefab => Resources.Load<PlayerProjectileModel>(_weaponData.ProjectileData.PrefabAddress);
         public float Thrust => _weaponData.Thrust;
         public float Recoil => _weaponData.Recoil;
 
         // Private
-
-        // Dependecies
 
         // Injected
         private MarkerShootingPointPlayer _shootingPoint;

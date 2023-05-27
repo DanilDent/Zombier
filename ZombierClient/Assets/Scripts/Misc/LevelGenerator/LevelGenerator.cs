@@ -1,5 +1,6 @@
 ﻿using Prototype.Data;
 using Prototype.MeshCombine;
+using Prototype.Service;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,7 +20,7 @@ namespace Prototype.LevelGeneration
             _levelData = levelData;
 
             _meshCombiner = new MeshCombiner();
-            LoadResources();
+            LoadPrefabs();
             Init();
         }
 
@@ -60,8 +61,7 @@ namespace Prototype.LevelGeneration
             float environmentYOffset = 0f;
             environment.transform.position += Vector3.up * environmentYOffset;
 
-            var locationLevelPrefab = Resources.Load<GameObject>(_locationData.LocationLevelPrefabAssetPath);
-            GameObject levelInstance = Object.Instantiate(locationLevelPrefab);
+            GameObject levelInstance = Object.Instantiate(_locationLevelPrefab);
             NavMeshSurface navMeshSurface = levelInstance.GetComponentInChildren<NavMeshSurface>();
 
             environment.transform.SetParent(levelInstance.transform);
@@ -95,6 +95,8 @@ namespace Prototype.LevelGeneration
         private int _minY;
         private int _maxY;
         //
+        private ResourcesLoader _resourcesLoader;
+        private GameObject _locationLevelPrefab;
         private GameObject _groundPrefab;
         private GameObject _wallPrefab;
         private GameObject[] _obstaclePrefabs;
@@ -102,14 +104,18 @@ namespace Prototype.LevelGeneration
         private GameObject _envGroundPrefab;
         private GameObject[] _envObstaclePrefabs;
 
-        private void LoadResources()
+        // TODO: Make multiple wall types
+        private void LoadPrefabs()
         {
-            _groundPrefab = Resources.Load<GameObject>(_locationData.GroundPrefabAssetPath);
-            _wallPrefab = Resources.Load<GameObject>(_locationData.WallPrefabAssetPath);
-            _obstaclePrefabs = Resources.LoadAll<GameObject>(_locationData.ObstaclePrefabsAssetPath);
-            _exitPrefab = Resources.Load<GameObject>(_locationData.ExitPrefabAssetPath);
-            _envGroundPrefab = Resources.Load<GameObject>(_locationData.EnvGroundPrefabAssetPath);
-            _envObstaclePrefabs = Resources.LoadAll<GameObject>(_locationData.EnvObstaclePrefabsAssetPath);
+            _resourcesLoader = new ResourcesLoader();
+
+            _locationLevelPrefab = _resourcesLoader.Load<GameObject>(_locationData.LocationLevelPrefabAddress);
+            _groundPrefab = _resourcesLoader.Load<GameObject>(_locationData.GroundPrefabAddress);
+            _wallPrefab = _resourcesLoader.Load<GameObject>(_locationData.WallPrefabsLabel);
+            _exitPrefab = _resourcesLoader.Load<GameObject>(_locationData.ExitPrefabAddress);
+            _obstaclePrefabs = _resourcesLoader.LoadAll<GameObject>(_locationData.ObstaclePrefabsLabel);
+            _envGroundPrefab = _resourcesLoader.Load<GameObject>(_locationData.EnvGroundPrefabAddress);
+            _envObstaclePrefabs = _resourcesLoader.LoadAll<GameObject>(_locationData.EnvObstaclePrefabsLabel);
         }
 
         private void Init()

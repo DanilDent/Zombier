@@ -6,13 +6,13 @@ namespace Prototype.Data
     public class LocationData : ScriptableObject
     {
         public LevelData[] Levels;
-        public string LocationLevelPrefabAssetPath;
+        public string LocationLevelPrefabAddress;
         // Visuals
-        public string GroundPrefabAssetPath;
-        public string WallPrefabAssetPath;
-        public string ObstaclePrefabsAssetPath;
-        public string ExitPrefabAssetPath;
-        public string EnvGroundPrefabAssetPath;
-        public string EnvObstaclePrefabsAssetPath;
+        public string GroundPrefabAddress;
+        public string WallPrefabsLabel;
+        public string ObstaclePrefabsLabel;
+        public string ExitPrefabAddress;
+        public string EnvGroundPrefabAddress;
+        public string EnvObstaclePrefabsLabel;
     }
 }

@@ -15,10 +15,10 @@ MonoBehaviour:
   Levels:
   - {fileID: 11400000, guid: 99766ccd872a4814284ebdb4ca70b63c, type: 2}
   - {fileID: 11400000, guid: 0108c94d765396f4f8f8f408398868b6, type: 2}
-  LocationLevelPrefabAssetPath: Location0Level
-  GroundPrefabAssetPath: Location0Ground
-  WallPrefabAssetPath: Location0Wall
-  ObstaclePrefabsAssetPath: Location0Obstacles
-  ExitPrefabAssetPath: Location0Exit
-  EnvGroundPrefabAssetPath: Environment/Location0EnvironmentGround
-  EnvObstaclePrefabsAssetPath: Environment/Location0EnvObstacles
+  LocationLevelPrefabAddress: Location0Level
+  GroundPrefabAddress: Location0Ground
+  WallPrefabsLabel: Location0Wall
+  ObstaclePrefabsLabel: Location0Obstacles
+  ExitPrefabAddress: Location0Exit
+  EnvGroundPrefabAddress: Location0EnvironmentGround
+  EnvObstaclePrefabsLabel: Location0EnvObstacles

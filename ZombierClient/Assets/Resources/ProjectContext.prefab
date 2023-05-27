@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _appData: {fileID: 11400000, guid: 3cb8408ccfb732f43a5ea0ba40351d83, type: 2}
-  _useEditorConfig: 1
+  _useEditorConfig: 0
 --- !u!1 &7157498780663344092
 GameObject:
   m_ObjectHideFlags: 0

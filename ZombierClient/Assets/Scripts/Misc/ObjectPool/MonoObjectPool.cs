@@ -18,7 +18,6 @@ namespace Prototype.ObjectPool
         public MonoObjectPool(PoolObjectFactory<T> factory)
         {
             _factory = factory;
-
             _queue = new Queue<T>();
         }
 
@@ -40,43 +39,9 @@ namespace Prototype.ObjectPool
             return Create(_prefab, enabled);
         }
 
-        public T Create(T prefab, bool enabled = true)
-        {
-            T instance;
-            if (_queue.Count > 0)
-            {
-                instance = _queue.Dequeue();
-            }
-            else
-            {
-                instance = Instantiate(prefab);
-            }
-
-            instance.gameObject.SetActive(enabled);
-            return instance;
-        }
-
         public T Create(Vector3 position, Quaternion rotation, bool enabled = true)
         {
             return Create(_prefab, position, rotation, enabled);
-        }
-
-        public T Create(T prefab, Vector3 position, Quaternion rotation, bool enabled = true)
-        {
-            T instance;
-            if (_queue.Count > 0)
-            {
-                instance = _queue.Dequeue();
-            }
-            else
-            {
-                instance = Instantiate(prefab);
-            }
-
-            instance.transform.position = position;
-            instance.transform.rotation = rotation;
-            instance.gameObject.SetActive(enabled);
-            return instance;
         }
 
         public void Destroy(T instance)
@@ -105,6 +70,40 @@ namespace Prototype.ObjectPool
             yield return new WaitForSeconds(sec);
             callback();
             Destroy(instance);
+        }
+
+        private T Create(T prefab, bool enabled = true)
+        {
+            T instance;
+            if (_queue.Count > 0)
+            {
+                instance = _queue.Dequeue();
+            }
+            else
+            {
+                instance = Instantiate(prefab);
+            }
+
+            instance.gameObject.SetActive(enabled);
+            return instance;
+        }
+
+        private T Create(T prefab, Vector3 position, Quaternion rotation, bool enabled = true)
+        {
+            T instance;
+            if (_queue.Count > 0)
+            {
+                instance = _queue.Dequeue();
+            }
+            else
+            {
+                instance = Instantiate(prefab);
+            }
+
+            instance.transform.position = position;
+            instance.transform.rotation = rotation;
+            instance.gameObject.SetActive(enabled);
+            return instance;
         }
 
         private T Instantiate(T prefab)

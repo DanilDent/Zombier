@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8ce509f62348149bddd4b3737e86d8, type: 3}
   m_Name: ProjectilePistolBullet
   m_EditorClassIdentifier: 
-  AssetPath: PistolBullet
+  PrefabAddress: PistolBullet

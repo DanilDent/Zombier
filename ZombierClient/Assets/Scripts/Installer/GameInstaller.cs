@@ -38,6 +38,8 @@ namespace Prototype
             LoadPrefabs(new List<string>()
             {
                 _currentGameSession.Player.PlayerPrefabAddress,
+                _currentGameSession.Player.Weapon.ProjectileData.PrefabAddress,
+                //
                 _gameConfig.EnemyPrefabAddress,
                 _gameConfig.EnemyProjectilePrefabAddress,
                 _gameConfig.HitVFXPrefabAddress,
@@ -177,7 +179,7 @@ namespace Prototype
                 {
                     if (obj is MonoObjectPool<PlayerProjectileModel> pool)
                     {
-                        var prefab = Resources.Load<PlayerProjectileModel>(_currentGameSession.Player.Weapon.ProjectileData.AssetPath);
+                        var prefab = _assetLoader.GetComponent<PlayerProjectileModel>(_currentGameSession.Player.Weapon.ProjectileData.PrefabAddress);
                         var transformContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
                         pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
                     }

@@ -84,7 +84,7 @@ namespace Prototype.Controller
             Vector3 shootDir = (targetPosition - _enemy.ShootingPoint.position).normalized;
             Quaternion rot = Quaternion.LookRotation(shootDir);
 
-            EnemyProjectileModel projectile = _projectilePool.Create(_enemy.ProjectilePrefab, _enemy.ShootingPoint.position, rot);
+            EnemyProjectileModel projectile = _projectilePool.Create(_enemy.ShootingPoint.position, rot);
             projectile.Sender = _enemy;
 
             float randomThrustMultiplier = 1.5f;

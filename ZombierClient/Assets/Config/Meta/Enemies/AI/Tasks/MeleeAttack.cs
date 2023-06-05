@@ -16,10 +16,9 @@ namespace Prototype.Enemies.AI
         public BBParameter<GameEventService> EventService;
         public BBParameter<PlayerModel> Player;
 
-        //Use for initialization. This is called only once in the lifetime of the task.
-        //Return null if init was successfull. Return an error string otherwise
         protected override string OnInit()
         {
+            Subscribe();
             return null;
         }
 
@@ -28,19 +27,13 @@ namespace Prototype.Enemies.AI
         //EndAction can be called from anywhere.
         protected override void OnExecute()
         {
-            Subscribe();
+            agent.Agent.SetDestination(agent.transform.position);
         }
 
         //Called once per frame while the action is active.
         protected override void OnUpdate()
         {
             Update();
-        }
-
-        //Called when the task is disabled.
-        protected override void OnStop()
-        {
-            Unsubscribe();
         }
 
         //Called when the task is paused.

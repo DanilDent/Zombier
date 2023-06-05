@@ -204,7 +204,11 @@ namespace Prototype
             Container.BindFactory<IdData, EnemyData, EnemyModel, EnemyModel.Factory>()
                 .FromSubContainerResolve()
                 .ByNewPrefabInstaller<EnemyInstaller>(_assetLoader.Get(_gameConfig.EnemyPrefabAddress))
-                .UnderTransform(GetMarker<MarkerEnemies>());
+                .UnderTransform(GetMarker<MarkerEnemies>())
+                .OnInstantiated<GameObject>((ctx, go) =>
+                {
+                    go.transform.position = Vector3.zero;
+                });
 
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>().
                     FromFactory<PrefabFactory<EnemyView>>();

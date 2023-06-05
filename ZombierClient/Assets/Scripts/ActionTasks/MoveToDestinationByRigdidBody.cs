@@ -5,7 +5,7 @@ using Prototype.Model;
 using Prototype.Service;
 using UnityEngine;
 
-namespace Prototype.Enemies.AI
+namespace Prototype.ActionTasks
 {
 
     [Category("Prototype/Movement")]
@@ -15,6 +15,8 @@ namespace Prototype.Enemies.AI
 
         // From blackboard
         public BBParameter<GameEventService> EventService;
+
+        // Protected
 
         protected override void OnExecute()
         {

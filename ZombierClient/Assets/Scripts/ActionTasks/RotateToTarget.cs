@@ -3,7 +3,7 @@ using ParadoxNotion.Design;
 using Prototype.Model;
 using UnityEngine;
 
-namespace Prototype.Enemies.AI
+namespace Prototype.ActionTasks
 {
 
     [Category("Prototype/Movement")]
@@ -11,6 +11,8 @@ namespace Prototype.Enemies.AI
     {
         // Public
         public BBParameter<Transform> Player;
+
+        // Protected
 
         protected override void OnUpdate()
         {

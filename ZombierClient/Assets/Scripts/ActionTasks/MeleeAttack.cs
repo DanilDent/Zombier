@@ -4,7 +4,7 @@ using Prototype.Model;
 using Prototype.Service;
 using UnityEngine;
 
-namespace Prototype.Enemies.AI
+namespace Prototype.ActionTasks
 {
 
     [Category("Prototype/Attacks")]
@@ -15,6 +15,8 @@ namespace Prototype.Enemies.AI
         // From blackboard
         public BBParameter<GameEventService> EventService;
         public BBParameter<PlayerModel> Player;
+
+        // Protected
 
         protected override string OnInit()
         {
@@ -27,14 +29,12 @@ namespace Prototype.Enemies.AI
             agent.Agent.SetDestination(agent.transform.position);
         }
 
-        //Called once per frame while the action is active.
         protected override void OnUpdate()
         {
             Execute();
             EndAction(true);
         }
 
-        //Called when the task is paused.
         protected override void OnPause()
         {
             Unsubscribe();

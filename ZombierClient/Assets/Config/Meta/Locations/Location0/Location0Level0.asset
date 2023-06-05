@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Location0Level0
   m_EditorClassIdentifier: 
   EnemySpawnData: {fileID: 11400000, guid: c23650678d1d8c949bd8e0184174c6a8, type: 2}
-  LevelSize: 1
+  LevelSize: 2

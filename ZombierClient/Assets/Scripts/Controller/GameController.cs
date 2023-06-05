@@ -19,9 +19,6 @@ namespace Prototype.Controller
             PlayerModel player,
             // Controllers
             DealDamageController dealDamageController,
-            //EnemyAttackController enemyAttackController,
-            //EnemyChaseController enemyChaseController,
-            //EnemyMovementController enemyMovementController,
             EnemyAIController enemyAIController,
             EnemySpawnController enemySpawnController,
             PlayerAimController playerAimController,
@@ -37,9 +34,6 @@ namespace Prototype.Controller
             _player = player;
             // Controllers
             _dealDamageController = dealDamageController;
-            //_enemyAttackController = enemyAttackController;
-            //_enemyChaseController = enemyChaseController;
-            //_enemyMovementController = enemyMovementController;
             _enemyAIController = enemyAIController;
             _enemySpawnController = enemySpawnController;
             _playerAimController = playerAimController;
@@ -56,9 +50,6 @@ namespace Prototype.Controller
         private PlayerModel _player;
         // Controllers
         private DealDamageController _dealDamageController;
-        //private EnemyAttackController _enemyAttackController;
-        //private EnemyChaseController _enemyChaseController;
-        //private EnemyMovementController _enemyMovementController;
         private EnemyAIController _enemyAIController;
         private EnemySpawnController _enemySpawnController;
         private PlayerAimController _playerAimController;
@@ -112,9 +103,6 @@ namespace Prototype.Controller
             _enemySpawnController.SpawnEnemies();
             //
             _dealDamageController.gameObject.SetActive(true);
-            //_enemyAttackController.gameObject.SetActive(true);
-            //_enemyChaseController.gameObject.SetActive(true);
-            //_enemyMovementController.gameObject.SetActive(true);
             _enemyAIController.gameObject.SetActive(true);
             _playerAimController.gameObject.SetActive(true);
             _playerMovementController.gameObject.SetActive(true);
@@ -128,9 +116,6 @@ namespace Prototype.Controller
         {
             _enemySpawnController.gameObject.SetActive(enabled);
             _dealDamageController.gameObject.SetActive(enabled);
-            //_enemyAttackController.gameObject.SetActive(enabled);
-            //_enemyChaseController.gameObject.SetActive(enabled);
-            //_enemyMovementController.gameObject.SetActive(enabled);
             _enemyAIController.gameObject.SetActive(enabled);
             _playerAimController.gameObject.SetActive(enabled);
             _playerMovementController.gameObject.SetActive(enabled);

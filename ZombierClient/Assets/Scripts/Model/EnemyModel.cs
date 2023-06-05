@@ -1,6 +1,5 @@
 ﻿using NodeCanvas.Framework;
 using NodeCanvas.StateMachines;
-using Prototype.Controller;
 using Prototype.Data;
 using System.Collections.Generic;
 using UnityEngine;
@@ -66,8 +65,6 @@ namespace Prototype.Model
         public float AttackRange => _data.Weapon.AttackRange;
         public List<DescAttackStrategy> AttackStrategies => _data.AttackStrategies;
         // Gameplay properties
-        public State CurrentState { get; set; }
-        public IAttackStrategy CurrentAttackStrategy { get; set; }
         public NavMeshAgent Agent => _agent;
         public Rigidbody Rigidbody => _rigidbody;
         public Transform TargetPoint => _targetPoint.transform;

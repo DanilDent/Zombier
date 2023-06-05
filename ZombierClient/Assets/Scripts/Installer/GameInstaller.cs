@@ -213,11 +213,6 @@ namespace Prototype
             Container.BindFactory<UnityEngine.Object, EnemyView, EnemyView.Factory>().
                     FromFactory<PrefabFactory<EnemyView>>();
 
-            Container.BindFactory<EnemyModel, MeleeAttackStrategy, MeleeAttackStrategy.Factory>();
-            Container.BindFactory<EnemyModel, RangeAttackStrategy, RangeAttackStrategy.Factory>();
-            Container.BindFactory<DescAttackStrategy.StrategyType, EnemyModel, IAttackStrategy, AttackStrategyFactory>()
-                .FromFactory<AttackStrategyByStrategyTypeFactory>();
-
             Container.Bind<List<EnemyModel>>().AsSingle();
 
             // VFX
@@ -260,9 +255,6 @@ namespace Prototype
             Container.Bind<PlayerLevelUpController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<DealDamageController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<EnemyAIController>().FromComponentInHierarchy(true).AsSingle();
-            //Container.Bind<EnemyAttackController>().FromComponentInHierarchy(true).AsSingle();
-            //Container.Bind<EnemyChaseController>().FromComponentInHierarchy(true).AsSingle();
-            //Container.Bind<EnemyMovementController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<SpawnWorldCanvasUIText>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
             // !Gameplay Controllers

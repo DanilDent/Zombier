@@ -8,7 +8,7 @@ namespace Prototype.Data
     {
         public int ProjectilesPoolSize = 10;
         public LevelGeneratorData LevelGeneratorConfig;
-        public string EnemyPrefabAddress;
+        public string EnemyContextAddress;
         public string EnemyProjectilePrefabAddress;
         public string HitVFXPrefabAddress;
         public string DeathVFXPrefabAddress;

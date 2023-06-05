@@ -40,7 +40,7 @@ namespace Prototype
                 _currentGameSession.Player.PlayerPrefabAddress,
                 _currentGameSession.Player.Weapon.ProjectileData.PrefabAddress,
                 //
-                _gameConfig.EnemyPrefabAddress,
+                _gameConfig.EnemyContextAddress,
                 _gameConfig.EnemyProjectilePrefabAddress,
                 _gameConfig.HitVFXPrefabAddress,
                 _gameConfig.DeathVFXPrefabAddress,
@@ -203,7 +203,7 @@ namespace Prototype
             // Enemy
             Container.BindFactory<IdData, EnemyData, EnemyModel, EnemyModel.Factory>()
                 .FromSubContainerResolve()
-                .ByNewPrefabInstaller<EnemyInstaller>(_assetLoader.Get(_gameConfig.EnemyPrefabAddress))
+                .ByNewPrefabInstaller<EnemyInstaller>(_assetLoader.Get(_gameConfig.EnemyContextAddress))
                 .UnderTransform(GetMarker<MarkerEnemies>())
                 .OnInstantiated<GameObject>((ctx, go) =>
                 {

@@ -1,7 +1,10 @@
-﻿using Prototype.Data;
+﻿using NodeCanvas.Framework;
+using NodeCanvas.StateMachines;
+using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
 using Prototype.View;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -15,36 +18,57 @@ namespace Prototype
         [Inject] private EnemyData _dataTemplate;
         // Resolved by installer
         private AssetLoader<GameObject> _assetLoader;
+        private GameObject _contextGO;
 
         public override void InstallBindings()
         {
-            _assetLoader = new AssetLoader<GameObject>(new List<string>()
-            {
-                _dataTemplate.ViewPrefabAddress
-            });
-            _assetLoader.Load();
-
             Container.BindInstance(_id).AsSingle();
-            Container.Bind<EnemyModel>().FromComponentOnRoot().AsSingle();
-            Container.BindInstance(_dataTemplate);
+
+            string idStr = _id.ToString();
+            int nCharsToDisplay = 8;
+            //gameObject.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}";
+
             if (_dataTemplate != null)
             {
-                //Container.Bind<EnemyView>()
-                //    .FromNewComponentOnNewPrefab(_dataTemplate.ViewPrefabAddress)
-                //    .UnderTransformGroup("View")
-                //    .AsSingle()
-                //    .NonLazy();
+                Container.BindInstance(_dataTemplate);
+
+                _assetLoader = new AssetLoader<GameObject>(new List<string>()
+                {
+                    _dataTemplate.ModelPrefabAddress,
+                    _dataTemplate.ViewPrefabAddress
+                });
+                _assetLoader.Load();
+
+                Container.Bind<EnemyModel>()
+                    .FromComponentInNewPrefab(_assetLoader.Get(_dataTemplate.ModelPrefabAddress))
+                    .AsSingle()
+                    .OnInstantiated<EnemyModel>((ctx, model) =>
+                    {
+                        _contextGO = model.transform.parent.gameObject;
+                        _contextGO.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}Context";
+                    })
+                    .NonLazy();
+
                 Container.Bind<EnemyView>()
                     .FromComponentInNewPrefab(_assetLoader.Get(_dataTemplate.ViewPrefabAddress))
-                    .UnderTransformGroup("View")
+                    .UnderTransform(GetMarker<MarkerView>)
                     .AsSingle()
                     .NonLazy();
+
+                Container.Bind<FSMOwner>().FromComponentInChildren().AsSingle();
+                Container.Bind<Blackboard>().FromComponentInChildren().AsSingle();
             }
+        }
+
+        private Transform GetMarker<T>(InjectContext context)
+           where T : UnityEngine.Component
+        {
+            return _contextGO?.transform.GetComponentInChildren<T>().transform;
         }
 
         private void OnDestroy()
         {
-            _assetLoader.Release();
+            _assetLoader?.Release();
         }
     }
 }

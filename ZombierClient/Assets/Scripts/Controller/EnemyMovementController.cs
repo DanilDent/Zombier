@@ -104,7 +104,7 @@ namespace Prototype.Controller
 
         private void HandleMovement(EnemyModel enemy)
         {
-            if (enemy.IsMoving())
+            if (enemy.IsMoving)
             {
                 float movingForce = enemy.MovingForce;
 
@@ -134,7 +134,7 @@ namespace Prototype.Controller
         {
             Vector3 positionToLookAt = new Vector3(enemy.CurrentMovement.x, 0f, enemy.CurrentMovement.z).normalized;
 
-            if (enemy.IsMoving() && positionToLookAt != Vector3.zero)
+            if (enemy.IsMoving && positionToLookAt != Vector3.zero)
             {
                 Vector3 velocityLocalZ = new Vector3(0f, 0f, Mathf.Max(0f, enemy.transform.InverseTransformDirection(enemy.Rigidbody.velocity).z));
                 Vector3 velocityZ = enemy.transform.TransformDirection(velocityLocalZ);

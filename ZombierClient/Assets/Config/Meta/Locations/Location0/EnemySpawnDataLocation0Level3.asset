@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Enemies:
   - {fileID: 11400000, guid: 4c5f9106574913d4ea2aab35b745f8c9, type: 2}
-  - {fileID: 11400000, guid: 08e04fbffe995404d8232d16d1aaf32f, type: 2}
   MinEnemyCount: 4
   MaxEnemyCount: 4
   MinEnemyLevel: 1

@@ -93,6 +93,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  ModelPrefabAddress: MeleeEnemy
   ViewPrefabAddress: MeleeEnemyYBotView
   MaxSpeed: 1.8
   CritChance: 0

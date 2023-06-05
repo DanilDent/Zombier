@@ -1,4 +1,6 @@
-﻿using Prototype.Controller;
+﻿using NodeCanvas.Framework;
+using NodeCanvas.StateMachines;
+using Prototype.Controller;
 using Prototype.Data;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,13 +22,17 @@ namespace Prototype.Model
             EnemyData dataTemplate,
             NavMeshAgent agent,
             Rigidbody rigidbody,
-            MarkerTargetPoint targetPoint)
+            MarkerTargetPoint targetPoint,
+            FSMOwner fsmOwner,
+            Blackboard blackboard)
         {
             _id = id;
             _data = Instantiate(dataTemplate);
             _agent = agent;
             _rigidbody = rigidbody;
             _targetPoint = targetPoint;
+            _fsmOwner = fsmOwner;
+            _blackboard = blackboard;
 
             _damage = new DescDamage();
             RecalcDamage();
@@ -75,11 +81,20 @@ namespace Prototype.Model
         public float CurrentSpeed { get; set; }
         public float MovingForce { get; set; }
         public float StoppingForce { get; set; }
-
-        public bool IsMoving()
+        public bool IsMoving => CurrentMovement.magnitude > 0;
+        public float AttackTimerMax
         {
-            return CurrentMovement.magnitude > 0;
+            get
+            {
+                int secInMin = 60;
+                float rps = (float)AttackRateRpm / secInMin;
+                float attackTimerMax = 1f / rps;
+
+                return attackTimerMax;
+            }
         }
+        public FSMOwner FSMOwner => _fsmOwner;
+        public Blackboard Blackboard => _blackboard;
 
         // Private
 
@@ -90,6 +105,8 @@ namespace Prototype.Model
         private NavMeshAgent _agent;
         private Rigidbody _rigidbody;
         private MarkerTargetPoint _targetPoint;
+        private FSMOwner _fsmOwner;
+        private Blackboard _blackboard;
         // From factory
         private EnemyData _data;
         //

@@ -15,7 +15,7 @@ MonoBehaviour:
   ProjectilesPoolSize: 10
   LevelGeneratorConfig: {fileID: 11400000, guid: 1d3244ee608fd3442b5e8d1bb2b7eea6,
     type: 2}
-  EnemyPrefabAddress: Enemy
+  EnemyPrefabAddress: EnemyContext
   EnemyProjectilePrefabAddress: Rock
   HitVFXPrefabAddress: HitBloodSplashPS
   DeathVFXPrefabAddress: DeathBloodSplashPS

@@ -255,9 +255,10 @@ namespace Prototype
             Container.Bind<PlayerShootController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<PlayerLevelUpController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<DealDamageController>().FromComponentInHierarchy(true).AsSingle();
-            Container.Bind<EnemyAttackController>().FromComponentInHierarchy(true).AsSingle();
-            Container.Bind<EnemyChaseController>().FromComponentInHierarchy(true).AsSingle();
-            Container.Bind<EnemyMovementController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<EnemyAIController>().FromComponentInHierarchy(true).AsSingle();
+            //Container.Bind<EnemyAttackController>().FromComponentInHierarchy(true).AsSingle();
+            //Container.Bind<EnemyChaseController>().FromComponentInHierarchy(true).AsSingle();
+            //Container.Bind<EnemyMovementController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<SpawnWorldCanvasUIText>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
             // !Gameplay Controllers

@@ -1,6 +1,7 @@
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using Prototype.Model;
+using Prototype.ObjectPool;
 using Prototype.Service;
 using UnityEngine;
 
@@ -8,13 +9,12 @@ namespace Prototype.Enemies.AI
 {
 
     [Category("Prototype/Attacks")]
-    public class MeleeAttack : ActionTask<EnemyModel>
+    public class RangeAttack : ActionTask<EnemyModel>
     {
-        // Public
-
         // From blackboard
-        public BBParameter<GameEventService> EventService;
         public BBParameter<PlayerModel> Player;
+        public BBParameter<GameEventService> EventService;
+        public BBParameter<MonoObjectPool<EnemyProjectileModel>> ProjectilePool;
 
         protected override string OnInit()
         {
@@ -30,14 +30,12 @@ namespace Prototype.Enemies.AI
             agent.Agent.SetDestination(agent.transform.position);
         }
 
-        //Called once per frame while the action is active.
         protected override void OnUpdate()
         {
             Execute();
             EndAction(true);
         }
 
-        //Called when the task is paused.
         protected override void OnPause()
         {
             Unsubscribe();
@@ -67,11 +65,24 @@ namespace Prototype.Enemies.AI
 
             if (agent.Id == e.EntityId)
             {
-                if (Vector3.Distance(agent.transform.position, Player.value.transform.position) < agent.AttackRange)
-                {
-                    EventService.value.OnAttacked(new GameEventService.AttackedEventArgs { Attacker = agent, Defender = Player.value });
-                }
+                Shoot();
             }
+        }
+
+        private void Shoot()
+        {
+            float playerHeight = 1f;
+            Vector3 targetPosition = Player.value.transform.position + Vector3.up * (playerHeight * .5f);
+            Vector3 shootDir = (targetPosition - agent.ShootingPoint.position).normalized;
+            Quaternion rot = Quaternion.LookRotation(shootDir);
+
+            EnemyProjectileModel projectile = ProjectilePool.value.Create(agent.ShootingPoint.position, rot);
+            projectile.Sender = agent;
+
+            float randomThrustMultiplier = 1.5f;
+            projectile.Rigidbody.AddForce(shootDir * Random.Range(agent.Thrust, agent.Thrust * randomThrustMultiplier), ForceMode.Impulse);
+            float torqueMultiplier = 1000f;
+            projectile.Rigidbody.AddTorque(Random.insideUnitSphere * torqueMultiplier);
         }
     }
 }

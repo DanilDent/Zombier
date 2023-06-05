@@ -57,7 +57,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  AttackRateRPM: 1
+  AttackRateRPM: 80
   AttackRange: 10
   Thrust: 50
   Recoil: 0

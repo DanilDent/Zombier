@@ -1,4 +1,5 @@
 ﻿using Prototype.Model;
+using Prototype.ObjectPool;
 using Prototype.Service;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,11 +12,16 @@ namespace Prototype.Controller
         // Public 
 
         [Inject]
-        public void Construct(GameEventService eventService, List<EnemyModel> enemies, PlayerModel player)
+        public void Construct(
+            GameEventService eventService,
+            List<EnemyModel> enemies,
+            PlayerModel player,
+            MonoObjectPool<EnemyProjectileModel> projectilePool)
         {
             _eventService = eventService;
             _enemies = enemies;
             _player = player;
+            _projectilePool = projectilePool;
         }
 
         // Private
@@ -24,6 +30,7 @@ namespace Prototype.Controller
         private GameEventService _eventService;
         private List<EnemyModel> _enemies;
         private PlayerModel _player;
+        private MonoObjectPool<EnemyProjectileModel> _projectilePool;
         // From inspector
         //
         [SerializeField] private float _obstacleAvoidanceRadius = 1f;
@@ -42,6 +49,7 @@ namespace Prototype.Controller
 
                 enemy.Blackboard.SetVariableValue("EventService", _eventService);
                 enemy.Blackboard.SetVariableValue("Player", _player);
+                enemy.Blackboard.SetVariableValue("ProjectilePool", _projectilePool);
             }
         }
 

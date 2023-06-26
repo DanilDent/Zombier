@@ -42,7 +42,7 @@ function getEnvironment() {
    
    // Write the data to the Firebase URL
    function writeDataToFirebase() {
-    importTimeStamp();
+    //importTimeStamp();
    
     sheetID = getEnvironment().spreadsheetID
     var ss = SpreadsheetApp.openById(sheetID);
@@ -58,19 +58,17 @@ function getEnvironment() {
    // Import each sheet when there is a change
    function importSheet(sheet) {
     var name = sheet.getName();
-    if(name.indexOf("Internal_") == 0)
-    {
-     return;
+    if (name.indexOf("Internal_") == 0) {
+      return;
     }
+    
     var data = sheet.getDataRange().getValues();
-   
     var dataToImport = {};
-   
+    
     for (var i = 1; i < data.length; i++) {
-     if(data[i][0].toString().length == 0)
-     {
-       continue;
-     }
+      if (data[i][0].toString().length == 0) {
+        continue;
+      }
       dataToImport[data[i][0]] = {};
       for (var j = 0; j < data[0].length; j++) {
         var cellValue = data[i][j];
@@ -78,14 +76,31 @@ function getEnvironment() {
         assign(dataToImport[data[i][0]], data[0][j].split("__"), jsonCellValue);
       }
     }
-   
+    
+    console.log(dataToImport);
+    
     var token = ScriptApp.getOAuthToken();
-   
-    var firebaseUrl =
-      getEnvironment().firebaseUrl + "MetaData" + "/" + name;
-    var base = FirebaseApp.getDatabaseByUrl(firebaseUrl, token);
-    base.setData("", dataToImport);
-   }
+    var firebaseUrl = getEnvironment().firebaseUrl;
+    var remoteConfigUrl = firebaseUrl + "projects/" + getEnvironment().projectId + "/remoteConfig";
+    var headers = {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    };
+    var payload = JSON.stringify({
+      conditions: [],
+      parameters: dataToImport,
+    });
+    
+    var options = {
+      method: "put",
+      headers: headers,
+      payload: payload,
+      muteHttpExceptions: true,
+    };
+    
+    var response = UrlFetchApp.fetch(remoteConfigUrl, options);
+    Logger.log(response.getContentText());
+  }
    
    function importTimeStamp()
    {

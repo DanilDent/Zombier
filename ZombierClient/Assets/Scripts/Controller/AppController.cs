@@ -12,16 +12,24 @@ namespace Prototype.Controller
     public class AppController : MonoBehaviour
     {
         [Inject]
-        public void Construct(AppEventService appEventService, AppData appData, SerializationService serializationService)
+        public void Construct(
+            AppEventService appEventService,
+            AppData appData,
+            SerializationService serializationService,
+            GameConfigDBService gameConfigDb)
         {
             _appEventService = appEventService;
             _appData = appData;
             _serializationService = serializationService;
+            _gameConfigDb = gameConfigDb;
         }
 
-        private void Start()
+        private async void Start()
         {
             Application.targetFrameRate = 60;
+
+            await _gameConfigDb.FetchGameBalanceConfig();
+            _gameConfigDb.GetTestGameBalanceJsonString();
 
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.MainMenu });
 
@@ -72,6 +80,7 @@ namespace Prototype.Controller
         private AppEventService _appEventService;
         private AppData _appData;
         private SerializationService _serializationService;
+        private GameConfigDBService _gameConfigDb;
 
         private void HandleGamePause(object sender, EventArgs e)
         {

@@ -43,6 +43,7 @@ namespace Prototype
             // !App data
 
             // Services
+            Container.Bind<GameConfigDBService>().AsSingle().NonLazy();
             Container.Bind<AppEventService>().AsSingle().NonLazy();
             Container.Bind<SceneLoaderService>().AsSingle().NonLazy();
             Container.Bind<SerializationService>().FromInstance(_serializationService).AsSingle();

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "219196188432",
+    "project_id": "zombier-5ac40",
+    "storage_bucket": "zombier-5ac40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219196188432:android:fc7c311d2326dd579da795",
+        "android_client_info": {
+          "package_name": "com.BadGamesStudio.Zombier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219196188432-1oudd1qhang843uqbjoppp2pulerduo3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOjX9ol2BfCiq9gKJbGVt9HkjnjvrofPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219196188432-1oudd1qhang843uqbjoppp2pulerduo3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

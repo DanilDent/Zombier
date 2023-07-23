@@ -54,7 +54,7 @@ namespace Prototype.Service
         {
             if (_targetOperation != null)
             {
-                return _targetOperation.progress;
+                return Mathf.Clamp(_targetOperation.progress / 0.9f, 0f, 1f);
             }
 
             return 1f;

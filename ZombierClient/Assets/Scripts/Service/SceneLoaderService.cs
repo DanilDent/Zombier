@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,11 +18,13 @@ namespace Prototype.Service
 
         public SceneLoaderService(AppEventService appEventService)
         {
-            _transitionsGraph = new Dictionary<Tuple<Scene, Scene>, Func<Scene, IEnumerator>>();
+            _transitionsGraph = new Dictionary<
+                Tuple<Scene, Scene>,
+                Tuple<Func<Scene, TransitionSettings, IEnumerator>, TransitionSettings>>();
             _appEventService = appEventService;
             _currentScene = Scene.Bootstrap;
             //
-            RegisterTransition(Scene.Bootstrap, Scene.MainMenu, LoadWithLoadingScreenAndFooter);
+            RegisterTransition(Scene.Bootstrap, Scene.MainMenu, LoadWithLoadingScreenAndFooter, new TransitionSettings { ShouldFetchGameBalance = true });
 
             RegisterTransition(Scene.Game, Scene.Game, LoadWithLoadingScreen);
 
@@ -57,6 +60,11 @@ namespace Prototype.Service
             return 1f;
         }
 
+        private struct TransitionSettings
+        {
+            public bool ShouldFetchGameBalance;
+        }
+
         private class CoroutineRunner : MonoBehaviour
         {
             private static CoroutineRunner instance;
@@ -81,7 +89,9 @@ namespace Prototype.Service
         private bool isSceneLoading = false;
         private AsyncOperation _loadingOperation;
         private AsyncOperation _targetOperation;
-        private Dictionary<Tuple<Scene, Scene>, Func<Scene, IEnumerator>> _transitionsGraph;
+        private Dictionary<
+            Tuple<Scene, Scene>,
+            Tuple<Func<Scene, TransitionSettings, IEnumerator>, TransitionSettings>> _transitionsGraph;
         private Scene _currentScene;
 
         private void HandleLoadScene(object sender, LoadSceneEventArgs e)
@@ -89,10 +99,12 @@ namespace Prototype.Service
             Load(e.To);
         }
 
-        private void RegisterTransition(Scene from, Scene to, Func<Scene, IEnumerator> transition)
+        private void RegisterTransition(Scene from, Scene to, Func<Scene, TransitionSettings, IEnumerator> transition, TransitionSettings settings = default)
         {
             Tuple<Scene, Scene> tupleKey = new Tuple<Scene, Scene>(from, to);
-            _transitionsGraph.Add(tupleKey, transition);
+            Tuple<Func<Scene, TransitionSettings, IEnumerator>, TransitionSettings> tupleValue =
+                new Tuple<Func<Scene, TransitionSettings, IEnumerator>, TransitionSettings>(transition, settings);
+            _transitionsGraph.Add(tupleKey, tupleValue);
         }
 
         private void Load(Scene targetScene)
@@ -105,7 +117,7 @@ namespace Prototype.Service
 
                 if (_transitionsGraph.ContainsKey(tuple))
                 {
-                    CoroutineRunner.Instance.StartCoroutine(_transitionsGraph[tuple](targetScene));
+                    CoroutineRunner.Instance.StartCoroutine(_transitionsGraph[tuple].Item1(targetScene, _transitionsGraph[tuple].Item2));
                 }
                 else
                 {
@@ -117,7 +129,7 @@ namespace Prototype.Service
 
         #region Transition Coroutines
 
-        private IEnumerator LoadWithLoadingScreen(Scene targetSceneName)
+        private IEnumerator LoadWithLoadingScreen(Scene targetSceneName, TransitionSettings settings = default)
         {
             Scene currentSceneName = _currentScene;
 
@@ -198,7 +210,7 @@ namespace Prototype.Service
             UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
         }
 
-        private IEnumerator LoadHorizontalTransitionRight(Scene targetSceneName)
+        private IEnumerator LoadHorizontalTransitionRight(Scene targetSceneName, TransitionSettings settings = default)
         {
             Scene currentSceneName = _currentScene;
 
@@ -261,7 +273,7 @@ namespace Prototype.Service
             UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
         }
 
-        private IEnumerator LoadHorizontalTransitionLeft(Scene targetSceneName)
+        private IEnumerator LoadHorizontalTransitionLeft(Scene targetSceneName, TransitionSettings settings = default)
         {
             Scene currentSceneName = _currentScene;
 
@@ -324,7 +336,7 @@ namespace Prototype.Service
             UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
         }
 
-        private IEnumerator LoadWithLoadingScreenAndFooter(Scene targetSceneName)
+        private IEnumerator LoadWithLoadingScreenAndFooter(Scene targetSceneName, TransitionSettings settings = default)
         {
             Scene currentSceneName = _currentScene;
 
@@ -363,6 +375,22 @@ namespace Prototype.Service
             loadingSceneCamera.enabled = true;
 
             SceneManager.UnloadSceneAsync(currentSceneName.ToString());
+
+            if (settings.ShouldFetchGameBalance)
+            {
+                LoadingScreenContoller loadingScreenController = loadindScene
+                    .GetRootGameObjects().Where(_ => _.GetComponentInChildren<LoadingScreenContoller>() != null)
+                    .Select(_ => _.GetComponentInChildren<LoadingScreenContoller>())
+                    .FirstOrDefault();
+
+                Task fetchGameBalanceTask = loadingScreenController.FetchGameBalanceAsync();
+                yield return new WaitUntil(() => fetchGameBalanceTask.IsCompleted);
+
+                while (!loadingScreenController.IsGameBalanceFetchComplete)
+                {
+                    yield return null;
+                }
+            }
 
             _targetOperation = SceneManager.LoadSceneAsync(targetSceneName.ToString(), LoadSceneMode.Additive);
             _targetOperation.allowSceneActivation = false;

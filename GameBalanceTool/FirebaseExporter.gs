@@ -3,6 +3,62 @@
 * SPDX-License-Identifier: Apache-2.0
 */
 
+function doGet(e)
+{
+    return downloadGameConfig();
+}
+
+function downloadGameConfig() {
+    var sheetID = getEnvironment().spreadsheetID;
+    var ss = SpreadsheetApp.openById(sheetID);
+    SpreadsheetApp.setActiveSpreadsheet(ss);
+    var sheets = ss.getSheets();
+    var dataToDownload = {};
+    for (var i = 0; i < sheets.length; ++i) {
+        SpreadsheetApp.setActiveSheet(sheets[i]);
+        downloadSheet(sheets[i], dataToDownload);
+    }
+
+    var fileContent = JSON.stringify(dataToDownload);
+
+    var fileName = "GameBalanceConfig.json";
+
+    var output = ContentService.createTextOutput(fileContent);
+
+    output.setMimeType(ContentService.MimeType.JSON);
+
+    return output.downloadAsFile(fileName);
+}
+
+function downloadSheet(sheet, dataToDownload)
+{
+    var name = sheet.getName();
+    if (name.indexOf("Internal_") == 0) 
+    {
+        return;
+    }
+
+    var data = sheet.getDataRange().getValues();
+    var dataToImport = {};
+
+    for (var i = 1; i < data.length; i++) 
+    {
+        if (data[i][0].toString().length == 0) 
+        {
+            continue;
+        }
+        dataToImport[data[i][0]] = {};
+        for (var j = 0; j < data[0].length; j++) 
+        {
+            var cellValue = data[i][j];
+            var jsonCellValue = getArray(cellValue);
+            assign(dataToImport[data[i][0]], data[0][j].split("__"), jsonCellValue);
+        }
+    }
+
+    dataToDownload[name] = dataToImport;
+}
+
 function getEnvironment() 
 {
     return environment;

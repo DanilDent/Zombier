@@ -20,5 +20,9 @@
   ],
   "executionApi": {
     "access": "DOMAIN"
+  },
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "MYSELF"
   }
 }

@@ -1,7 +1,4 @@
 var environment = {
-    spreadsheetID: "<SpreadSheetID>",
-    remoteConfigEmail: "<RemoteConfigEmail>",
-    remoteConfigKey: "<RemoteConfigKey>",
-    remoteConfigProjectId: "<RemoteConfigProjectId>"
-  };
- 
+  spreadsheetID: "<SPREADSHEET_ID>",
+  firebaseUrl: "<FIREBASE_URL>"
+};

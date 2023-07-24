@@ -7,7 +7,7 @@ namespace Prototype.Data
     [Serializable]
     public class DescDamage : List<DescDamageType>
     {
-        public DescDamageType this[DescDamageType.DamageType t]
+        public DescDamageType this[DamageTypeType t]
         {
             get
             {

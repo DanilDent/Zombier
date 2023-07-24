@@ -134,7 +134,7 @@
         public double MaxSpeed { get; set; }
 
         [JsonProperty("Damage")]
-        public DamageEnum Damage { get; set; }
+        public string Damage { get; set; }
 
         [JsonProperty("CritChance")]
         public long CritChance { get; set; }
@@ -281,7 +281,7 @@
         public double MaxSpeed { get; set; }
 
         [JsonProperty("Damage")]
-        public DamageEnum Damage { get; set; }
+        public string Damage { get; set; }
 
         [JsonProperty("CritChance")]
         public double CritChance { get; set; }
@@ -368,8 +368,6 @@
 
     public enum EnemyAttackType { Range };
 
-    public enum DamageEnum { IdDamageZero };
-
     public enum EnemyEnum { IdEnemyLocation0RangeYbot };
 
     public enum Locaiton { IdLocaiton0 };
@@ -387,7 +385,6 @@
                 DamageTypeTypeConverter.Singleton,
                 ProjectilePrefabAddressConverter.Singleton,
                 EnemyAttackTypeConverter.Singleton,
-                DamageEnumConverter.Singleton,
                 EnemyEnumConverter.Singleton,
                 LocaitonConverter.Singleton,
                 WeaponEnumConverter.Singleton,
@@ -513,40 +510,6 @@
         }
 
         public static readonly EnemyAttackTypeConverter Singleton = new EnemyAttackTypeConverter();
-    }
-
-    internal class DamageEnumConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(DamageEnum) || t == typeof(DamageEnum?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "Id_Damage_Zero")
-            {
-                return DamageEnum.IdDamageZero;
-            }
-            throw new Exception("Cannot unmarshal type DamageEnum");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (DamageEnum)untypedValue;
-            if (value == DamageEnum.IdDamageZero)
-            {
-                serializer.Serialize(writer, "Id_Damage_Zero");
-                return;
-            }
-            throw new Exception("Cannot marshal type DamageEnum");
-        }
-
-        public static readonly DamageEnumConverter Singleton = new DamageEnumConverter();
     }
 
     internal class EnemyEnumConverter : JsonConverter

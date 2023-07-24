@@ -28,7 +28,7 @@ namespace Prototype.Model
                 _weaponData.AttackRange = value;
             }
         }
-        public int FireRateRPM
+        public float FireRateRPM
         {
             get
             {

@@ -47,6 +47,7 @@ namespace Prototype
             Container.Bind<AppEventService>().AsSingle().NonLazy();
             Container.Bind<SceneLoaderService>().AsSingle().NonLazy();
             Container.Bind<SerializationService>().FromInstance(_serializationService).AsSingle();
+            Container.Bind<GameplaySessionConfigurator>().AsSingle();
             // !Services
 
             // Controllers

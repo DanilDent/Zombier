@@ -7,14 +7,7 @@ namespace Prototype.Data
     [Serializable]
     public struct DescDamageType : IEquatable<DescDamageType>
     {
-        public enum DamageType
-        {
-            Physical = 0,
-            Toxic,
-            Fire
-        }
-
-        public DescDamageType(DamageType type)
+        public DescDamageType(DamageTypeType type)
         {
             Type = type;
 
@@ -22,7 +15,7 @@ namespace Prototype.Data
             Chance = 0;
         }
 
-        public DamageType Type;
+        public DamageTypeType Type;
         [JsonIgnore] public float Value => UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
         public DescRandomRange ValueRange;
         public float Chance;

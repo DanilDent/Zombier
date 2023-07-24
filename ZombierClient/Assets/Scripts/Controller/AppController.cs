@@ -15,12 +15,22 @@ namespace Prototype.Controller
         public void Construct(
             AppEventService appEventService,
             AppData appData,
-            SerializationService serializationService)
+            SerializationService serializationService,
+            GameplaySessionConfigurator sessionConfigurator)
         {
             _appEventService = appEventService;
             _appData = appData;
             _serializationService = serializationService;
+            _sessionConfigurator = sessionConfigurator;
         }
+
+        // Private
+
+        // Injected
+        private AppEventService _appEventService;
+        private AppData _appData;
+        private SerializationService _serializationService;
+        private GameplaySessionConfigurator _sessionConfigurator;
 
         private void Start()
         {
@@ -69,13 +79,6 @@ namespace Prototype.Controller
             Debug.Log($"Application quitting, app data saved to {_serializationService.PersistentAppDataPath}");
         }
 
-        // Private
-
-        // Injected
-        private AppEventService _appEventService;
-        private AppData _appData;
-        private SerializationService _serializationService;
-
         private void HandleGamePause(object sender, EventArgs e)
         {
             Time.timeScale = 0f;
@@ -88,9 +91,9 @@ namespace Prototype.Controller
 
         private void HandlePlay(object sender, PlayEventArgs e)
         {
-            GameSessionData newGameSession = _appData.Meta.DefaultSession.Copy();
-            newGameSession.Location = e.LocationData.Copy();
-            _appData.User.GameSession = newGameSession.Copy();
+            var newSession = _sessionConfigurator.CreateGameSession();
+            newSession.Location = e.LocationData.Copy();
+            _appData.User.GameSession = newSession.Copy();
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
         }
 

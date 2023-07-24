@@ -1,14 +1,11 @@
 ﻿namespace Prototype.Data
 {
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using System;
-    using System.Globalization;
 
     public partial class GameBalanceData
     {
         [JsonProperty("Damage")]
-        public DamageElement[] Damage { get; set; }
+        public Damage[] Damage { get; set; }
 
         [JsonProperty("DamageTypes")]
         public DamageType[] DamageTypes { get; set; }
@@ -23,7 +20,7 @@
         public Weapon[] Weapons { get; set; }
 
         [JsonProperty("Enemies")]
-        public EnemyElement[] Enemies { get; set; }
+        public Enemy[] Enemies { get; set; }
 
         [JsonProperty("Locations")]
         public Location[] Locations { get; set; }
@@ -44,7 +41,7 @@
         public EnemyAttack[] EnemyAttacks { get; set; }
     }
 
-    public partial class DamageElement
+    public partial class Damage
     {
         [JsonProperty("Index")]
         public long Index { get; set; }
@@ -77,7 +74,7 @@
         public double Max { get; set; }
     }
 
-    public partial class EnemyElement
+    public partial class Enemy
     {
         [JsonProperty("Index")]
         public long Index { get; set; }
@@ -104,13 +101,13 @@
         public string Id { get; set; }
 
         [JsonProperty("Type")]
-        public EnemyAttackType Type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("Damage")]
         public string Damage { get; set; }
 
         [JsonProperty("AttackRange")]
-        public long AttackRange { get; set; }
+        public double AttackRange { get; set; }
 
         [JsonProperty("AttackRateAPS")]
         public double AttackRateAps { get; set; }
@@ -126,6 +123,9 @@
 
         [JsonProperty("Id")]
         public string Id { get; set; }
+
+        [JsonProperty("EnemyId")]
+        public string EnemyId { get; set; }
 
         [JsonProperty("Level")]
         public long Level { get; set; }
@@ -200,7 +200,7 @@
         public string SpawnData { get; set; }
 
         [JsonProperty("Enemy")]
-        public EnemyEnum Enemy { get; set; }
+        public string Enemy { get; set; }
 
         [JsonProperty("Chance")]
         public double Chance { get; set; }
@@ -215,7 +215,7 @@
         public string Id { get; set; }
 
         [JsonProperty("Locaiton")]
-        public Locaiton Locaiton { get; set; }
+        public string Locaiton { get; set; }
 
         [JsonProperty("LevelIndex")]
         public long LevelIndex { get; set; }
@@ -233,7 +233,7 @@
         public long Index { get; set; }
 
         [JsonProperty("Id")]
-        public Locaiton Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("Name")]
         public string Name { get; set; }
@@ -299,7 +299,7 @@
         public string Resists { get; set; }
 
         [JsonProperty("Weapon")]
-        public WeaponEnum Weapon { get; set; }
+        public string Weapon { get; set; }
 
         [JsonProperty("Level")]
         public long Level { get; set; }
@@ -320,7 +320,7 @@
         public string Id { get; set; }
 
         [JsonProperty("Weapon")]
-        public WeaponEnum Weapon { get; set; }
+        public string Weapon { get; set; }
 
         [JsonProperty("Level")]
         public long Level { get; set; }
@@ -347,7 +347,7 @@
         public long Index { get; set; }
 
         [JsonProperty("Id")]
-        public WeaponEnum Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("PrefabAddress")]
         public string PrefabAddress { get; set; }
@@ -362,255 +362,12 @@
         public string Level { get; set; }
     }
 
-    public enum DamageTypeType { Electric, Fire, Physical, Toxic };
-
-    public enum ProjectilePrefabAddress { Rock };
-
-    public enum EnemyAttackType { Range };
-
-    public enum EnemyEnum { IdEnemyLocation0RangeYbot };
-
-    public enum Locaiton { IdLocaiton0 };
-
-    public enum WeaponEnum { IdPistol };
-
-    internal static class Converter
+    public partial struct ProjectilePrefabAddress
     {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters =
-            {
-                DamageTypeTypeConverter.Singleton,
-                ProjectilePrefabAddressConverter.Singleton,
-                EnemyAttackTypeConverter.Singleton,
-                EnemyEnumConverter.Singleton,
-                LocaitonConverter.Singleton,
-                WeaponEnumConverter.Singleton,
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
-    }
+        public long[] IntegerArray;
+        public string String;
 
-    internal class DamageTypeTypeConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(DamageTypeType) || t == typeof(DamageTypeType?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "Electric":
-                    return DamageTypeType.Electric;
-                case "Fire":
-                    return DamageTypeType.Fire;
-                case "Physical":
-                    return DamageTypeType.Physical;
-                case "Toxic":
-                    return DamageTypeType.Toxic;
-            }
-            throw new Exception("Cannot unmarshal type DamageTypeType");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (DamageTypeType)untypedValue;
-            switch (value)
-            {
-                case DamageTypeType.Electric:
-                    serializer.Serialize(writer, "Electric");
-                    return;
-                case DamageTypeType.Fire:
-                    serializer.Serialize(writer, "Fire");
-                    return;
-                case DamageTypeType.Physical:
-                    serializer.Serialize(writer, "Physical");
-                    return;
-                case DamageTypeType.Toxic:
-                    serializer.Serialize(writer, "Toxic");
-                    return;
-            }
-            throw new Exception("Cannot marshal type DamageTypeType");
-        }
-
-        public static readonly DamageTypeTypeConverter Singleton = new DamageTypeTypeConverter();
-    }
-
-    internal class ProjectilePrefabAddressConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(ProjectilePrefabAddress) || t == typeof(ProjectilePrefabAddress?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "Rock")
-            {
-                return ProjectilePrefabAddress.Rock;
-            }
-            throw new Exception("Cannot unmarshal type ProjectilePrefabAddress");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (ProjectilePrefabAddress)untypedValue;
-            if (value == ProjectilePrefabAddress.Rock)
-            {
-                serializer.Serialize(writer, "Rock");
-                return;
-            }
-            throw new Exception("Cannot marshal type ProjectilePrefabAddress");
-        }
-
-        public static readonly ProjectilePrefabAddressConverter Singleton = new ProjectilePrefabAddressConverter();
-    }
-
-    internal class EnemyAttackTypeConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(EnemyAttackType) || t == typeof(EnemyAttackType?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "Range")
-            {
-                return EnemyAttackType.Range;
-            }
-            throw new Exception("Cannot unmarshal type EnemyAttackType");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (EnemyAttackType)untypedValue;
-            if (value == EnemyAttackType.Range)
-            {
-                serializer.Serialize(writer, "Range");
-                return;
-            }
-            throw new Exception("Cannot marshal type EnemyAttackType");
-        }
-
-        public static readonly EnemyAttackTypeConverter Singleton = new EnemyAttackTypeConverter();
-    }
-
-    internal class EnemyEnumConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(EnemyEnum) || t == typeof(EnemyEnum?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "Id_Enemy_Location0_Range_Ybot")
-            {
-                return EnemyEnum.IdEnemyLocation0RangeYbot;
-            }
-            throw new Exception("Cannot unmarshal type EnemyEnum");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (EnemyEnum)untypedValue;
-            if (value == EnemyEnum.IdEnemyLocation0RangeYbot)
-            {
-                serializer.Serialize(writer, "Id_Enemy_Location0_Range_Ybot");
-                return;
-            }
-            throw new Exception("Cannot marshal type EnemyEnum");
-        }
-
-        public static readonly EnemyEnumConverter Singleton = new EnemyEnumConverter();
-    }
-
-    internal class LocaitonConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(Locaiton) || t == typeof(Locaiton?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "Id_Locaiton0")
-            {
-                return Locaiton.IdLocaiton0;
-            }
-            throw new Exception("Cannot unmarshal type Locaiton");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (Locaiton)untypedValue;
-            if (value == Locaiton.IdLocaiton0)
-            {
-                serializer.Serialize(writer, "Id_Locaiton0");
-                return;
-            }
-            throw new Exception("Cannot marshal type Locaiton");
-        }
-
-        public static readonly LocaitonConverter Singleton = new LocaitonConverter();
-    }
-
-    internal class WeaponEnumConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(WeaponEnum) || t == typeof(WeaponEnum?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            if (value == "Id_Pistol")
-            {
-                return WeaponEnum.IdPistol;
-            }
-            throw new Exception("Cannot unmarshal type WeaponEnum");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (WeaponEnum)untypedValue;
-            if (value == WeaponEnum.IdPistol)
-            {
-                serializer.Serialize(writer, "Id_Pistol");
-                return;
-            }
-            throw new Exception("Cannot marshal type WeaponEnum");
-        }
-
-        public static readonly WeaponEnumConverter Singleton = new WeaponEnumConverter();
+        public static implicit operator ProjectilePrefabAddress(long[] IntegerArray) => new ProjectilePrefabAddress { IntegerArray = IntegerArray };
+        public static implicit operator ProjectilePrefabAddress(string String) => new ProjectilePrefabAddress { String = String };
     }
 }

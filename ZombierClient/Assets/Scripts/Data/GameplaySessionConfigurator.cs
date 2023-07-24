@@ -14,6 +14,7 @@ namespace Prototype.Data
         {
             var session = ScriptableObject.CreateInstance<GameSessionData>();
             session.Player = CreatePlayerData();
+            session.Location = CreateLocationData("Id_Locaiton0");
             return session;
         }
 
@@ -66,7 +67,7 @@ namespace Prototype.Data
 
             playerData.PlayerPrefabAddress = playerCfg.AssetPath;
             playerData.MaxSpeed = (float)playerCfg.MaxSpeed;
-            playerData.Damage = CreateDescDamage(playerCfg.Damage.ToString());
+            playerData.Damage = CreateDescDamage(playerCfg.Damage);
             playerData.CritChance = (float)playerCfg.CritChance;
             playerData.CritMultiplier = (float)playerCfg.CritMultiplier;
             playerData.MaxHealth = (float)playerCfg.MaxHealth;
@@ -78,6 +79,96 @@ namespace Prototype.Data
             playerData.LevelExpThresholds = playerCfg.LevelExpThresholds.Select(_ => (int)_).ToArray();
 
             return playerData;
+        }
+
+        private EnemyAttackData CreateEnemyAttackData(string enemyAttackId)
+        {
+            var enemyAttackCfg = _gameBalance.EnemyAttacks.FirstOrDefault(_ => _.Id.Equals(enemyAttackId));
+
+            var enemyAttackData = new EnemyAttackData();
+            enemyAttackData.AttackRateRPM = (float)enemyAttackCfg.AttackRateAps * 60f;
+            enemyAttackData.AttackRange = (float)enemyAttackCfg.AttackRange;
+            // TODO: add this parameter to remote config
+            enemyAttackData.Thrust = 30f;
+            // TODO: add this parameter to remote config
+            enemyAttackData.Recoil = 0.1f;
+            enemyAttackData.Damage = CreateDescDamage(enemyAttackCfg.Damage);
+            enemyAttackData.ProjectileData = new ProjectileData { PrefabAddress = enemyAttackCfg.ProjectilePrefabAddress.String };
+
+            return enemyAttackData;
+        }
+
+        private EnemyData CreateEnemyData(string enemyId, int enemyLevel)
+        {
+            var enemyCfg = _gameBalance.Enemies.FirstOrDefault(_ => _.Id.Equals(enemyId));
+            var enemyLvlCfg = _gameBalance.EnemyLevel.FirstOrDefault(_ => _.Level == enemyLevel && _.EnemyId.Equals(enemyCfg.Id));
+
+            var enemyData = ScriptableObject.CreateInstance<EnemyData>();
+
+            enemyData.ModelPrefabAddress = enemyCfg.ModelPrefabAddress;
+            enemyData.ViewPrefabAddress = enemyCfg.ViewPrefabAddress;
+            enemyData.MaxSpeed = (float)enemyLvlCfg.MaxSpeed;
+            enemyData.Damage = CreateDescDamage(enemyLvlCfg.Damage);
+            enemyData.CritChance = (float)enemyLvlCfg.CritChance;
+            enemyData.CritMultiplier = (float)enemyLvlCfg.CritMultipleir;
+            enemyData.MaxHealth = (float)enemyLvlCfg.MaxHealth;
+            enemyData.Health = enemyData.MaxHealth;
+            enemyData.Resists = CreateDescDamage(enemyLvlCfg.Resists);
+            enemyData.EnemyAttack = CreateEnemyAttackData(enemyLvlCfg.Attacks);
+            enemyData.ExpReward = (int)enemyLvlCfg.ExpReward;
+
+            return enemyData;
+        }
+
+        private EnemySpawnData CreateEnemySpawnData(string enemySpawnConfigId)
+        {
+            var enemySpawnConfig = _gameBalance.EnemySpawnConfig.FirstOrDefault(_ => _.Id.Equals(enemySpawnConfigId));
+            var enemySpawnData = ScriptableObject.CreateInstance<EnemySpawnData>();
+
+            enemySpawnData.MinEnemyCount = (int)enemySpawnConfig.MinEnemyCount;
+            enemySpawnData.MaxEnemyCount = (int)enemySpawnConfig.MaxEnemyCount;
+            enemySpawnData.MinEnemyLevel = (int)enemySpawnConfig.MinEnemyLevel;
+            enemySpawnData.MaxEnemyLevel = (int)enemySpawnConfig.MaxEnemyLevel;
+
+            var enemySpawnTypesCfg = _gameBalance.EnemySpawnTypes
+                .Where(_ => enemySpawnConfig.EnemySpawnTypes.Contains(_.Id)).ToArray(); ;
+            var enemies = enemySpawnTypesCfg
+                .Select(_ => CreateEnemyData(_.Enemy, 1)).ToList();
+            enemySpawnData.Enemies = enemies;
+
+            return enemySpawnData;
+        }
+
+        private LevelData CreateLevelData(string levelId)
+        {
+            var levelCfg = _gameBalance.Levels.FirstOrDefault(_ => _.Id.Equals(levelId));
+            var levelData = ScriptableObject.CreateInstance<LevelData>();
+
+            levelData.EnemySpawnData = CreateEnemySpawnData(levelCfg.EnemySpawnData);
+            levelData.LevelSize = (int)levelCfg.LevelSize;
+
+            return levelData;
+        }
+
+        private LocationData CreateLocationData(string locationId)
+        {
+            var locationCfg = _gameBalance.Locations.FirstOrDefault(_ => _.Id.Equals(locationId));
+            var locationData = ScriptableObject.CreateInstance<LocationData>();
+
+            var levelsCfg = _gameBalance.Levels
+                .Where(_ => locationCfg.Levels.Contains(_.Id)).ToArray();
+            locationData.Levels = levelsCfg
+                .Select(_ => CreateLevelData(_.Id)).ToArray();
+
+            locationData.LocationLevelPrefabAddress = locationCfg.LocationLevelPrefabAddress;
+            locationData.GroundPrefabAddress = locationCfg.GroundPrefabAddress;
+            locationData.WallPrefabsLabel = locationCfg.WallPrefabsLabel;
+            locationData.ObstaclePrefabsLabel = locationCfg.ObstaclePrefabsLabel;
+            locationData.ExitPrefabAddress = locationCfg.ExitPrefabAddress;
+            locationData.EnvGroundPrefabAddress = locationCfg.EnvGroundPrefabAddress;
+            locationData.EnvObstaclePrefabsLabel = locationCfg.EnvObstaclePrefabsLabel;
+
+            return locationData;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Prototype.Data
     [CreateAssetMenu(fileName = "New Enemy Spawner Data", menuName = "Data/Enemy Spawner Data")]
     public class EnemySpawnData : ScriptableObject
     {
-        public List<EnemyData> Enemies;
+        public List<EnemyData> Enemies = new List<EnemyData>();
         public int MinEnemyCount;
         public int MaxEnemyCount;
         public int MinEnemyLevel;

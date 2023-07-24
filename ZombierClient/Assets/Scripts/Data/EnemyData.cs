@@ -20,7 +20,7 @@ namespace Prototype.Data
         public float MaxHealth;
         [OdinSerialize] public DescDamage Resists;
 
-        public WeaponData Weapon;
+        public EnemyAttackData EnemyAttack;
         public List<DescAttackStrategy> AttackStrategies;
         public int ExpReward;
     }

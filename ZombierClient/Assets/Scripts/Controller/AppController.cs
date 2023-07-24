@@ -92,7 +92,6 @@ namespace Prototype.Controller
         private void HandlePlay(object sender, PlayEventArgs e)
         {
             var newSession = _sessionConfigurator.CreateGameSession();
-            newSession.Location = e.LocationData.Copy();
             _appData.User.GameSession = newSession.Copy();
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
         }

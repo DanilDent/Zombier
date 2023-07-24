@@ -62,15 +62,15 @@ namespace Prototype.Model
 
         public int ExpReward => _data.ExpReward;
         public float MaxSpeed => _data.MaxSpeed;
-        public float AttackRange => _data.Weapon.AttackRange;
+        public float AttackRange => _data.EnemyAttack.AttackRange;
         public List<DescAttackStrategy> AttackStrategies => _data.AttackStrategies;
         // Gameplay properties
         public NavMeshAgent Agent => _agent;
         public Rigidbody Rigidbody => _rigidbody;
         public Transform TargetPoint => _targetPoint.transform;
         public Transform ShootingPoint => _shootingPoint.transform;
-        public float AttackRateRpm => _data.Weapon.AttackRateRPM;
-        public float Thrust => _data.Weapon.Thrust;
+        public float AttackRateRpm => _data.EnemyAttack.AttackRateRPM;
+        public float Thrust => _data.EnemyAttack.Thrust;
         public float RotationMultiplier => _rotationMultiplier;
         public float Acceleration => _acceleration;
         public float Deceleration => _deceleration;
@@ -120,7 +120,7 @@ namespace Prototype.Model
 
         private void RecalcDamage()
         {
-            foreach (DescDamageType dmg in _data.Weapon.Damage)
+            foreach (DescDamageType dmg in _data.EnemyAttack.Damage)
             {
                 if (_damage.FindIndex(_ => _.Type == dmg.Type) == -1)
                 {

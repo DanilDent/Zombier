@@ -17,7 +17,7 @@ public class LoadingScreenContoller : MonoBehaviour
         _loadingScreenUIView.SetLoadingState(LoadingScreenUIView.LoadingState.DownloadingGameBalance);
 
         await _gameConfigDb.FetchGameBalanceConfig();
-        _gameConfigDb.GetTestGameBalanceJsonString();
+        _gameConfigDb.UpdateGameBalance();
         IsGameBalanceFetchComplete = true;
 
         _loadingScreenUIView.SetLoadingState(LoadingScreenUIView.LoadingState.LoadingScene);

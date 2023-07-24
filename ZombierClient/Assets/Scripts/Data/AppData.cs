@@ -8,5 +8,6 @@ namespace Prototype.Data
         // Data
         public MetaData Meta;
         public UserData User;
+        public GameBalanceData GameBalance;
     }
 }

@@ -1,16 +1,25 @@
 using Firebase.Extensions;
 using Firebase.RemoteConfig;
+using Newtonsoft.Json;
+using Prototype.Data;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameConfigDBService
 {
-    public string GetTestGameBalanceJsonString()
+    public GameConfigDBService(AppData appData)
+    {
+        _appData = appData;
+    }
+
+    public string UpdateGameBalance()
     {
         var remoteConfig = FirebaseRemoteConfig.DefaultInstance;
         string json = remoteConfig.GetValue("GameBalance").StringValue;
+        _appData.GameBalance = JsonConvert.DeserializeObject<GameBalanceData>(json);
         Debug.Log($"Game config json: {json}");
+        Debug.Log($"Game balance data: {_appData.GameBalance}");
         return json;
     }
 
@@ -20,6 +29,8 @@ public class GameConfigDBService
         await FetchDataAsync();
         Debug.Log("Game balance fetching complete");
     }
+
+    private AppData _appData;
 
     // Start a fetch request.
     // FetchAsync only fetches new data if the current data is older than the provided

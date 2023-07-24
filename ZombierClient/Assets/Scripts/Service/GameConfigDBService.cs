@@ -17,7 +17,7 @@ public class GameConfigDBService
     {
         var remoteConfig = FirebaseRemoteConfig.DefaultInstance;
         string json = remoteConfig.GetValue("GameBalance").StringValue;
-        _appData.GameBalance = JsonConvert.DeserializeObject<GameBalanceData>(json);
+        _appData.GameBalance = JsonConvert.DeserializeObject<GameBalanceData>(json, Converter.Settings);
         Debug.Log($"Game config json: {json}");
         Debug.Log($"Game balance data: {_appData.GameBalance}");
         return json;

@@ -16,48 +16,9 @@ namespace Prototype.Data
             Converters =
             {
                 DamageTypeTypeConverter.Singleton,
-                ProjectilePrefabAddressConverter.Singleton,
                 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
             },
         };
-    }
-
-    internal class ProjectilePrefabAddressConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(ProjectilePrefabAddress) || t == typeof(ProjectilePrefabAddress?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            switch (reader.TokenType)
-            {
-                case JsonToken.String:
-                case JsonToken.Date:
-                    var stringValue = serializer.Deserialize<string>(reader);
-                    return new ProjectilePrefabAddress { String = stringValue };
-                case JsonToken.StartArray:
-                    var arrayValue = serializer.Deserialize<long[]>(reader);
-                    return new ProjectilePrefabAddress { IntegerArray = arrayValue };
-            }
-            throw new Exception("Cannot unmarshal type ProjectilePrefabAddress");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            var value = (ProjectilePrefabAddress)untypedValue;
-            if (value.String != null)
-            {
-                serializer.Serialize(writer, value.String);
-                return;
-            }
-            if (value.IntegerArray != null)
-            {
-                serializer.Serialize(writer, value.IntegerArray);
-                return;
-            }
-            throw new Exception("Cannot marshal type ProjectilePrefabAddress");
-        }
-
-        public static readonly ProjectilePrefabAddressConverter Singleton = new ProjectilePrefabAddressConverter();
     }
 
     internal class DamageTypeTypeConverter : JsonConverter

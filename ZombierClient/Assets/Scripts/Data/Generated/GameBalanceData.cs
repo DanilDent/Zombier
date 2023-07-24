@@ -112,8 +112,8 @@
         [JsonProperty("AttackRateAPS")]
         public double AttackRateAps { get; set; }
 
-        [JsonProperty("ProjectilePrefabAddress")]
-        public ProjectilePrefabAddress ProjectilePrefabAddress { get; set; }
+        [JsonProperty("ProjectilePrefabAddress", NullValueHandling = NullValueHandling.Ignore)]
+        public string ProjectilePrefabAddress { get; set; }
     }
 
     public partial class EnemyLevel
@@ -355,19 +355,10 @@
         [JsonProperty("IconAddress")]
         public string IconAddress { get; set; }
 
-        [JsonProperty("ProjectilePrefabAddress")]
+        [JsonProperty("ProjectilePrefabAddress", NullValueHandling = NullValueHandling.Ignore)]
         public string ProjectilePrefabAddress { get; set; }
 
         [JsonProperty("Level")]
         public string Level { get; set; }
-    }
-
-    public partial struct ProjectilePrefabAddress
-    {
-        public long[] IntegerArray;
-        public string String;
-
-        public static implicit operator ProjectilePrefabAddress(long[] IntegerArray) => new ProjectilePrefabAddress { IntegerArray = IntegerArray };
-        public static implicit operator ProjectilePrefabAddress(string String) => new ProjectilePrefabAddress { String = String };
     }
 }

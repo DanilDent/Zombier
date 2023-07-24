@@ -41,6 +41,11 @@ function downloadSheet(sheet, dataToDownload)
     var data = sheet.getDataRange().getValues();
     var dataToImport = {};
 
+    if(data[0][0] == "Index")
+    {
+      dataToImport = [];
+    }
+
     for (var i = 1; i < data.length; i++) 
     {
         if (data[i][0].toString().length == 0) 
@@ -219,6 +224,11 @@ function parseCustom(value)
 function getArray(value) 
 {
     var result;
+    if(value == "")
+    {
+      return value;
+    }
+    
     if (typeof value != 'string') 
     {
         return value;

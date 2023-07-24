@@ -93,7 +93,7 @@ namespace Prototype.Data
             // TODO: add this parameter to remote config
             enemyAttackData.Recoil = 0.1f;
             enemyAttackData.Damage = CreateDescDamage(enemyAttackCfg.Damage);
-            enemyAttackData.ProjectileData = new ProjectileData { PrefabAddress = enemyAttackCfg.ProjectilePrefabAddress.String };
+            enemyAttackData.ProjectileData = new ProjectileData { PrefabAddress = enemyAttackCfg.ProjectilePrefabAddress };
 
             return enemyAttackData;
         }

@@ -1,6 +1,7 @@
 ﻿using NodeCanvas.Framework;
 using NodeCanvas.StateMachines;
 using Prototype.Data;
+using Prototype.Extensions;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -26,7 +27,7 @@ namespace Prototype.Model
             Blackboard blackboard)
         {
             _id = id;
-            _data = Instantiate(dataTemplate);
+            _data = dataTemplate.Copy();
             _agent = agent;
             _rigidbody = rigidbody;
             _targetPoint = targetPoint;

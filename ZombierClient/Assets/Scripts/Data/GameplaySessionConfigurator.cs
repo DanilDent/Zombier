@@ -12,7 +12,7 @@ namespace Prototype.Data
 
         public GameSessionData CreateGameSession(string locationId)
         {
-            var session = ScriptableObject.CreateInstance<GameSessionData>();
+            var session = new GameSessionData();
             session.Player = CreatePlayerData();
             session.Location = CreateLocationData(locationId);
             return session;
@@ -43,7 +43,7 @@ namespace Prototype.Data
             var weaponCfg = _gameBalance.Weapons.FirstOrDefault(_ => _.Id.ToString().Equals(weaponId));
             var weaponLvlCfg = _gameBalance.WeaponLevel.FirstOrDefault(_ => _.Weapon.ToString().Equals(weaponCfg.Id.ToString()));
 
-            var weaponData = ScriptableObject.CreateInstance<WeaponData>();
+            var weaponData = new WeaponData();
 
             weaponData.AttackRateRPM = (float)weaponLvlCfg.FireRateAps * 60f;
             // TODO: add this variable to config
@@ -53,7 +53,7 @@ namespace Prototype.Data
             weaponData.Recoil = (float)weaponLvlCfg.Recoil;
             weaponData.Damage = CreateDescDamage(weaponLvlCfg.Damage);
 
-            var projectileData = ScriptableObject.CreateInstance<ProjectileData>();
+            var projectileData = new ProjectileData();
             projectileData.PrefabAddress = weaponCfg.ProjectilePrefabAddress;
             weaponData.ProjectileData = projectileData;
 
@@ -63,7 +63,7 @@ namespace Prototype.Data
         private PlayerData CreatePlayerData()
         {
             var playerCfg = _gameBalance.Player.PlayerConfig;
-            var playerData = ScriptableObject.CreateInstance<PlayerData>();
+            var playerData = new PlayerData();
 
             playerData.PlayerPrefabAddress = playerCfg.AssetPath;
             playerData.MaxSpeed = (float)playerCfg.MaxSpeed;
@@ -103,7 +103,7 @@ namespace Prototype.Data
             var enemyCfg = _gameBalance.Enemies.FirstOrDefault(_ => _.Id.Equals(enemyId));
             var enemyLvlCfg = _gameBalance.EnemyLevel.FirstOrDefault(_ => _.Level == enemyLevel && _.EnemyId.Equals(enemyCfg.Id));
 
-            var enemyData = ScriptableObject.CreateInstance<EnemyData>();
+            var enemyData = new EnemyData();
 
             enemyData.ModelPrefabAddress = enemyCfg.ModelPrefabAddress;
             enemyData.ViewPrefabAddress = enemyCfg.ViewPrefabAddress;
@@ -142,7 +142,7 @@ namespace Prototype.Data
         private LevelData CreateLevelData(string levelId)
         {
             var levelCfg = _gameBalance.Levels.FirstOrDefault(_ => _.Id.Equals(levelId));
-            var levelData = ScriptableObject.CreateInstance<LevelData>();
+            var levelData = new LevelData();
 
             levelData.EnemySpawnData = CreateEnemySpawnData(levelCfg.EnemySpawnData);
             levelData.LevelSize = (int)levelCfg.LevelSize;
@@ -153,7 +153,7 @@ namespace Prototype.Data
         private LocationData CreateLocationData(string locationId)
         {
             var locationCfg = _gameBalance.Locations.FirstOrDefault(_ => _.Id.Equals(locationId));
-            var locationData = ScriptableObject.CreateInstance<LocationData>();
+            var locationData = new LocationData();
 
             var levelsCfg = _gameBalance.Levels
                 .Where(_ => locationCfg.Levels.Contains(_.Id)).ToArray();

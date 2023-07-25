@@ -12,14 +12,12 @@ namespace Prototype.Model
 
         [Inject]
         public void Construct(
-            MetaData meta,
             GameSessionData session,
             GameEventService eventService,
             WeaponModel weaponModel,
             MarkerDefaulTargetPoint targetPoint,
             TargetHandleModel targetHandle)
         {
-            _playerMeta = meta.Player;
             _playerSession = session.Player;
             _eventService = eventService;
             _weaponModel = weaponModel;
@@ -53,7 +51,7 @@ namespace Prototype.Model
         public int CurrentLevel { get => _playerSession.CurrentLevel; set => _playerSession.CurrentLevel = value; }
         public int SavedLevelUpCounter { get => _playerSession.SavedLevelUpCounter; set => _playerSession.SavedLevelUpCounter = value; }
         public int CurrentExp { get => _playerSession.CurrentExp; set => _playerSession.CurrentExp = value; }
-        public int CurrentLevelExpThreshold => _playerMeta.LevelExpThresholds[CurrentLevel];
+        public int CurrentLevelExpThreshold => _playerSession.LevelExpThresholds[CurrentLevel - 1];
         public WeaponModel WeaponModel => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
@@ -76,7 +74,6 @@ namespace Prototype.Model
         private MarkerDefaulTargetPoint _targetPoint;
         [SerializeField] private TargetHandleModel _targetHandle;
         //
-        private PlayerData _playerMeta;
         private PlayerData _playerSession;
         [SerializeField] private float _rotationSpeed = 9f;
         [SerializeField] private EnemyModel _currentTarget;

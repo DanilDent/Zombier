@@ -1,11 +1,8 @@
-﻿using Sirenix.OdinInspector;
-using Sirenix.Serialization;
-using UnityEngine;
+﻿using Sirenix.Serialization;
 
 namespace Prototype.Data
 {
-    [CreateAssetMenu(fileName = "New Player Data", menuName = "Data/Player Data")]
-    public class PlayerData : SerializedScriptableObject
+    public class PlayerData
     {
         public string PlayerPrefabAddress;
         public float MaxSpeed;

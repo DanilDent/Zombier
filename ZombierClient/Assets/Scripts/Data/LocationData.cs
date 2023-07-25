@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-
-namespace Prototype.Data
+﻿namespace Prototype.Data
 {
-    [CreateAssetMenu(fileName = "New Location Data", menuName = "Data/Location Data")]
-    public class LocationData : ScriptableObject
+    public class LocationData
     {
         public LevelData[] Levels;
         public string LocationLevelPrefabAddress;

@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-
-namespace Prototype.Data
+﻿namespace Prototype.Data
 {
-    [CreateAssetMenu(fileName = "New Level Data", menuName = "Data/Level Data")]
-    public class LevelData : ScriptableObject
+    public class LevelData
     {
         public EnemySpawnData EnemySpawnData;
         public int LevelSize;

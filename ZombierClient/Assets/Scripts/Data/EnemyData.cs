@@ -1,12 +1,9 @@
-using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Prototype.Data
 {
-    [CreateAssetMenu(fileName = "New Enemy Data", menuName = "Data/Enemy Data")]
-    public class EnemyData : SerializedScriptableObject
+    public class EnemyData
     {
         public string ModelPrefabAddress;
         public string ViewPrefabAddress;

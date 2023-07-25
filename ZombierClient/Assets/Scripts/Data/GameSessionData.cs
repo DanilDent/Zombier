@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-
-namespace Prototype.Data
+﻿namespace Prototype.Data
 {
-    [CreateAssetMenu(fileName = "New Gameplay Session Data", menuName = "Data/Gameplay Session Data")]
-    public class GameSessionData : ScriptableObject
+    public class GameSessionData
     {
         public PlayerData Player;
 

@@ -10,7 +10,7 @@ namespace Prototype
     {
         // From inspector
         [SerializeField] private AppData _appData;
-        [SerializeField] private bool _useEditorConfig = true;
+        [SerializeField] private bool _useFirebaseConfig = true;
         // Resolved by app installer 
         private SerializationService _serializationService;
 
@@ -19,11 +19,11 @@ namespace Prototype
             _serializationService = new SerializationService();
 
             // App data
-            if (_useEditorConfig)
+            if (_useFirebaseConfig)
             {
-                // Use data from editor's SO assets
+                // Use data from firebase remote config
+                _appData = new AppData();
                 Container.Bind<AppData>().FromInstance(_appData).AsSingle();
-                Container.Bind<MetaData>().FromInstance(_appData.Meta).AsSingle();
                 Container.Bind<UserData>().FromInstance(_appData.User).AsSingle();
             }
             else
@@ -37,7 +37,6 @@ namespace Prototype
                 // Use data from data base
                 AppData appData = _serializationService.DeserializeAppData();
                 Container.Bind<AppData>().FromInstance(appData).AsSingle();
-                Container.Bind<MetaData>().FromInstance(appData.Meta).AsSingle();
                 Container.Bind<UserData>().FromInstance(appData.User).AsSingle();
             }
             // !App data

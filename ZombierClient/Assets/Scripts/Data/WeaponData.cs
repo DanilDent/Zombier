@@ -1,11 +1,8 @@
-using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using UnityEngine;
 
 namespace Prototype.Data
 {
-    [CreateAssetMenu(fileName = "New Weapon Data", menuName = "Data/Weapon Data")]
-    public class WeaponData : SerializedScriptableObject
+    public class WeaponData
     {
         public float AttackRateRPM;
         public float AttackRange;

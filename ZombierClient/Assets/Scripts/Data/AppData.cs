@@ -1,12 +1,13 @@
-﻿using UnityEngine;
-
-namespace Prototype.Data
+﻿namespace Prototype.Data
 {
-    [CreateAssetMenu(fileName = "New App Data", menuName = "Data/App Data")]
-    public class AppData : ScriptableObject
+    public class AppData
     {
+        public AppData()
+        {
+            User = new UserData();
+        }
+
         // Data
-        public MetaData Meta;
         public UserData User;
         public GameBalanceData GameBalance;
     }

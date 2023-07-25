@@ -76,9 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1843ab6f712bc4197c11d9a71b8cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useFirebaseConfig: 1
-  _usePersistentDataPath: 0
-  _useFirestoreDataBase: 0
+  _useFirebaseConfig: 0
+  _useFirestoreDataBase: 1
 --- !u!1 &7157498780663344092
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,39 +9,39 @@ namespace Prototype.Service
     {
         private const string APP_DATA_PATH = "/APP_DATA.json";
 
-        public string SerializeAppData(AppData appData)
+        public string SerializeUserData(UserData userData)
         {
             string fullPath = Application.persistentDataPath + APP_DATA_PATH;
-            string json = JsonConvert.SerializeObject(appData);
+            string json = JsonConvert.SerializeObject(userData);
             File.WriteAllText(fullPath, json);
             return json;
         }
 
-        public AppData DeserializeAppData()
+        public UserData DeserializeUserData()
         {
             string fullPath = Application.persistentDataPath + APP_DATA_PATH;
             string json = File.ReadAllText(fullPath);
-            AppData appData = JsonConvert.DeserializeObject<AppData>(json);
-            return appData;
+            UserData userData = JsonConvert.DeserializeObject<UserData>(json);
+            return userData;
         }
 
-        public bool TryDeserializeAppData(out AppData appData)
+        public bool TryDeserializeUserData(out UserData userData)
         {
             string fullPath = Application.persistentDataPath + APP_DATA_PATH;
 
             if (!File.Exists(fullPath))
             {
                 Debug.LogError("Cannot find app data.");
-                appData = null;
+                userData = null;
                 return false;
             }
 
             string json = File.ReadAllText(fullPath);
-            appData = JsonConvert.DeserializeObject<AppData>(json);
+            userData = JsonConvert.DeserializeObject<UserData>(json);
             return true;
         }
 
-        public bool AppDataExists()
+        public bool AppDataFolderExists()
         {
             string fullPath = Application.persistentDataPath + APP_DATA_PATH;
             return File.Exists(fullPath);

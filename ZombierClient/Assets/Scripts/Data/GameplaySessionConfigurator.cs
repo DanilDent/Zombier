@@ -10,11 +10,11 @@ namespace Prototype.Data
             _appData = appData;
         }
 
-        public GameSessionData CreateGameSession()
+        public GameSessionData CreateGameSession(string locationId)
         {
             var session = ScriptableObject.CreateInstance<GameSessionData>();
             session.Player = CreatePlayerData();
-            session.Location = CreateLocationData("Id_Locaiton0");
+            session.Location = CreateLocationData(locationId);
             return session;
         }
 

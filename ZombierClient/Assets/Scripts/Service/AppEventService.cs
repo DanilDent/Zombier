@@ -84,7 +84,7 @@ namespace Prototype.Service
 
     public class PlayEventArgs : EventArgs
     {
-        public LocationData LocationData;
+        public string LocationId;
     }
 
     #endregion

@@ -41,9 +41,16 @@ public class GameConfigDBService
     private Task FetchDataAsync()
     {
         Debug.Log("Fetching data...");
+
+
+#if DEBUG
+        var cacheExpirationInterval = TimeSpan.Zero;
+#else
+        var cacheExpirationInterval = TimeSpan.FromHours(12f);
+#endif
         Task fetchTask =
         FirebaseRemoteConfig.DefaultInstance.FetchAsync(
-            TimeSpan.Zero);
+            cacheExpirationInterval);
         return fetchTask.ContinueWithOnMainThread(FetchComplete);
     }
 

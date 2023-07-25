@@ -9,45 +9,50 @@ namespace Prototype.Service
 {
     public class UsersDbService
     {
-        public UsersDbService(AppData appData)
+        public UsersDbService(AppData appData, AuthenticationService authService)
         {
             _db = FirebaseFirestore.DefaultInstance;
             _appData = appData;
+            _authService = authService;
         }
 
         public void SaveUser(UserData userData)
         {
-            var city = new City { Name = "Saratov", State = "Saratov district", Country = "Russia", Capital = false, Population = 20003423 };
-            DocumentReference docRef = _db.Collection("Users").Document("TestUser");
+            DocumentReference docRef = _db.Collection(USERS_COLLECTION_NAME).Document(_authService.CurrentUser.UserId.ToString());
             docRef.SetAsync(userData).ContinueWithOnMainThread(task =>
             {
                 if (task.IsCompleted)
                 {
-                    Debug.Log("Added data to the users document in the users collection.");
+                    Debug.Log("Added data to database.");
                 }
                 else
                 {
-                    Debug.LogError("Failed to add data to the aturing document: " + task.Exception);
+                    Debug.LogError("Failed to add data to database: " + task.Exception);
                 }
             });
         }
 
         public async Task LoadUserAsync()
         {
-            DocumentReference docRef = _db.Collection("Users").Document("TestUser");
+            DocumentReference docRef = _db.Collection(USERS_COLLECTION_NAME).Document(_authService.CurrentUser.UserId.ToString());
             await docRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>
             {
                 DocumentSnapshot snapshot = task.Result;
                 UserData data = snapshot.ConvertTo<UserData>();
+                if (data == null)
+                {
+                    data = new UserData();
+                    SaveUser(data);
+                }
                 _appData.User = data;
                 _appData.User.IsInitComplete = true;
                 Debug.Log($"User data: {JsonConvert.SerializeObject(data)}");
-
-                Debug.Log("Read all data from the users collection.");
             });
         }
 
+        private const string USERS_COLLECTION_NAME = "Users";
         private FirebaseFirestore _db;
+        private AuthenticationService _authService;
         private AppData _appData;
 
         [FirestoreData]

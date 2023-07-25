@@ -39,6 +39,7 @@ namespace Prototype
             Container.Bind<SceneLoaderService>().AsSingle().NonLazy();
             Container.Bind<GameplaySessionConfigurator>().AsSingle();
             Container.Bind<UsersDbService>().AsSingle().NonLazy();
+            Container.Bind<AuthenticationService>().AsSingle().NonLazy();
             // !Services
 
             // Controllers

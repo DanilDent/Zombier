@@ -16,12 +16,14 @@ namespace Prototype.Controller
             AppEventService appEventService,
             AppData appData,
             GameplaySessionConfigurator sessionConfigurator,
-            UsersDbService usersDb)
+            UsersDbService usersDb,
+            AuthenticationService authService)
         {
             _appEventService = appEventService;
             _appData = appData;
             _sessionConfigurator = sessionConfigurator;
             _usersDb = usersDb;
+            _authService = authService;
         }
 
         // Private
@@ -31,10 +33,13 @@ namespace Prototype.Controller
         private AppData _appData;
         private GameplaySessionConfigurator _sessionConfigurator;
         private UsersDbService _usersDb;
+        private AuthenticationService _authService;
 
-        private void Start()
+        private async void Start()
         {
             Application.targetFrameRate = 60;
+
+            await _authService.SingInAnonymouslyAsync();
 
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.MainMenu });
 

@@ -50,7 +50,7 @@ namespace Prototype.Controller
             _appEventService.ResetGameSession += HandleResetGameSession;
         }
 
-        private void Update()
+        private async void Update()
         {
             if (Input.GetKeyDown(KeyCode.S))
             {
@@ -62,6 +62,11 @@ namespace Prototype.Controller
             if (Input.GetKeyDown(KeyCode.F))
             {
                 _usersDb.SaveUser(_appData.User);
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                await _usersDb.LoadUserAsync();
             }
         }
 
@@ -77,14 +82,25 @@ namespace Prototype.Controller
 
         private void OnApplicationPause()
         {
-            _serializationService.SerializeAndSaveUserData(_appData.User);
-            Debug.Log($"Application paused, app data saved to {_serializationService.PersistentAppDataPath}");
+            //_serializationService.SerializeAndSaveUserData(_appData.User);
+            //Debug.Log($"Application paused, app data saved to {_serializationService.PersistentAppDataPath}");
+
+            if (_appData.User == null || !_appData.User.IsInitComplete)
+            {
+                return;
+            }
+
+            _usersDb.SaveUser(_appData.User);
+            Debug.Log($"Application paused, user data saved to database");
         }
 
         private void OnApplicationQuit()
         {
-            _serializationService.SerializeAndSaveUserData(_appData.User);
-            Debug.Log($"Application quitting, app data saved to {_serializationService.PersistentAppDataPath}");
+            //_serializationService.SerializeAndSaveUserData(_appData.User);
+            //Debug.Log($"Application quitting, app data saved to {_serializationService.PersistentAppDataPath}");
+
+            _usersDb.SaveUser(_appData.User);
+            Debug.Log($"Application quitting, user data saved to database");
         }
 
         private void HandleGamePause(object sender, EventArgs e)
@@ -101,6 +117,7 @@ namespace Prototype.Controller
         {
             var newSession = _sessionConfigurator.CreateGameSession(e.LocationId);
             _appData.User.GameSession = newSession.Copy();
+            _usersDb.SaveUser(_appData.User);
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
         }
 
@@ -113,14 +130,17 @@ namespace Prototype.Controller
         private void HandleResetGameSession(object sender, EventArgs e)
         {
             _appData.User.GameSession = null;
+            _usersDb.SaveUser(_appData.User);
             Debug.Log("Game session reset.");
         }
 
         private void HandleSaveGameSession(object sender, PlayerPassedLevelEventArgs e)
         {
             _appData.User.GameSession = e.GameSession.Copy();
-            _serializationService.SerializeAndSaveUserData(_appData.User);
-            Debug.Log($"App data saved to {_serializationService.PersistentAppDataPath}");
+            //_serializationService.SerializeAndSaveUserData(_appData.User);
+            //Debug.Log($"App data saved to {_serializationService.PersistentAppDataPath}");
+            _usersDb.SaveUser(_appData.User);
+            Debug.Log($"User data saved to database");
         }
     }
 }

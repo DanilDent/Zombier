@@ -386,6 +386,9 @@ namespace Prototype.Service
                 Task fetchGameBalanceTask = loadingScreenController.FetchGameBalanceAsync();
                 yield return new WaitUntil(() => fetchGameBalanceTask.IsCompleted);
 
+                Task loadUserProfileTask = loadingScreenController.LoadUserProfileAsync();
+                yield return new WaitUntil(() => loadUserProfileTask.IsCompleted);
+
                 while (!loadingScreenController.IsGameBalanceFetchComplete)
                 {
                     yield return null;

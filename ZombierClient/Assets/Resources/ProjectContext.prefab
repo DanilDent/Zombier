@@ -77,6 +77,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useFirebaseConfig: 1
+  _usePersistentDataPath: 0
+  _useFirestoreDataBase: 0
 --- !u!1 &7157498780663344092
 GameObject:
   m_ObjectHideFlags: 0

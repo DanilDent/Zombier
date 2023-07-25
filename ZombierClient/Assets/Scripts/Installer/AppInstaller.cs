@@ -10,6 +10,8 @@ namespace Prototype
     {
         // From inspector
         [SerializeField] private bool _useFirebaseConfig = true;
+        [SerializeField] private bool _usePersistentDataPath = false;
+        [SerializeField] private bool _useFirestoreDataBase = true;
         // Resolved by app installer 
         private AppData _appData;
         private SerializationService _serializationService;
@@ -26,7 +28,7 @@ namespace Prototype
                 Container.Bind<AppData>().FromInstance(_appData).AsSingle();
                 Container.Bind<UserData>().FromInstance(_appData.User).AsSingle();
             }
-            else
+            else if (_usePersistentDataPath)
             {
                 if (!_serializationService.AppDataFolderExists())
                 {
@@ -40,6 +42,12 @@ namespace Prototype
                 Container.Bind<AppData>().FromInstance(_appData).AsSingle();
                 Container.Bind<UserData>().FromInstance(_appData.User).AsSingle();
             }
+            else if (_useFirestoreDataBase)
+            {
+                Container.Bind<AppData>().FromInstance(_appData).AsSingle();
+                Container.Bind<UserData>().FromInstance(_appData.User).AsSingle();
+            }
+
             // !App data
 
             // Services

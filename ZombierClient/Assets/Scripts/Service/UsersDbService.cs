@@ -1,15 +1,18 @@
 ﻿using Firebase.Extensions;
 using Firebase.Firestore;
+using Newtonsoft.Json;
 using Prototype.Data;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Prototype.Service
 {
     public class UsersDbService
     {
-        public UsersDbService()
+        public UsersDbService(AppData appData)
         {
             _db = FirebaseFirestore.DefaultInstance;
+            _appData = appData;
         }
 
         public void SaveUser(UserData userData)
@@ -29,7 +32,23 @@ namespace Prototype.Service
             });
         }
 
+        public async Task LoadUserAsync()
+        {
+            DocumentReference docRef = _db.Collection("Users").Document("TestUser");
+            await docRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>
+            {
+                DocumentSnapshot snapshot = task.Result;
+                UserData data = snapshot.ConvertTo<UserData>();
+                _appData.User = data;
+                _appData.User.IsInitComplete = true;
+                Debug.Log($"User data: {JsonConvert.SerializeObject(data)}");
+
+                Debug.Log("Read all data from the users collection.");
+            });
+        }
+
         private FirebaseFirestore _db;
+        private AppData _appData;
 
         [FirestoreData]
         public class City

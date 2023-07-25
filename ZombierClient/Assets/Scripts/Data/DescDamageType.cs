@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using Firebase.Firestore;
+using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
 namespace Prototype.Data
 {
     [Serializable]
+    [FirestoreData]
     public struct DescDamageType : IEquatable<DescDamageType>
     {
         public DescDamageType(DamageTypeType type)
@@ -15,10 +17,17 @@ namespace Prototype.Data
             Chance = 0;
         }
 
-        public DamageTypeType Type;
-        [JsonIgnore] public float Value => UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
-        public DescRandomRange ValueRange;
-        public float Chance;
+        [FirestoreProperty]
+        public DamageTypeType Type { get; set; }
+
+        [JsonIgnore]
+        public float Value => UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);
+
+        [FirestoreProperty]
+        public DescRandomRange ValueRange { get; set; }
+
+        [FirestoreProperty]
+        public float Chance { get; set; }
 
         public static DescDamageType operator +(DescDamageType a, DescDamageType b)
         {

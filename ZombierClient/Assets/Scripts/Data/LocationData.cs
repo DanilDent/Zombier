@@ -1,15 +1,33 @@
-﻿namespace Prototype.Data
+﻿using Firebase.Firestore;
+
+namespace Prototype.Data
 {
+    [FirestoreData]
     public class LocationData
     {
-        public LevelData[] Levels;
-        public string LocationLevelPrefabAddress;
+        [FirestoreProperty]
+        public LevelData[] Levels { get; set; }
+
+        [FirestoreProperty]
+        public string LocationLevelPrefabAddress { get; set; }
+
         // Visuals
-        public string GroundPrefabAddress;
-        public string WallPrefabsLabel;
-        public string ObstaclePrefabsLabel;
-        public string ExitPrefabAddress;
-        public string EnvGroundPrefabAddress;
-        public string EnvObstaclePrefabsLabel;
+        [FirestoreProperty]
+        public string GroundPrefabAddress { get; set; }
+
+        [FirestoreProperty]
+        public string WallPrefabsLabel { get; set; }
+
+        [FirestoreProperty]
+        public string ObstaclePrefabsLabel { get; set; }
+
+        [FirestoreProperty]
+        public string ExitPrefabAddress { get; set; }
+
+        [FirestoreProperty]
+        public string EnvGroundPrefabAddress { get; set; }
+
+        [FirestoreProperty]
+        public string EnvObstaclePrefabsLabel { get; set; }
     }
 }

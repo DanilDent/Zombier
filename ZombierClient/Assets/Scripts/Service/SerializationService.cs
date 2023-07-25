@@ -9,7 +9,7 @@ namespace Prototype.Service
     {
         private const string APP_DATA_PATH = "/APP_DATA.json";
 
-        public string SerializeUserData(UserData userData)
+        public string SerializeAndSaveUserData(UserData userData)
         {
             string fullPath = Application.persistentDataPath + APP_DATA_PATH;
             string json = JsonConvert.SerializeObject(userData);
@@ -17,7 +17,7 @@ namespace Prototype.Service
             return json;
         }
 
-        public UserData DeserializeUserData()
+        public UserData DeserializeAndLoadUserData()
         {
             string fullPath = Application.persistentDataPath + APP_DATA_PATH;
             string json = File.ReadAllText(fullPath);
@@ -25,7 +25,7 @@ namespace Prototype.Service
             return userData;
         }
 
-        public bool TryDeserializeUserData(out UserData userData)
+        public bool TryDeserializeAndLoadUserData(out UserData userData)
         {
             string fullPath = Application.persistentDataPath + APP_DATA_PATH;
 

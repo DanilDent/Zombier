@@ -1,10 +1,17 @@
-﻿namespace Prototype.Data
+﻿using Firebase.Firestore;
+
+namespace Prototype.Data
 {
+    [FirestoreData]
     public class GameSessionData
     {
-        public PlayerData Player;
+        [FirestoreProperty]
+        public PlayerData Player { get; set; }
 
-        public int CurrentLevelIndex;
-        public LocationData Location;
+        [FirestoreProperty]
+        public int CurrentLevelIndex { get; set; }
+
+        [FirestoreProperty]
+        public LocationData Location { get; set; }
     }
 }

@@ -1,7 +1,11 @@
+using Firebase.Firestore;
+
 namespace Prototype.Data
 {
+    [FirestoreData]
     public class ProjectileData
     {
-        public string PrefabAddress;
+        [FirestoreProperty]
+        public string PrefabAddress { get; set; }
     }
 }

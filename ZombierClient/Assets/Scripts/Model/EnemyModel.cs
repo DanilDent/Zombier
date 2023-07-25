@@ -2,7 +2,6 @@
 using NodeCanvas.StateMachines;
 using Prototype.Data;
 using Prototype.Extensions;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -64,7 +63,6 @@ namespace Prototype.Model
         public int ExpReward => _data.ExpReward;
         public float MaxSpeed => _data.MaxSpeed;
         public float AttackRange => _data.EnemyAttack.AttackRange;
-        public List<DescAttackStrategy> AttackStrategies => _data.AttackStrategies;
         // Gameplay properties
         public NavMeshAgent Agent => _agent;
         public Rigidbody Rigidbody => _rigidbody;

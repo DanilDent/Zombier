@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Firebase.Firestore;
+using System;
 
 namespace Prototype.Data
 {
     [Serializable]
+    [FirestoreData]
     public struct DescRandomRange : IEquatable<DescRandomRange>
     {
-        public float Min;
-        public float Max;
+        [FirestoreProperty]
+        public float Min { get; set; }
+
+        [FirestoreProperty]
+        public float Max { get; set; }
 
         public static DescRandomRange operator +(DescRandomRange a, DescRandomRange b)
         {

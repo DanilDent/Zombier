@@ -1,14 +1,26 @@
-using Sirenix.Serialization;
+using Firebase.Firestore;
 
 namespace Prototype.Data
 {
+    [FirestoreData]
     public class WeaponData
     {
-        public float AttackRateRPM;
-        public float AttackRange;
-        public float Thrust = 3f;
-        public float Recoil = 0.1f;
-        [OdinSerialize] public DescDamage Damage;
-        public ProjectileData ProjectileData;
+        [FirestoreProperty]
+        public float AttackRateRPM { get; set; }
+
+        [FirestoreProperty]
+        public float AttackRange { get; set; }
+
+        [FirestoreProperty]
+        public float Thrust { get; set; }
+
+        [FirestoreProperty]
+        public float Recoil { get; set; }
+
+        [FirestoreProperty]
+        public DescDamage Damage { get; set; }
+
+        [FirestoreProperty]
+        public ProjectileData ProjectileData { get; set; }
     }
 }

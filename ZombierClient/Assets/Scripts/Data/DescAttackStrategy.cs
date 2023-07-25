@@ -1,16 +1,20 @@
-﻿using System;
+﻿using Firebase.Firestore;
+using System;
 
 namespace Prototype.Data
 {
     [Serializable]
+    [FirestoreData]
     public struct DescAttackStrategy
     {
+        [FirestoreData]
         public enum StrategyType
         {
             Melee = 0,
             Range,
         }
 
-        public StrategyType Type;
+        [FirestoreProperty]
+        public StrategyType Type { get; set; }
     }
 }

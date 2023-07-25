@@ -1,24 +1,45 @@
-using Sirenix.Serialization;
+using Firebase.Firestore;
 using System.Collections.Generic;
 
 namespace Prototype.Data
 {
+    [FirestoreData]
     public class EnemyData
     {
-        public string ModelPrefabAddress;
-        public string ViewPrefabAddress;
-        public float MaxSpeed;
+        [FirestoreProperty]
+        public string ModelPrefabAddress { get; set; }
 
-        [OdinSerialize] public DescDamage Damage;
-        public float CritChance;
-        public float CritMultiplier;
+        [FirestoreProperty]
+        public string ViewPrefabAddress { get; set; }
 
-        public float Health;
-        public float MaxHealth;
-        [OdinSerialize] public DescDamage Resists;
+        [FirestoreProperty]
+        public float MaxSpeed { get; set; }
 
-        public EnemyAttackData EnemyAttack;
-        public List<DescAttackStrategy> AttackStrategies;
-        public int ExpReward;
+        [FirestoreProperty]
+        public DescDamage Damage { get; set; }
+
+        [FirestoreProperty]
+        public float CritChance { get; set; }
+
+        [FirestoreProperty]
+        public float CritMultiplier { get; set; }
+
+        [FirestoreProperty]
+        public float Health { get; set; }
+
+        [FirestoreProperty]
+        public float MaxHealth { get; set; }
+
+        [FirestoreProperty]
+        public DescDamage Resists { get; set; }
+
+        [FirestoreProperty]
+        public EnemyAttackData EnemyAttack { get; set; }
+
+        [FirestoreProperty]
+        public List<DescAttackStrategy> AttackStrategies { get; set; }
+
+        [FirestoreProperty]
+        public int ExpReward { get; set; }
     }
 }

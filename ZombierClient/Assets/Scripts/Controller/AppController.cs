@@ -16,12 +16,14 @@ namespace Prototype.Controller
             AppEventService appEventService,
             AppData appData,
             SerializationService serializationService,
-            GameplaySessionConfigurator sessionConfigurator)
+            GameplaySessionConfigurator sessionConfigurator,
+            UsersDbService usersDb)
         {
             _appEventService = appEventService;
             _appData = appData;
             _serializationService = serializationService;
             _sessionConfigurator = sessionConfigurator;
+            _usersDb = usersDb;
         }
 
         // Private
@@ -31,6 +33,7 @@ namespace Prototype.Controller
         private AppData _appData;
         private SerializationService _serializationService;
         private GameplaySessionConfigurator _sessionConfigurator;
+        private UsersDbService _usersDb;
 
         private void Start()
         {
@@ -51,9 +54,14 @@ namespace Prototype.Controller
         {
             if (Input.GetKeyDown(KeyCode.S))
             {
-                string json = _serializationService.SerializeUserData(_appData.User);
+                string json = _serializationService.SerializeAndSaveUserData(_appData.User);
                 Debug.Log($"App data saved to {_serializationService.PersistentAppDataPath}");
                 Debug.Log($"{json}");
+            }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _usersDb.SaveUser(_appData.User);
             }
         }
 
@@ -69,13 +77,13 @@ namespace Prototype.Controller
 
         private void OnApplicationPause()
         {
-            _serializationService.SerializeUserData(_appData.User);
+            _serializationService.SerializeAndSaveUserData(_appData.User);
             Debug.Log($"Application paused, app data saved to {_serializationService.PersistentAppDataPath}");
         }
 
         private void OnApplicationQuit()
         {
-            _serializationService.SerializeUserData(_appData.User);
+            _serializationService.SerializeAndSaveUserData(_appData.User);
             Debug.Log($"Application quitting, app data saved to {_serializationService.PersistentAppDataPath}");
         }
 
@@ -111,7 +119,7 @@ namespace Prototype.Controller
         private void HandleSaveGameSession(object sender, PlayerPassedLevelEventArgs e)
         {
             _appData.User.GameSession = e.GameSession.Copy();
-            _serializationService.SerializeUserData(_appData.User);
+            _serializationService.SerializeAndSaveUserData(_appData.User);
             Debug.Log($"App data saved to {_serializationService.PersistentAppDataPath}");
         }
     }

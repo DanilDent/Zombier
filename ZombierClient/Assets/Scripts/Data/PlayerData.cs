@@ -1,25 +1,47 @@
-﻿using Sirenix.Serialization;
+﻿using Firebase.Firestore;
 
 namespace Prototype.Data
 {
+    [FirestoreData]
     public class PlayerData
     {
-        public string PlayerPrefabAddress;
-        public float MaxSpeed;
+        [FirestoreProperty]
+        public string PlayerPrefabAddress { get; set; }
 
-        [OdinSerialize] public DescDamage Damage;
-        public float CritChance;
-        public float CritMultiplier;
+        [FirestoreProperty]
+        public float MaxSpeed { get; set; }
 
-        public float Health;
-        public float MaxHealth;
-        [OdinSerialize] public DescDamage Resists;
+        [FirestoreProperty]
+        public DescDamage Damage { get; set; }
 
-        public WeaponData Weapon;
+        [FirestoreProperty]
+        public float CritChance { get; set; }
 
-        public int CurrentLevel;
-        public int SavedLevelUpCounter;
-        public int CurrentExp;
-        public int[] LevelExpThresholds;
+        [FirestoreProperty]
+        public float CritMultiplier { get; set; }
+
+        [FirestoreProperty]
+        public float Health { get; set; }
+
+        [FirestoreProperty]
+        public float MaxHealth { get; set; }
+
+        [FirestoreProperty]
+        public DescDamage Resists { get; set; }
+
+        [FirestoreProperty]
+        public WeaponData Weapon { get; set; }
+
+        [FirestoreProperty]
+        public int CurrentLevel { get; set; }
+
+        [FirestoreProperty]
+        public int SavedLevelUpCounter { get; set; }
+
+        [FirestoreProperty]
+        public int CurrentExp { get; set; }
+
+        [FirestoreProperty]
+        public int[] LevelExpThresholds { get; set; }
     }
 }

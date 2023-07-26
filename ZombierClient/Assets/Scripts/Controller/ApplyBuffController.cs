@@ -153,7 +153,7 @@ namespace Prototype
     /// </summary>
     public class IncreaseDamageBuff : IBuff
     {
-        public IncreaseDamageBuff(DamageTypeType dmgType, float value)
+        public IncreaseDamageBuff(DamageTypeEnum dmgType, float value)
         {
             Type = BuffType.IncreaseDamage;
             _damageType = dmgType;
@@ -164,7 +164,7 @@ namespace Prototype
         // Dependencies
         private GameEventService _eventService;
         // Internal variables
-        private DamageTypeType _damageType;
+        private DamageTypeEnum _damageType;
         private float _value;
 
         public void Apply(PlayerModel player)
@@ -200,43 +200,6 @@ namespace Prototype
     public class BouncingProjectilesBuff : IBuff
     {
         public BuffType Type { get; }
-
-        public void Apply(PlayerModel player)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Cancel(PlayerModel player)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Subscribe(GameEventService eventService)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Unsubscribe(GameEventService eventService)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    /// <summary>
-    /// Player projectiles now make enemies on fire with Chance propability on each hit. Ignited enemies 
-    /// start burning taking Damage every DamageInterval seconds
-    /// </summary>
-    public class FireProjectilesBuff : IBuff
-    {
-        public BuffType Type { get; }
-
-        public DescDamage Damage { get; }
-
-        public float Duration { get; }
-
-        public float DamageIntervalSec { get; }
-
-        public float Chance { get; }
 
         public void Apply(PlayerModel player)
         {

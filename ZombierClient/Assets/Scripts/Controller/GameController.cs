@@ -88,7 +88,7 @@ namespace Prototype.Controller
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { Buff = new IncreaseDamageBuff(DamageTypeType.Physical, 0.25f) });
+                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { Buff = new IncreaseDamageBuff(DamageTypeEnum.Physical, 0.25f) });
             }
         }
 

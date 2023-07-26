@@ -15,7 +15,7 @@ namespace Prototype.Data
             _items = new List<DescDamageType>();
         }
 
-        public DescDamageType this[DamageTypeType t]
+        public DescDamageType this[DamageTypeEnum t]
         {
             get
             {

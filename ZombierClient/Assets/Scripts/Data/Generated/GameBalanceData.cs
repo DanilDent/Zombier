@@ -39,6 +39,33 @@
 
         [JsonProperty("EnemyAttacks")]
         public EnemyAttack[] EnemyAttacks { get; set; }
+
+        [JsonProperty("BuffConfigs")]
+        public BuffConfig[] BuffConfigs { get; set; }
+    }
+
+    public partial class BuffConfig
+    {
+        [JsonProperty("Index")]
+        public long Index { get; set; }
+
+        [JsonProperty("Id")]
+        public string Id { get; set; }
+
+        [JsonProperty("BuffType")]
+        public BuffTypeEnum BuffType { get; set; }
+
+        [JsonProperty("BuffLevel")]
+        public long BuffLevel { get; set; }
+
+        [JsonProperty("Value")]
+        public double Value { get; set; }
+
+        [JsonProperty("DamageType", NullValueHandling = NullValueHandling.Ignore)]
+        public DamageTypeEnum DamageType { get; set; }
+
+        [JsonProperty("Effects")]
+        public EffectEnum Effects { get; set; }
     }
 
     public partial class Damage
@@ -65,7 +92,7 @@
         public string Damage { get; set; }
 
         [JsonProperty("Type")]
-        public DamageTypeType Type { get; set; }
+        public DamageTypeEnum Type { get; set; }
 
         [JsonProperty("Min ")]
         public double Min { get; set; }

@@ -9,7 +9,7 @@ namespace Prototype.Data
     [FirestoreData]
     public struct DescDamageType : IEquatable<DescDamageType>
     {
-        public DescDamageType(DamageTypeType type)
+        public DescDamageType(DamageTypeEnum type)
         {
             Type = type;
 
@@ -18,7 +18,7 @@ namespace Prototype.Data
         }
 
         [FirestoreProperty]
-        public DamageTypeType Type { get; set; }
+        public DamageTypeEnum Type { get; set; }
 
         [JsonIgnore]
         public float Value => UnityEngine.Random.Range(ValueRange.Min, ValueRange.Max);

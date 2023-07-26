@@ -1,4 +1,5 @@
 ﻿using Firebase.Firestore;
+using System.Collections.Generic;
 
 namespace Prototype.Data
 {
@@ -43,5 +44,8 @@ namespace Prototype.Data
 
         [FirestoreProperty]
         public int[] LevelExpThresholds { get; set; }
+
+        [FirestoreProperty]
+        public List<string> AppliedBuffs { get; set; }
     }
 }

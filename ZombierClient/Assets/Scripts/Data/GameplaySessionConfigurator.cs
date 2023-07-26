@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Prototype.Data
@@ -77,6 +78,7 @@ namespace Prototype.Data
             playerData.CurrentLevel = (int)playerCfg.Level;
             playerData.CurrentExp = (int)playerCfg.Exp;
             playerData.LevelExpThresholds = playerCfg.LevelExpThresholds.Select(_ => (int)_).ToArray();
+            playerData.AppliedBuffs = new List<string>();
 
             return playerData;
         }

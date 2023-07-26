@@ -1,6 +1,7 @@
 ﻿using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -9,10 +10,14 @@ namespace Prototype
     public class ApplyBuffController : MonoBehaviour
     {
         [Inject]
-        public void Construct(PlayerModel player, GameEventService eventService)
+        public void Construct(
+            PlayerModel player,
+            GameEventService eventService,
+            BuffFactory buffFactory)
         {
             _player = player;
             _eventService = eventService;
+            _buffFactory = buffFactory;
         }
 
         private void OnEnable()
@@ -27,10 +32,9 @@ namespace Prototype
 
         private void HandleApplyBuff(object sender, GameEventService.PlayerBuffAppliedEventArgs e)
         {
-            IBuff buff = e.Buff;
-            buff.Subscribe(_eventService);
+            IBuff buff = _buffFactory.Create(e.BuffId);
             buff.Apply(_player);
-            Debug.Log($"Buff applied: {buff.Type}");
+            Debug.Log($"Buff applied: {buff.Id}");
         }
 
         // Private
@@ -40,11 +44,60 @@ namespace Prototype
         // Injected
         private PlayerModel _player;
         private GameEventService _eventService;
+        private BuffFactory _buffFactory;
+    }
+
+    public class BuffFactory : PlaceholderFactory<string, IBuff> { }
+
+    public class BuffFromIdFactory : IFactory<string, IBuff>
+    {
+        // Injected
+        private readonly AppData _appData;
+        private readonly GameEventService _eventService;
+        //
+        private readonly GameBalanceData _gameBalance;
+
+        public BuffFromIdFactory(AppData appData, GameEventService eventService)
+        {
+            _appData = appData;
+            _gameBalance = _appData.GameBalance;
+            _eventService = eventService;
+        }
+
+        public IBuff Create(string buffId)
+        {
+            var buffCfg = _gameBalance.BuffConfigs.FirstOrDefault(_ => _.Id.Equals(buffId));
+            IBuff result;
+
+            switch (buffCfg.BuffType)
+            {
+                case BuffTypeEnum.Heal:
+                    result = new HealBuff(buffId, (float)buffCfg.Value, (int)buffCfg.BuffLevel);
+                    break;
+                case BuffTypeEnum.IncreaseMaxHealth:
+                    result = new IncreaseMaxHealthBuff(buffId, (float)buffCfg.Value, (int)buffCfg.BuffLevel);
+                    break;
+                case BuffTypeEnum.IncreaseDamage:
+                    result = new IncreaseDamageBuff(buffId, buffCfg.DamageType, (float)buffCfg.Value, (int)buffCfg.BuffLevel);
+                    break;
+                case BuffTypeEnum.BouncingProjectiles:
+                    result = new BouncingProjectilesBuff(buffId, (int)buffCfg.BuffLevel);
+                    break;
+                default:
+                    throw new System.Exception($"Unknown buff type: {buffCfg.BuffType}");
+            }
+
+            result.Subscribe(_eventService);
+
+            return result;
+        }
     }
 
     public interface IBuff
     {
-        public BuffType Type { get; }
+        public string Id { get; }
+        public BuffTypeEnum Type { get; }
+        public int Level { get; }
 
         public void Subscribe(GameEventService eventService);
         public void Unsubscribe(GameEventService eventService);
@@ -53,29 +106,27 @@ namespace Prototype
         public void Cancel(PlayerModel player);
     }
 
-    public enum BuffType
-    {
-        Heal,
-        IncreaseMaxHealth,
-        IncreaseDamage,
-        BouncingProjectiles,
-        FireProjectiles
-    }
-
     /// <summary>
     /// Restores value% of max health
     /// </summary>
     public class HealBuff : IBuff
     {
-        public HealBuff(float value)
+        public HealBuff(string id, float value, int level)
         {
-            Type = BuffType.Heal;
+            Id = id;
+            Type = BuffTypeEnum.Heal;
             _value = value;
+            Level = level;
         }
 
-        public BuffType Type { get; }
+        public string Id { get; }
+
+        public BuffTypeEnum Type { get; }
+
+        public int Level { get; }
+
+        // Internal variables
         private readonly float _value;
-        //
         private GameEventService _eventService;
 
         public void Apply(PlayerModel player)
@@ -103,13 +154,19 @@ namespace Prototype
     /// </summary>
     public class IncreaseMaxHealthBuff : IBuff
     {
-        public IncreaseMaxHealthBuff(float value)
+        public IncreaseMaxHealthBuff(string id, float value, int level)
         {
-            Type = BuffType.IncreaseMaxHealth;
+            Id = id;
+            Type = BuffTypeEnum.IncreaseMaxHealth;
             _value = value;
+            Level = level;
         }
 
-        public BuffType Type { get; }
+        public string Id { get; }
+
+        public BuffTypeEnum Type { get; }
+
+        public int Level { get; }
         //
         private readonly float _value;
         //
@@ -117,7 +174,7 @@ namespace Prototype
 
         public void Apply(PlayerModel player)
         {
-            player.AppliedBuffs.Add(this);
+            player.AppliedBuffs.Add(Id);
 
             float ratio = player.Health / player.MaxHealth;
             player.MaxHealth = player.MaxHealth * (1f + _value);
@@ -129,7 +186,7 @@ namespace Prototype
 
         public void Cancel(PlayerModel player)
         {
-            player.AppliedBuffs.Remove(this);
+            player.AppliedBuffs.Remove(Id);
 
             float ratio = player.Health / player.MaxHealth;
             player.MaxHealth = player.MaxHealth / (1f + _value);
@@ -153,14 +210,21 @@ namespace Prototype
     /// </summary>
     public class IncreaseDamageBuff : IBuff
     {
-        public IncreaseDamageBuff(DamageTypeEnum dmgType, float value)
+        public IncreaseDamageBuff(string id, DamageTypeEnum dmgType, float value, int level)
         {
-            Type = BuffType.IncreaseDamage;
+            Id = id;
+            Type = BuffTypeEnum.IncreaseDamage;
             _damageType = dmgType;
             _value = value;
+            Level = level;
         }
 
-        public BuffType Type { get; }
+        public string Id { get; }
+
+        public BuffTypeEnum Type { get; }
+
+        public int Level { get; }
+
         // Dependencies
         private GameEventService _eventService;
         // Internal variables
@@ -169,7 +233,7 @@ namespace Prototype
 
         public void Apply(PlayerModel player)
         {
-            player.AppliedBuffs.Add(this);
+            player.AppliedBuffs.Add(Id);
             DescDamageType oldDmgType = player.Damage[_damageType];
             DescDamageType newDmgType = new DescDamageType { Type = _damageType, ValueRange = oldDmgType.ValueRange * (1f + _value), Chance = oldDmgType.Chance };
             player.Damage[_damageType] = newDmgType;
@@ -179,7 +243,7 @@ namespace Prototype
 
         public void Cancel(PlayerModel player)
         {
-            player.AppliedBuffs.Remove(this);
+            player.AppliedBuffs.Remove(Id);
             DescDamageType oldDmgType = player.Damage[_damageType];
             DescDamageType newDmgType = new DescDamageType { ValueRange = oldDmgType.ValueRange / (1f + _value), Chance = oldDmgType.Chance };
             player.Damage[_damageType] = newDmgType;
@@ -199,7 +263,18 @@ namespace Prototype
     /// </summary>
     public class BouncingProjectilesBuff : IBuff
     {
-        public BuffType Type { get; }
+        public BouncingProjectilesBuff(string id, int level)
+        {
+            Id = id;
+            Type = BuffTypeEnum.BouncingProjectiles;
+            Level = level;
+        }
+
+        public string Id { get; }
+
+        public BuffTypeEnum Type { get; }
+
+        public int Level { get; }
 
         public void Apply(PlayerModel player)
         {

@@ -245,7 +245,15 @@ namespace Prototype
                    }
                })
                .NonLazy();
+
             //// !Game entities
+
+            //// Buffs
+
+            Container.BindFactory<string, IBuff, BuffFactory>().FromFactory<BuffFromIdFactory>();
+
+            /// !Buffs
+
 
             // Gameplay Controllers
             Container.Bind<EnemySpawnController>().FromComponentInHierarchy(true).AsSingle();

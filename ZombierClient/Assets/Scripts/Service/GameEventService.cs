@@ -48,7 +48,7 @@ namespace Prototype.Service
 
         public class PlayerBuffAppliedEventArgs : EventArgs
         {
-            public IBuff Buff;
+            public string BuffId;
         }
 
         public class PlayerHealthChangedEventArgs : EventArgs

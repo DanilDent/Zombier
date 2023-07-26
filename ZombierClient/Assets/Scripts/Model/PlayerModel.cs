@@ -27,7 +27,6 @@ namespace Prototype.Model
 
             _damage = new DescDamage();
             _damage = RecalcDamage();
-            AppliedBuffs = new List<IBuff>();
         }
 
         public enum State
@@ -37,7 +36,7 @@ namespace Prototype.Model
             Death,
         };
 
-        public List<IBuff> AppliedBuffs { get; set; }
+        public List<string> AppliedBuffs => _playerSession.AppliedBuffs;
 
         // IDamaging
         public DescDamage Damage => _damage;

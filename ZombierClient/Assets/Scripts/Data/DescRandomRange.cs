@@ -47,6 +47,24 @@ namespace Prototype.Data
             return hash;
         }
 
+        public static DescRandomRange operator *(DescRandomRange t1, float multiplier)
+        {
+            return new DescRandomRange
+            {
+                Min = t1.Min * multiplier,
+                Max = t1.Max * multiplier
+            };
+        }
+
+        public static DescRandomRange operator /(DescRandomRange t1, float delimiter)
+        {
+            return new DescRandomRange
+            {
+                Min = t1.Min / delimiter,
+                Max = t1.Max / delimiter
+            };
+        }
+
         public static bool operator ==(DescRandomRange t1, DescRandomRange t2)
         {
             return t1.Equals(t2);
@@ -55,6 +73,11 @@ namespace Prototype.Data
         public static bool operator !=(DescRandomRange t1, DescRandomRange t2)
         {
             return !t1.Equals(t2);
+        }
+
+        public override string ToString()
+        {
+            return $"({Min}, {Max})";
         }
     }
 }

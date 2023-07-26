@@ -1,5 +1,4 @@
-﻿using Prototype.Data;
-using Prototype.Model;
+﻿using Prototype.Model;
 using Prototype.ObjectPool;
 using Prototype.Service;
 using Prototype.View;
@@ -31,7 +30,7 @@ namespace Prototype.Controller
         private MonoObjectPool<DamageTextUIView> _damageTextPool;
         private MonoObjectPool<ExpTextUIView> _expTextPool;
         //
-        [SerializeField] private DescRandomRange _displayDuration;
+        [SerializeField] private Vector2 _displayDuration;
         private List<DamageTextUIView> _damageTextList;
         private List<ExpTextUIView> _expTextList;
 
@@ -82,7 +81,7 @@ namespace Prototype.Controller
                 DamageTextUIView instance = _damageTextPool.Create(spawnPosition, Quaternion.identity, enabled: false);
                 instance.SetTextValue(e.DamageValue);
                 instance.IsCrit = e.IsCrit;
-                instance.DisplayDuration = Random.Range(_displayDuration.Min, _displayDuration.Max);
+                instance.DisplayDuration = Random.Range(_displayDuration.x, _displayDuration.y);
                 instance.gameObject.SetActive(true);
                 _damageTextList.Add(instance);
                 StartCoroutine(_damageTextPool.Destroy(instance, instance.DisplayDuration, () => _damageTextList.Remove(instance)));

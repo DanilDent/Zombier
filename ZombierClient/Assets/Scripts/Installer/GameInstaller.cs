@@ -257,6 +257,7 @@ namespace Prototype
             Container.Bind<EnemyAIController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<SpawnWorldCanvasUIText>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<ApplyBuffController>().FromComponentInHierarchy(true).AsSingle();
             // !Gameplay Controllers
         }
 

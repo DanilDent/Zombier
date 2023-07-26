@@ -21,6 +21,7 @@ namespace Prototype.Service
 
         public event EventHandler<AttackedEventArgs> Attacked;
         public event EventHandler<DamagedEventArgs> Damaged;
+        public event EventHandler<PlayerHealthChangedEventArgs> PlayerHealthChanged;
         public event EventHandler<EnemyDeathEventArgs> EnemyDeath;
         public event EventHandler<EnemyDeathEventArgs> EnemyDeathInstant;
         public event EventHandler EnemyPreDestroyed;
@@ -39,10 +40,22 @@ namespace Prototype.Service
 
         public event EventHandler ShowSettings;
         public event EventHandler<CurrentLevelChangedEventArgs> CurrentLevelChanged;
+        public event EventHandler<PlayerBuffAppliedEventArgs> PlayerBuffApplied;
 
         #endregion
 
         #region EventArgs
+
+        public class PlayerBuffAppliedEventArgs : EventArgs
+        {
+            public IBuff Buff;
+        }
+
+        public class PlayerHealthChangedEventArgs : EventArgs
+        {
+            public float Health;
+            public float MaxHealth;
+        }
 
         public class PlayerLevelChangedEventArgs : EventArgs
         {
@@ -122,6 +135,16 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnPlayerBuffApplied(PlayerBuffAppliedEventArgs e)
+        {
+            PlayerBuffApplied?.Invoke(this, e);
+        }
+
+        public void OnPlayerHealthChanged(PlayerHealthChangedEventArgs e)
+        {
+            PlayerHealthChanged?.Invoke(this, e);
+        }
 
         public void OnPlayerLevelChanged(PlayerLevelChangedEventArgs e)
         {

@@ -1,5 +1,6 @@
 using Prototype.Data;
 using Prototype.Service;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -25,7 +26,8 @@ namespace Prototype.Model
             _targetHandle = targetHandle;
 
             _damage = new DescDamage();
-            RecalcDamage();
+            _damage = RecalcDamage();
+            AppliedBuffs = new List<IBuff>();
         }
 
         public enum State
@@ -35,8 +37,11 @@ namespace Prototype.Model
             Death,
         };
 
+        public List<IBuff> AppliedBuffs { get; set; }
+
         // IDamaging
         public DescDamage Damage => _damage;
+
         public float CritChance { get => _playerSession.CritChance; set => _playerSession.CritChance = value; }
         public float CritMultiplier { get => _playerSession.CritMultiplier; set => _playerSession.CritMultiplier = value; }
         // !IDamaging
@@ -79,17 +84,19 @@ namespace Prototype.Model
         [SerializeField] private EnemyModel _currentTarget;
         private DescDamage _damage;
 
-        private void RecalcDamage()
+        private DescDamage RecalcDamage()
         {
+            DescDamage damage = new DescDamage();
             foreach (DescDamageType dmg in _playerSession.Weapon.Damage)
             {
-                if (_damage.FindIndex(_ => _.Type == dmg.Type) == -1)
+                if (damage.FindIndex(_ => _.Type == dmg.Type) == -1)
                 {
-                    _damage.Add(new DescDamageType(dmg.Type));
+                    damage.Add(new DescDamageType(dmg.Type));
                 }
 
-                _damage[dmg.Type] += dmg;
+                damage[dmg.Type] += dmg;
             }
+            return damage;
         }
 
         private void OnTriggerEnter(Collider other)

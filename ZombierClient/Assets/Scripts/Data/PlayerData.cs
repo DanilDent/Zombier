@@ -25,6 +25,9 @@ namespace Prototype.Data
         public float Health { get; set; }
 
         [FirestoreProperty]
+        public float HealthRatio { get; set; }
+
+        [FirestoreProperty]
         public float MaxHealth { get; set; }
 
         [FirestoreProperty]

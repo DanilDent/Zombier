@@ -1,4 +1,5 @@
 ﻿using Prototype.Data;
+using Prototype.Extensions;
 using Prototype.Model;
 using Prototype.Service;
 using System.Linq;
@@ -30,11 +31,21 @@ namespace Prototype
             _eventService.PlayerBuffApplied -= HandleApplyBuff;
         }
 
+        private void HandleApplyAllBuffs()
+        {
+            foreach (var buffId in _player.AppliedBuffs)
+            {
+                Buff buff = _buffFactory.Create(buffId);
+                buff.Apply(updateSessionData: false);
+                Debug.Log($"Saved buff applied: {buff.Config.Id}");
+            }
+        }
+
         private void HandleApplyBuff(object sender, GameEventService.PlayerBuffAppliedEventArgs e)
         {
-            IBuff buff = _buffFactory.Create(e.BuffId);
+            Buff buff = _buffFactory.Create(e.BuffId);
             buff.Apply(_player);
-            Debug.Log($"Buff applied: {buff.Id}");
+            Debug.Log($"Buff applied: {buff.Config.Id}");
         }
 
         // Private
@@ -47,241 +58,207 @@ namespace Prototype
         private BuffFactory _buffFactory;
     }
 
-    public class BuffFactory : PlaceholderFactory<string, IBuff> { }
+    public class BuffFactory : PlaceholderFactory<string, Buff> { }
 
-    public class BuffFromIdFactory : IFactory<string, IBuff>
+    public class BuffFromIdFactory : IFactory<string, Buff>
     {
         // Injected
         private readonly AppData _appData;
         private readonly GameEventService _eventService;
+        private readonly PlayerModel _player;
         //
         private readonly GameBalanceData _gameBalance;
 
-        public BuffFromIdFactory(AppData appData, GameEventService eventService)
+        public BuffFromIdFactory(AppData appData, GameEventService eventService, PlayerModel player)
         {
             _appData = appData;
             _gameBalance = _appData.GameBalance;
             _eventService = eventService;
+            _player = player;
         }
 
-        public IBuff Create(string buffId)
+        public Buff Create(string buffId)
         {
-            var buffCfg = _gameBalance.BuffConfigs.FirstOrDefault(_ => _.Id.Equals(buffId));
-            IBuff result;
+            BuffConfig buffCfg = _gameBalance.BuffConfigs.FirstOrDefault(_ => _.Id.Equals(buffId)).Copy();
+            Buff result;
 
             switch (buffCfg.BuffType)
             {
                 case BuffTypeEnum.Heal:
-                    result = new HealBuff(buffId, (float)buffCfg.Value, (int)buffCfg.BuffLevel);
+                    result = new HealBuff(buffCfg, _player, _eventService);
                     break;
                 case BuffTypeEnum.IncreaseMaxHealth:
-                    result = new IncreaseMaxHealthBuff(buffId, (float)buffCfg.Value, (int)buffCfg.BuffLevel);
+                    result = new IncreaseMaxHealthBuff(buffCfg, _player, _eventService);
                     break;
                 case BuffTypeEnum.IncreaseDamage:
-                    result = new IncreaseDamageBuff(buffId, buffCfg.DamageType, (float)buffCfg.Value, (int)buffCfg.BuffLevel);
+                    result = new IncreaseDamageBuff(buffCfg, _player, _eventService);
                     break;
                 case BuffTypeEnum.BouncingProjectiles:
-                    result = new BouncingProjectilesBuff(buffId, (int)buffCfg.BuffLevel);
+                    result = new BouncingProjectilesBuff(buffCfg, _player, _eventService);
                     break;
                 default:
                     throw new System.Exception($"Unknown buff type: {buffCfg.BuffType}");
             }
 
-            result.Subscribe(_eventService);
-
             return result;
         }
     }
 
-    public interface IBuff
+    public abstract class Buff
     {
-        public string Id { get; }
-        public BuffTypeEnum Type { get; }
-        public int Level { get; }
+        public Buff(
+            BuffConfig config,
+            PlayerModel player,
+            GameEventService eventService,
+            GameBalanceData gameBalance)
+        {
+            Config = config;
+            _player = player;
+            _eventService = eventService;
+            _gameBalance = gameBalance;
+        }
 
-        public void Subscribe(GameEventService eventService);
-        public void Unsubscribe(GameEventService eventService);
+        public BuffConfig Config { get; }
         //
-        public void Apply(PlayerModel player);
-        public void Cancel(PlayerModel player);
+        public abstract void Apply(bool updateSessionData = true);
+        public abstract void Cancel(bool updateSessionData = true);
+        //
+        protected PlayerModel _player;
+        protected GameEventService _eventService;
+        protected GameBalanceData _gameBalance;
     }
 
     /// <summary>
     /// Restores value% of max health
     /// </summary>
-    public class HealBuff : IBuff
+    public class HealBuff : Buff
     {
-        public HealBuff(string id, float value, int level)
+        public HealBuff(BuffConfig config, PlayerModel player, GameEventService eventService, GameBalanceData gameBalance)
+            : base(config, player, eventService, gameBalance)
         {
-            Id = id;
-            Type = BuffTypeEnum.Heal;
-            _value = value;
-            Level = level;
         }
 
-        public string Id { get; }
-
-        public BuffTypeEnum Type { get; }
-
-        public int Level { get; }
-
-        // Internal variables
-        private readonly float _value;
-        private GameEventService _eventService;
-
-        public void Apply(PlayerModel player)
+        public override void Apply(bool updateSessionData = true)
         {
-            float newHealth = player.Health + player.MaxHealth * _value;
-            newHealth = Mathf.Clamp(newHealth, 0f, player.MaxHealth);
-            player.Health = newHealth;
+            float newHealth = _player.Health + _player.MaxHealth * (float)Config.Value;
+            newHealth = Mathf.Clamp(newHealth, 0f, _player.MaxHealth);
+            _player.Health = newHealth;
             _eventService.OnPlayerHealthChanged(
-                new GameEventService.PlayerHealthChangedEventArgs { Health = player.Health, MaxHealth = player.MaxHealth });
+                new GameEventService.PlayerHealthChangedEventArgs { Health = _player.Health, MaxHealth = _player.MaxHealth });
         }
 
-        public void Cancel(PlayerModel player) { }
-
-        public void Subscribe(GameEventService eventService)
-        {
-            _eventService = eventService;
-        }
-
-        public void Unsubscribe(GameEventService eventService)
-        { }
+        public override void Cancel(bool updateSessionData = true) { }
     }
 
     /// <summary>
     /// Increase player max health by value%
     /// </summary>
-    public class IncreaseMaxHealthBuff : IBuff
+    public class IncreaseMaxHealthBuff : Buff
     {
-        public IncreaseMaxHealthBuff(string id, float value, int level)
+        public IncreaseMaxHealthBuff(BuffConfig config, PlayerModel player, GameEventService eventService, GameBalanceData gameBalance)
+            : base(config, player, eventService, gameBalance)
         {
-            Id = id;
-            Type = BuffTypeEnum.IncreaseMaxHealth;
-            _value = value;
-            Level = level;
         }
 
-        public string Id { get; }
-
-        public BuffTypeEnum Type { get; }
-
-        public int Level { get; }
-        //
-        private readonly float _value;
-        //
-        private GameEventService _eventService;
-
-        public void Apply(PlayerModel player)
+        public override void Apply(bool updateSessionData = true)
         {
-            player.AppliedBuffs.Add(Id);
+            if (_player.AppliedBuffs.Contains(Config.Id))
+            {
+                return;
+            }
 
-            float ratio = player.Health / player.MaxHealth;
-            player.MaxHealth = player.MaxHealth * (1f + _value);
-            player.Health = player.MaxHealth * ratio;
+            if (updateSessionData)
+            {
+                _player.AppliedBuffs.Add(Config.Id);
+            }
+
+            float ratio = _player.Health / _player.MaxHealth;
+            _player.MaxHealth = _player.MaxHealth * (1f + (float)Config.Value);
+            _player.Health = _player.MaxHealth * ratio;
 
             _eventService.OnPlayerHealthChanged(
-               new GameEventService.PlayerHealthChangedEventArgs { Health = player.Health, MaxHealth = player.MaxHealth });
+               new GameEventService.PlayerHealthChangedEventArgs { Health = _player.Health, MaxHealth = _player.MaxHealth });
         }
 
-        public void Cancel(PlayerModel player)
+        public override void Cancel(bool updateSessionData = true)
         {
-            player.AppliedBuffs.Remove(Id);
+            if (updateSessionData)
+            {
+                _player.AppliedBuffs.Remove(Config.Id);
+            }
 
-            float ratio = player.Health / player.MaxHealth;
-            player.MaxHealth = player.MaxHealth / (1f + _value);
-            player.Health = player.MaxHealth * ratio;
+            float ratio = _player.Health / _player.MaxHealth;
+            _player.MaxHealth = _player.MaxHealth / (1f + (float)Config.Value);
+            _player.Health = _player.MaxHealth * ratio;
 
             _eventService.OnPlayerHealthChanged(
-               new GameEventService.PlayerHealthChangedEventArgs { Health = player.Health, MaxHealth = player.MaxHealth });
+               new GameEventService.PlayerHealthChangedEventArgs { Health = _player.Health, MaxHealth = _player.MaxHealth });
         }
-
-        public void Subscribe(GameEventService eventService)
-        {
-            _eventService = eventService;
-        }
-
-        public void Unsubscribe(GameEventService eventService)
-        { }
     }
 
     /// <summary>
     /// Increases damage of type DamageType by value %
     /// </summary>
-    public class IncreaseDamageBuff : IBuff
+    public class IncreaseDamageBuff : Buff
     {
-        public IncreaseDamageBuff(string id, DamageTypeEnum dmgType, float value, int level)
+        public IncreaseDamageBuff(BuffConfig config, PlayerModel player, GameEventService eventService, GameBalanceData gameBalance)
+            : base(config, player, eventService, gameBalance)
         {
-            Id = id;
-            Type = BuffTypeEnum.IncreaseDamage;
-            _damageType = dmgType;
-            _value = value;
-            Level = level;
         }
 
-        public string Id { get; }
-
-        public BuffTypeEnum Type { get; }
-
-        public int Level { get; }
-
-        // Dependencies
-        private GameEventService _eventService;
-        // Internal variables
-        private DamageTypeEnum _damageType;
-        private float _value;
-
-        public void Apply(PlayerModel player)
+        public override void Apply(bool updateSessionData = true)
         {
-            player.AppliedBuffs.Add(Id);
-            DescDamageType oldDmgType = player.Damage[_damageType];
-            DescDamageType newDmgType = new DescDamageType { Type = _damageType, ValueRange = oldDmgType.ValueRange * (1f + _value), Chance = oldDmgType.Chance };
-            player.Damage[_damageType] = newDmgType;
+            if (_player.AppliedBuffs.Contains(Config.Id))
+            {
+                return;
+            }
+
+            if (updateSessionData)
+            {
+                _player.AppliedBuffs.Add(Config.Id);
+            }
+
+            DescDamageType oldDmgType = _player.Damage[Config.DamageType];
+            DescDamageType newDmgType = new DescDamageType
+            {
+                Type = Config.DamageType,
+                ValueRange = oldDmgType.ValueRange * (1f + (float)Config.Value),
+                Chance = oldDmgType.Chance
+            };
+            _player.Damage[Config.DamageType] = newDmgType;
             Debug.Log($"old value range: {oldDmgType.ValueRange}");
             Debug.Log($"new value range: {newDmgType.ValueRange}");
         }
 
-        public void Cancel(PlayerModel player)
+        public override void Cancel(bool updateSessionData = true)
         {
-            player.AppliedBuffs.Remove(Id);
-            DescDamageType oldDmgType = player.Damage[_damageType];
-            DescDamageType newDmgType = new DescDamageType { ValueRange = oldDmgType.ValueRange / (1f + _value), Chance = oldDmgType.Chance };
-            player.Damage[_damageType] = newDmgType;
-        }
+            if (updateSessionData)
+            {
+                _player.AppliedBuffs.Remove(Config.Id);
+            }
 
-        public void Subscribe(GameEventService eventService)
-        {
-            _eventService = eventService;
+            DescDamageType oldDmgType = _player.Damage[Config.DamageType];
+            DescDamageType newDmgType = new DescDamageType { ValueRange = oldDmgType.ValueRange / (1f + (float)Config.Value), Chance = oldDmgType.Chance };
+            _player.Damage[Config.DamageType] = newDmgType;
         }
-
-        public void Unsubscribe(GameEventService eventService)
-        { }
     }
 
     /// <summary>
     /// Player projectiles now bounce from walls and obstacles
     /// </summary>
-    public class BouncingProjectilesBuff : IBuff
+    public class BouncingProjectilesBuff : Buff
     {
-        public BouncingProjectilesBuff(string id, int level)
+        public BouncingProjectilesBuff(BuffConfig config, PlayerModel player, GameEventService eventService, GameBalanceData gameBalance)
+            : base(config, player, eventService, gameBalance)
         {
-            Id = id;
-            Type = BuffTypeEnum.BouncingProjectiles;
-            Level = level;
         }
 
-        public string Id { get; }
-
-        public BuffTypeEnum Type { get; }
-
-        public int Level { get; }
-
-        public void Apply(PlayerModel player)
+        public override void Apply(bool updateSessionData = true)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Cancel(PlayerModel player)
+        public override void Cancel(bool updateSessionData = true)
         {
             throw new System.NotImplementedException();
         }

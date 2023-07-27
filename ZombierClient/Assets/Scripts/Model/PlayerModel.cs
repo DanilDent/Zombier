@@ -46,7 +46,19 @@ namespace Prototype.Model
         // !IDamaging
 
         // IDamageable
-        public float Health { get => _playerSession.Health; set => _playerSession.Health = value; }
+        public float Health
+        {
+            get
+            {
+                return MaxHealth * _playerSession.HealthRatio;
+            }
+            set
+            {
+                float ratio = (float)value / MaxHealth;
+                _playerSession.HealthRatio = ratio;
+            }
+        }
+
         public float MaxHealth { get => _playerSession.MaxHealth; set => _playerSession.MaxHealth = value; }
         public DescDamage Resists => _playerSession.Resists;
         // !IDamageable

@@ -250,7 +250,7 @@ namespace Prototype
 
             //// Buffs
 
-            Container.BindFactory<string, IBuff, BuffFactory>().FromFactory<BuffFromIdFactory>();
+            Container.BindFactory<string, Buff, BuffFactory>().FromFactory<BuffFromIdFactory>();
 
             /// !Buffs
 

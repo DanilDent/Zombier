@@ -1,6 +1,7 @@
 ﻿using Prototype.Controller;
 using Prototype.Data;
 using Prototype.Service;
+using Prototype.Timer;
 using UnityEngine;
 using Zenject;
 
@@ -40,6 +41,7 @@ namespace Prototype
             Container.Bind<GameplaySessionConfigurator>().AsSingle();
             Container.Bind<UsersDbService>().AsSingle().NonLazy();
             Container.Bind<AuthenticationService>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<TimerService>().AsSingle().NonLazy();
             // !Services
 
             // Controllers

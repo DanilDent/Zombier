@@ -66,7 +66,7 @@ namespace Prototype.ActionTasks
             {
                 if (Vector3.Distance(agent.transform.position, Player.value.transform.position) < agent.AttackRange)
                 {
-                    EventService.value.OnAttacked(new GameEventService.AttackedEventArgs { Attacker = agent, Defender = Player.value });
+                    EventService.value.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = agent, Defender = Player.value });
                 }
             }
         }

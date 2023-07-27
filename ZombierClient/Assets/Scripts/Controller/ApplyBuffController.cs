@@ -273,6 +273,8 @@ namespace Prototype
             _player.Damage[Config.DamageType] = newDmgType;
             Debug.Log($"old value range: {oldDmgType.ValueRange}");
             Debug.Log($"new value range: {newDmgType.ValueRange}");
+
+
         }
 
         public override void Cancel(bool updateSessionData = true)

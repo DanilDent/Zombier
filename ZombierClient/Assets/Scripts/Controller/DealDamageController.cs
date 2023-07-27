@@ -15,17 +15,17 @@ public class DealDamageController : MonoBehaviour
 
     private void OnEnable()
     {
-        _eventService.Attacked += HandleDamagedEvent;
+        _eventService.DamageDealt += HandleDamageDealt;
     }
 
     private void OnDisable()
     {
-        _eventService.Attacked -= HandleDamagedEvent;
+        _eventService.DamageDealt -= HandleDamageDealt;
     }
 
     private GameEventService _eventService;
 
-    private void HandleDamagedEvent(object sender, GameEventService.AttackedEventArgs e)
+    private void HandleDamageDealt(object sender, GameEventService.DamageDealtEventArgs e)
     {
         IDamaging attacker = e.Attacker;
         IDamageable defender = e.Defender;
@@ -73,5 +73,19 @@ public class DealDamageController : MonoBehaviour
                 _eventService.OnPlayerDeath();
             }
         }
+    }
+
+    private void ApplyEffects(IDamaging attacker, IDamageable defender)
+    {
+        // Apply damage effects
+        //foreach (string effectId in attacker.DamagingEffects)
+        //{
+        //    EffectConfig effectCfg = _gameBalance.EffectConfigs.FirstOrDefault(_ => _.Id.Equals(effectId));
+        //    if (Helpers.TryRandom(effectCfg.Chance))
+        //    {
+        //        _eventService.OnEffectApplied(effectCfg, defender);
+        //        break;
+        //    }
+        //}
     }
 }

@@ -36,7 +36,7 @@ namespace Prototype.Model
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
             {
-                _eventService.OnAttacked(new GameEventService.AttackedEventArgs { Attacker = Sender, Defender = damageable });
+                _eventService.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = Sender, Defender = damageable });
 
                 if (damageable is EnemyModel cast)
                 {
@@ -55,7 +55,7 @@ namespace Prototype.Model
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
             {
-                _eventService.OnAttacked(new GameEventService.AttackedEventArgs { Attacker = Sender, Defender = damageable });
+                _eventService.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = Sender, Defender = damageable });
 
                 if (damageable is EnemyModel cast)
                 {

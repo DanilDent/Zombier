@@ -2,6 +2,7 @@
 using NodeCanvas.StateMachines;
 using Prototype.Data;
 using Prototype.Extensions;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
@@ -35,6 +36,7 @@ namespace Prototype.Model
 
             _damage = new DescDamage();
             RecalcDamage();
+            DamagingEffects = new List<EffectEnum>();
         }
 
         public class Factory : PlaceholderFactory<IdData, EnemyData, EnemyModel> { }
@@ -53,6 +55,7 @@ namespace Prototype.Model
         public DescDamage Damage => _damage;
         public float CritChance { get => _data.CritChance; set => _data.CritChance = value; }
         public float CritMultiplier { get => _data.CritMultiplier; set => _data.CritMultiplier = value; }
+        public List<EffectEnum> DamagingEffects { get; private set; }
         // !IDamaging
         // IDamageable
         public float Health { get => _data.Health; set => _data.Health = value; }

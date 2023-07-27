@@ -173,8 +173,10 @@ namespace Prototype
             Container.BindFactory<UnityEngine.Object, EnemyProjectileModel, PoolObjectFactory<EnemyProjectileModel>>()
                 .FromFactory<PrefabFactory<EnemyProjectileModel>>();
 
-            Container.Bind<MonoObjectPool<PlayerProjectileModel>>()
-                .AsSingle()
+            Container.Bind<IMonoObjectPool<PlayerProjectileModel>>()
+                .WithId("DefaultPlayerProjectileObjectPool")
+                .To<MonoObjectPool<PlayerProjectileModel>>()
+                .AsCached()
                 .OnInstantiated((ctx, obj) =>
                 {
                     if (obj is MonoObjectPool<PlayerProjectileModel> pool)
@@ -182,6 +184,25 @@ namespace Prototype
                         var prefab = _assetLoader.GetComponent<PlayerProjectileModel>(_currentGameSession.Player.Weapon.ProjectileData.PrefabAddress);
                         var transformContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
                         pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer);
+                    }
+                })
+                .NonLazy();
+
+            Container.Bind<IMonoObjectPool<PlayerProjectileModel>>()
+                .WithId("BouncePlayerProjectileObjectPool")
+                .To<MonoObjectPool<PlayerProjectileModel>>()
+                .AsCached()
+                .OnInstantiated((ctx, obj) =>
+                {
+                    if (obj is MonoObjectPool<PlayerProjectileModel> pool)
+                    {
+                        var prefab = _assetLoader.GetComponent<PlayerProjectileModel>(_currentGameSession.Player.Weapon.ProjectileData.PrefabAddress);
+                        var transformContainer = transform.GetComponentInChildren<MarkerProjectiles>().transform;
+                        pool.Initialize(prefab, _gameConfig.ProjectilesPoolSize, transformContainer, (instance) =>
+                        {
+                            instance.GetComponent<Collider>().material = _gameConfig.ProjectileBouncePhysMat;
+                            instance.Init(isBouncing: true);
+                        });
                     }
                 })
                 .NonLazy();

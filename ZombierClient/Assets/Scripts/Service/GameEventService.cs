@@ -41,6 +41,7 @@ namespace Prototype.Service
         public event EventHandler ShowSettings;
         public event EventHandler<CurrentLevelChangedEventArgs> CurrentLevelChanged;
         public event EventHandler<PlayerBuffAppliedEventArgs> PlayerBuffApplied;
+        public event EventHandler BounceProjectilesEnabled;
 
         #endregion
 
@@ -135,6 +136,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnBounceProjectilesEnabled()
+        {
+            BounceProjectilesEnabled?.Invoke(this, EventArgs.Empty);
+        }
 
         public void OnPlayerBuffApplied(PlayerBuffAppliedEventArgs e)
         {

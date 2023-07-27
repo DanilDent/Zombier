@@ -90,6 +90,10 @@ namespace Prototype.Controller
             {
                 _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Physical_Level_1" });
             }
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_BouncingProjectiles" });
+            }
         }
 
         private void FireInitUIEvents()

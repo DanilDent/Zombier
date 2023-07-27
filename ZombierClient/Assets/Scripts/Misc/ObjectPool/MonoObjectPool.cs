@@ -6,8 +6,10 @@ using Zenject;
 
 namespace Prototype.ObjectPool
 {
-    public class MonoObjectPool<T>
-    where T : PoolObject
+
+
+    public class MonoObjectPool<T> : IMonoObjectPool<T>
+        where T : PoolObject
     {
         private PoolObjectFactory<T> _factory;
         private Queue<T> _queue;
@@ -29,6 +31,20 @@ namespace Prototype.ObjectPool
             for (int i = 0; i < count; ++i)
             {
                 T instance = Instantiate(prefab);
+                instance.gameObject.SetActive(false);
+                _queue.Enqueue(instance);
+            }
+        }
+
+        public void Initialize(T prefab, int count, Transform transformContainer, Action<T> onInstantiated)
+        {
+            _prefab = prefab;
+            _transformContainer = transformContainer;
+
+            for (int i = 0; i < count; ++i)
+            {
+                T instance = Instantiate(prefab);
+                onInstantiated(instance);
                 instance.gameObject.SetActive(false);
                 _queue.Enqueue(instance);
             }

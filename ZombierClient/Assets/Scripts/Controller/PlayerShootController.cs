@@ -16,12 +16,10 @@ namespace Prototype.Controller
         public void Construct(
             PlayerModel player,
             List<EnemyModel> enemies,
-            MonoObjectPool<PlayerProjectileModel> projectilePool,
             GameEventService eventService)
         {
             _player = player;
             _enemies = enemies;
-            _projectilePool = projectilePool;
             _eventService = eventService;
         }
 
@@ -32,20 +30,29 @@ namespace Prototype.Controller
         // Injected
         private PlayerModel _player;
         private List<EnemyModel> _enemies;
-        private MonoObjectPool<PlayerProjectileModel> _projectilePool;
+        [Inject(Id = "DefaultPlayerProjectileObjectPool")] private IMonoObjectPool<PlayerProjectileModel> _defaultProjectilePool;
+        [Inject(Id = "BouncePlayerProjectileObjectPool")] private IMonoObjectPool<PlayerProjectileModel> _bounceProjectilePool;
         private GameEventService _eventService;
         //
         private float _timer;
         private float _timerMax;
+        private IMonoObjectPool<PlayerProjectileModel> _projectilePool;
 
         private void OnEnable()
         {
             _eventService.PlayerShootAnimationEvent += Shoot;
+            _eventService.BounceProjectilesEnabled += HandleBounceProjectilesEnabled;
+        }
+
+        private void Start()
+        {
+            _projectilePool = _defaultProjectilePool;
         }
 
         private void OnDisable()
         {
             _eventService.PlayerShootAnimationEvent -= Shoot;
+            _eventService.BounceProjectilesEnabled -= HandleBounceProjectilesEnabled;
         }
 
         private void Update()
@@ -69,6 +76,11 @@ namespace Prototype.Controller
             }
         }
 
+        private void HandleBounceProjectilesEnabled(object sender, EventArgs e)
+        {
+            _projectilePool = _bounceProjectilePool;
+        }
+
         private void Shoot(object sender, EventArgs e)
         {
             if (_player.CurrentTarget != null)
@@ -87,7 +99,7 @@ namespace Prototype.Controller
 
                 projectile.Rigidbody.AddForce(shootDir * weapon.Thrust, ForceMode.Impulse);
 
-                float projectileLifeTime = 3f;
+                float projectileLifeTime = 7f;
                 StartCoroutine(_projectilePool.Destroy(projectile, projectileLifeTime));
             }
         }

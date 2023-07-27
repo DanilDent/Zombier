@@ -273,22 +273,20 @@ namespace Prototype
 
         public override void Apply(bool updateSessionData = true)
         {
-            throw new System.NotImplementedException();
+            if (_player.AppliedBuffs.Contains(Config.Id) && updateSessionData)
+            {
+                return;
+            }
+
+            if (updateSessionData)
+            {
+                _player.AppliedBuffs.Add(Config.Id);
+            }
+
+            _eventService.OnBounceProjectilesEnabled();
         }
 
         public override void Cancel(bool updateSessionData = true)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Subscribe(GameEventService eventService)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Unsubscribe(GameEventService eventService)
-        {
-            throw new System.NotImplementedException();
-        }
+        { }
     }
 }

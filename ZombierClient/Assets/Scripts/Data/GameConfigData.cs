@@ -14,5 +14,8 @@ namespace Prototype.Data
         public string DeathVFXPrefabAddress;
         public string DamageTextUIPrefabAddress;
         public string ExpTextUIPrefabAddress;
+        //
+        public PhysicMaterial ProjectileDefaultPhysMat;
+        public PhysicMaterial ProjectileBouncePhysMat;
     }
 }

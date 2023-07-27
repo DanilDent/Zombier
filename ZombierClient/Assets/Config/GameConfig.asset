@@ -21,3 +21,7 @@ MonoBehaviour:
   DeathVFXPrefabAddress: DeathBloodSplashPS
   DamageTextUIPrefabAddress: DamageTextUI
   ExpTextUIPrefabAddress: ExpTextUI
+  ProjectileDefaultPhysMat: {fileID: 13400000, guid: f690208a0686db04abd0c0de9ef96f2c,
+    type: 2}
+  ProjectileBouncePhysMat: {fileID: 13400000, guid: d06e41eb821fb1549a4fa150b729ff7f,
+    type: 2}

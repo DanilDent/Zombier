@@ -7,21 +7,32 @@ namespace Prototype.Model
 {
     public class PlayerProjectileModel : ProjectileModelBase
     {
-        // Public
-
-        [Inject]
-        public void Construct(MonoObjectPool<PlayerProjectileModel> pool)
+        public void Init(bool isBouncing = false)
         {
-            _pool = pool;
+            _isBouncing = isBouncing;
         }
 
         // Private
 
         // Injected
-        private MonoObjectPool<PlayerProjectileModel> _pool;
+        [Inject(Id = "DefaultPlayerProjectileObjectPool")] private IMonoObjectPool<PlayerProjectileModel> _defaultPool;
+        [Inject(Id = "BouncePlayerProjectileObjectPool")] private IMonoObjectPool<PlayerProjectileModel> _bouncingPool;
         //
+        private bool _isBouncing;
 
         private void OnCollisionEnter(Collision collision)
+        {
+            if (!_isBouncing)
+            {
+                HandleCollisionDefault(collision);
+            }
+            else
+            {
+                HandleCollisionBouncing(collision);
+            }
+        }
+
+        private void HandleCollisionDefault(Collision collision)
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
             {
@@ -37,7 +48,27 @@ namespace Prototype.Model
                     });
                 }
             }
-            _pool.Destroy(this);
+            _defaultPool.Destroy(this);
+        }
+
+        private void HandleCollisionBouncing(Collision collision)
+        {
+            if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
+            {
+                _eventService.OnAttacked(new GameEventService.AttackedEventArgs { Attacker = Sender, Defender = damageable });
+
+                if (damageable is EnemyModel cast)
+                {
+                    _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
+                    {
+                        EntityId = cast.Id,
+                        HitDirection = _rigidbody.velocity,
+                        HitPosition = transform.position
+                    });
+                }
+
+                _bouncingPool.Destroy(this);
+            }
         }
     }
 }

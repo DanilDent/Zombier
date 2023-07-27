@@ -17,16 +17,20 @@ namespace Prototype.Model
             GameEventService eventService,
             WeaponModel weaponModel,
             MarkerDefaulTargetPoint targetPoint,
-            TargetHandleModel targetHandle)
+            TargetHandleModel targetHandle,
+            AppData appData)
         {
             _playerSession = session.Player;
             _eventService = eventService;
             _weaponModel = weaponModel;
             _targetPoint = targetPoint;
             _targetHandle = targetHandle;
+            _gameBalance = appData.GameBalance;
 
             _damage = new DescDamage();
             _damage = RecalcDamage();
+
+            MaxHealth = _gameBalance.Player.PlayerConfig.MaxHealth;
         }
 
         public enum State
@@ -59,7 +63,9 @@ namespace Prototype.Model
             }
         }
 
-        public float MaxHealth { get => _playerSession.MaxHealth; set => _playerSession.MaxHealth = value; }
+        public float HealthRatio => _playerSession.HealthRatio;
+
+        public float MaxHealth { get; set; }
         public DescDamage Resists => _playerSession.Resists;
         // !IDamageable
 
@@ -85,6 +91,7 @@ namespace Prototype.Model
         // Dependencies
 
         // Injected
+        private GameBalanceData _gameBalance;
         private GameEventService _eventService;
         private WeaponModel _weaponModel;
         private MarkerDefaulTargetPoint _targetPoint;

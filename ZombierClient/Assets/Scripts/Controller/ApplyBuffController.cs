@@ -26,18 +26,38 @@ namespace Prototype
             _eventService.PlayerBuffApplied += HandleApplyBuff;
         }
 
+        private void Start()
+        {
+            ApplyAllBuffs();
+        }
+
         private void OnDisable()
         {
             _eventService.PlayerBuffApplied -= HandleApplyBuff;
         }
 
-        private void HandleApplyAllBuffs()
+        private void OnDestroy()
+        {
+            CancelAllBuffs();
+        }
+
+        private void ApplyAllBuffs()
         {
             foreach (var buffId in _player.AppliedBuffs)
             {
                 Buff buff = _buffFactory.Create(buffId);
                 buff.Apply(updateSessionData: false);
                 Debug.Log($"Saved buff applied: {buff.Config.Id}");
+            }
+        }
+
+        private void CancelAllBuffs()
+        {
+            foreach (var buffId in _player.AppliedBuffs)
+            {
+                Buff buff = _buffFactory.Create(buffId);
+                buff.Cancel(updateSessionData: false);
+                Debug.Log($"Buff canceled runtime");
             }
         }
 
@@ -85,16 +105,16 @@ namespace Prototype
             switch (buffCfg.BuffType)
             {
                 case BuffTypeEnum.Heal:
-                    result = new HealBuff(buffCfg, _player, _eventService);
+                    result = new HealBuff(buffCfg, _player, _eventService, _gameBalance);
                     break;
                 case BuffTypeEnum.IncreaseMaxHealth:
-                    result = new IncreaseMaxHealthBuff(buffCfg, _player, _eventService);
+                    result = new IncreaseMaxHealthBuff(buffCfg, _player, _eventService, _gameBalance);
                     break;
                 case BuffTypeEnum.IncreaseDamage:
-                    result = new IncreaseDamageBuff(buffCfg, _player, _eventService);
+                    result = new IncreaseDamageBuff(buffCfg, _player, _eventService, _gameBalance);
                     break;
                 case BuffTypeEnum.BouncingProjectiles:
-                    result = new BouncingProjectilesBuff(buffCfg, _player, _eventService);
+                    result = new BouncingProjectilesBuff(buffCfg, _player, _eventService, _gameBalance);
                     break;
                 default:
                     throw new System.Exception($"Unknown buff type: {buffCfg.BuffType}");
@@ -162,7 +182,7 @@ namespace Prototype
 
         public override void Apply(bool updateSessionData = true)
         {
-            if (_player.AppliedBuffs.Contains(Config.Id))
+            if (_player.AppliedBuffs.Contains(Config.Id) && updateSessionData)
             {
                 return;
             }
@@ -172,9 +192,8 @@ namespace Prototype
                 _player.AppliedBuffs.Add(Config.Id);
             }
 
-            float ratio = _player.Health / _player.MaxHealth;
-            _player.MaxHealth = _player.MaxHealth * (1f + (float)Config.Value);
-            _player.Health = _player.MaxHealth * ratio;
+            float baseMaxHealth = _gameBalance.Player.PlayerConfig.MaxHealth;
+            _player.MaxHealth = baseMaxHealth * (1f + (float)Config.Value);
 
             _eventService.OnPlayerHealthChanged(
                new GameEventService.PlayerHealthChangedEventArgs { Health = _player.Health, MaxHealth = _player.MaxHealth });
@@ -187,9 +206,8 @@ namespace Prototype
                 _player.AppliedBuffs.Remove(Config.Id);
             }
 
-            float ratio = _player.Health / _player.MaxHealth;
-            _player.MaxHealth = _player.MaxHealth / (1f + (float)Config.Value);
-            _player.Health = _player.MaxHealth * ratio;
+            float baseMaxHealth = _gameBalance.Player.PlayerConfig.MaxHealth;
+            _player.MaxHealth = baseMaxHealth;
 
             _eventService.OnPlayerHealthChanged(
                new GameEventService.PlayerHealthChangedEventArgs { Health = _player.Health, MaxHealth = _player.MaxHealth });
@@ -208,7 +226,7 @@ namespace Prototype
 
         public override void Apply(bool updateSessionData = true)
         {
-            if (_player.AppliedBuffs.Contains(Config.Id))
+            if (_player.AppliedBuffs.Contains(Config.Id) && updateSessionData)
             {
                 return;
             }

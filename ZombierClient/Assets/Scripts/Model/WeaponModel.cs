@@ -39,6 +39,9 @@ namespace Prototype.Model
                 _weaponData.AttackRateRPM = value;
             }
         }
+
+        public DescDamage Damage => _weaponData.Damage;
+
         public Transform ShootingPoint => _shootingPoint.transform;
         public float Thrust => _weaponData.Thrust;
         public float Recoil => _weaponData.Recoil;

@@ -51,7 +51,7 @@ namespace Prototype.Controller
         private void Update()
         {
             int secInMin = 60;
-            float rps = (float)_player.WeaponModel.FireRateRPM / secInMin;
+            float rps = (float)_player.Weapon.FireRateRPM / secInMin;
             _timerMax = 1f / rps;
 
             if (_player.CurrentState == PlayerModel.State.Fight)
@@ -73,7 +73,7 @@ namespace Prototype.Controller
         {
             if (_player.CurrentTarget != null)
             {
-                WeaponModel weapon = _player.WeaponModel;
+                WeaponModel weapon = _player.Weapon;
                 Vector3 shootDir = (_player.CurrentTarget.TargetPoint.position - weapon.ShootingPoint.position).normalized;
 
                 float recoilX = UnityEngine.Random.Range(-weapon.Recoil, weapon.Recoil);

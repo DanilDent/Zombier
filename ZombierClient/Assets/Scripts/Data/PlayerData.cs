@@ -13,22 +13,13 @@ namespace Prototype.Data
         public float MaxSpeed { get; set; }
 
         [FirestoreProperty]
-        public DescDamage Damage { get; set; }
-
-        [FirestoreProperty]
         public float CritChance { get; set; }
 
         [FirestoreProperty]
         public float CritMultiplier { get; set; }
 
         [FirestoreProperty]
-        public float Health { get; set; }
-
-        [FirestoreProperty]
         public float HealthRatio { get; set; }
-
-        [FirestoreProperty]
-        public float MaxHealth { get; set; }
 
         [FirestoreProperty]
         public DescDamage Resists { get; set; }

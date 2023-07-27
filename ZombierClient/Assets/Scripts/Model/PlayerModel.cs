@@ -27,10 +27,8 @@ namespace Prototype.Model
             _targetHandle = targetHandle;
             _gameBalance = appData.GameBalance;
 
-            _damage = new DescDamage();
-            _damage = RecalcDamage();
-
             MaxHealth = _gameBalance.Player.PlayerConfig.MaxHealth;
+            _damage = RecalcDamage();
         }
 
         public enum State
@@ -74,7 +72,7 @@ namespace Prototype.Model
         public int SavedLevelUpCounter { get => _playerSession.SavedLevelUpCounter; set => _playerSession.SavedLevelUpCounter = value; }
         public int CurrentExp { get => _playerSession.CurrentExp; set => _playerSession.CurrentExp = value; }
         public int CurrentLevelExpThreshold => _playerSession.LevelExpThresholds[CurrentLevel - 1];
-        public WeaponModel WeaponModel => _weaponModel;
+        public WeaponModel Weapon => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
         public float Speed

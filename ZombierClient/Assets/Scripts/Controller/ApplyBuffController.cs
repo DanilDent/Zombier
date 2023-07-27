@@ -236,7 +236,7 @@ namespace Prototype
                 _player.AppliedBuffs.Add(Config.Id);
             }
 
-            DescDamageType oldDmgType = _player.Damage[Config.DamageType];
+            DescDamageType oldDmgType = _player.Weapon.Damage[Config.DamageType];
             DescDamageType newDmgType = new DescDamageType
             {
                 Type = Config.DamageType,
@@ -255,8 +255,8 @@ namespace Prototype
                 _player.AppliedBuffs.Remove(Config.Id);
             }
 
-            DescDamageType oldDmgType = _player.Damage[Config.DamageType];
-            DescDamageType newDmgType = new DescDamageType { ValueRange = oldDmgType.ValueRange / (1f + (float)Config.Value), Chance = oldDmgType.Chance };
+            DescDamageType oldDmgType = _player.Weapon.Damage[Config.DamageType];
+            DescDamageType newDmgType = oldDmgType;
             _player.Damage[Config.DamageType] = newDmgType;
         }
     }

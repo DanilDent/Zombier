@@ -68,11 +68,8 @@ namespace Prototype.Data
 
             playerData.PlayerPrefabAddress = playerCfg.AssetPath;
             playerData.MaxSpeed = (float)playerCfg.MaxSpeed;
-            playerData.Damage = CreateDescDamage(playerCfg.Damage);
             playerData.CritChance = (float)playerCfg.CritChance;
             playerData.CritMultiplier = (float)playerCfg.CritMultiplier;
-            playerData.MaxHealth = (float)playerCfg.MaxHealth;
-            playerData.Health = playerData.MaxHealth;
             playerData.HealthRatio = 1f;
             playerData.Resists = CreateDescDamage(playerCfg.Resists.ToString());
             playerData.Weapon = CreateWeaponData(playerCfg.Weapon.ToString());

@@ -54,7 +54,7 @@ namespace Prototype.Controller
                     if (currentTarget == enemy)
                     {
                         // Target has not changed
-                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.Weapon.AttackRange)
                         {
                             // Target is still in attack range
                         }
@@ -69,7 +69,7 @@ namespace Prototype.Controller
                     else if (currentTarget == null)
                     {
                         // Player does not have a target yet
-                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.Weapon.AttackRange)
                         {
                             // Enemy is in range of current weapon
                             _player.CurrentState = PlayerModel.State.Fight;
@@ -84,7 +84,7 @@ namespace Prototype.Controller
                     else
                     {
                         // Player has other target
-                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.WeaponModel.AttackRange)
+                        if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.Weapon.AttackRange)
                         {
                             // Enemy is in range of current weapon
                             UpdateCurrentTarget(enemy);

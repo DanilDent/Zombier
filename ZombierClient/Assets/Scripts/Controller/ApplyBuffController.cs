@@ -182,8 +182,19 @@ namespace Prototype
 
         public override void Apply(bool updateSessionData = true)
         {
-            if (_player.AppliedBuffs.Contains(Config.Id) && updateSessionData)
+            if (updateSessionData && Config.BuffLevel > 1)
             {
+                BuffConfig prevLvlBuffCfg = _gameBalance.BuffConfigs.FirstOrDefault(_ => _.BuffType == Config.BuffType && _.BuffLevel == Config.BuffLevel - 1);
+                if (!_player.AppliedBuffs.Contains(prevLvlBuffCfg.Id))
+                {
+                    throw new System.Exception($"Player should have prev level buff applied in order to upgrade");
+                }
+                _player.AppliedBuffs.Remove(prevLvlBuffCfg.Id);
+            }
+
+            if (updateSessionData && _player.AppliedBuffs.Contains(Config.Id))
+            {
+                Debug.LogWarning($"Trying to apply buff {Config.Id} twice, this is not allowed");
                 return;
             }
 
@@ -226,8 +237,24 @@ namespace Prototype
 
         public override void Apply(bool updateSessionData = true)
         {
-            if (_player.AppliedBuffs.Contains(Config.Id) && updateSessionData)
+            if (updateSessionData && Config.BuffLevel > 1)
             {
+                BuffConfig prevLvlBuffCfg = _gameBalance.BuffConfigs
+                    .FirstOrDefault(_ =>
+                    _.BuffType == Config.BuffType
+                    && _.BuffLevel == Config.BuffLevel - 1
+                    && _.DamageType == Config.DamageType);
+
+                if (!_player.AppliedBuffs.Contains(prevLvlBuffCfg.Id))
+                {
+                    throw new System.Exception($"Player should have prev level buff applied in order to upgrade");
+                }
+                _player.AppliedBuffs.Remove(prevLvlBuffCfg.Id);
+            }
+
+            if (updateSessionData && _player.AppliedBuffs.Contains(Config.Id))
+            {
+                Debug.LogWarning($"Trying to apply buff {Config.Id} twice, this is not allowed");
                 return;
             }
 

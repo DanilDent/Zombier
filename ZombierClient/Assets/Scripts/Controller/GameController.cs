@@ -82,13 +82,22 @@ namespace Prototype.Controller
             {
                 _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_Heal_Level_1" });
             }
+
             if (Input.GetKeyDown(KeyCode.I))
             {
                 _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseMaxHealth_Level_1" });
             }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseMaxHealth_Level_2" });
+            }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Physical_Level_1" });
+            }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Physical_Level_2" });
             }
             if (Input.GetKeyDown(KeyCode.B))
             {

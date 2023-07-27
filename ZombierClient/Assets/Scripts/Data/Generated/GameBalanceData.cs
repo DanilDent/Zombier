@@ -42,6 +42,9 @@
 
         [JsonProperty("BuffConfigs")]
         public BuffConfig[] BuffConfigs { get; set; }
+
+        [JsonProperty("EffectConfigs")]
+        public EffectConfig[] EffectConfigs { get; set; }
     }
 
     public partial class BuffConfig
@@ -61,11 +64,11 @@
         [JsonProperty("Value")]
         public double Value { get; set; }
 
-        [JsonProperty("DamageType", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("DamageType")]
         public DamageTypeEnum DamageType { get; set; }
 
         [JsonProperty("Effects")]
-        public EffectEnum Effects { get; set; }
+        public string Effects { get; set; }
     }
 
     public partial class Damage
@@ -99,6 +102,39 @@
 
         [JsonProperty("Max")]
         public double Max { get; set; }
+    }
+
+    public partial class EffectConfig
+    {
+        [JsonProperty("Index")]
+        public long Index { get; set; }
+
+        [JsonProperty("Id")]
+        public string Id { get; set; }
+
+        [JsonProperty("EffectType")]
+        public EffectTypeEnum EffectType { get; set; }
+
+        [JsonProperty("Chance")]
+        public double Chance { get; set; }
+
+        [JsonProperty("Duration")]
+        public double Duration { get; set; }
+
+        [JsonProperty("Interval")]
+        public double Interval { get; set; }
+
+        [JsonProperty("ApplyEventType")]
+        public ApplyEventTypeEnum ApplyEventType { get; set; }
+
+        [JsonProperty("DamageType")]
+        public DamageTypeEnum DamageType { get; set; }
+
+        [JsonProperty("DamageValue")]
+        public double DamageValue { get; set; }
+
+        [JsonProperty("SpreadRadius")]
+        public double SpreadRadius { get; set; }
     }
 
     public partial class Enemy

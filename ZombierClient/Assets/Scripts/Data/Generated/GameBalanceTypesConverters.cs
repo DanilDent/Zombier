@@ -5,9 +5,10 @@ using System.Globalization;
 
 namespace Prototype.Data
 {
-    public enum DamageTypeEnum { Electric, Fire, Physical, Toxic, None };
+    public enum DamageTypeEnum { Electric, Fire, Physical, Toxic, Frost, None };
     public enum BuffTypeEnum { Heal, IncreaseMaxHealth, IncreaseDamage, BouncingProjectiles, None };
-    public enum EffectEnum { Burn, None };
+    public enum EffectTypeEnum { Burn, Poison, Freeze, Smite, Dodge, Explode, Hypnotize, Scare, None };
+    public enum ApplyEventTypeEnum { DamageTarget, DamagedByTarget, DestroyTarget, None };
 
     internal static class Converter
     {
@@ -19,15 +20,16 @@ namespace Prototype.Data
             {
                 DamageTypeEnumConverter.Singleton,
                 BuffTypeEnumConverter.Singleton,
-                EffectEnumConverter.Singleton,
+                EffectTypeEnumConverter.Singleton,
+                ApplyEventTypEnumConverter.Singleton,
                 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
             },
         };
     }
 
-    internal class EffectEnumConverter : JsonConverter
+    internal class ApplyEventTypEnumConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(EffectEnum) || t == typeof(EffectEnum?);
+        public override bool CanConvert(Type t) => t == typeof(ApplyEventTypeEnum) || t == typeof(ApplyEventTypeEnum?);
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
@@ -36,9 +38,75 @@ namespace Prototype.Data
             switch (value)
             {
                 case "":
-                    return EffectEnum.None;
+                    return ApplyEventTypeEnum.None;
+                case "DamageTarget":
+                    return ApplyEventTypeEnum.DamageTarget;
+                case "DamagedByTarget":
+                    return ApplyEventTypeEnum.DamagedByTarget;
+                case "DestroyTarget":
+                    return ApplyEventTypeEnum.DestroyTarget;
+            }
+            throw new Exception("Cannot unmarshal type ApplyEventTypeEnum");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (ApplyEventTypeEnum)untypedValue;
+            switch (value)
+            {
+                case ApplyEventTypeEnum.None:
+                    serializer.Serialize(writer, "");
+                    return;
+                case ApplyEventTypeEnum.DamageTarget:
+                    serializer.Serialize(writer, "DamageTarget");
+                    return;
+                case ApplyEventTypeEnum.DamagedByTarget:
+                    serializer.Serialize(writer, "DamagedByTarget");
+                    return;
+                case ApplyEventTypeEnum.DestroyTarget:
+                    serializer.Serialize(writer, "DestroyTarget");
+                    return;
+            }
+            throw new Exception("Cannot marshal type ApplyEventTypeEnum");
+        }
+
+        public static readonly ApplyEventTypEnumConverter Singleton = new ApplyEventTypEnumConverter();
+    }
+
+    internal class EffectTypeEnumConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(EffectTypeEnum) || t == typeof(EffectTypeEnum?);
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "":
+                    return EffectTypeEnum.None;
                 case "Burn":
-                    return EffectEnum.Burn;
+                    return EffectTypeEnum.Burn;
+                case "Poison":
+                    return EffectTypeEnum.Poison;
+                case "Freeze":
+                    return EffectTypeEnum.Freeze;
+                case "Smite":
+                    return EffectTypeEnum.Smite;
+                case "Dodge":
+                    return EffectTypeEnum.Dodge;
+                case "Explode":
+                    return EffectTypeEnum.Explode;
+                case "Hypnotize":
+                    return EffectTypeEnum.Hypnotize;
+                case "Scare":
+                    return EffectTypeEnum.Scare;
+
             }
             throw new Exception("Cannot unmarshal type EffectEnum");
         }
@@ -50,20 +118,41 @@ namespace Prototype.Data
                 serializer.Serialize(writer, null);
                 return;
             }
-            var value = (EffectEnum)untypedValue;
+            var value = (EffectTypeEnum)untypedValue;
             switch (value)
             {
-                case EffectEnum.None:
+                case EffectTypeEnum.None:
                     serializer.Serialize(writer, "");
                     return;
-                case EffectEnum.Burn:
+                case EffectTypeEnum.Burn:
                     serializer.Serialize(writer, "Burn");
+                    return;
+                case EffectTypeEnum.Poison:
+                    serializer.Serialize(writer, "Poison");
+                    return;
+                case EffectTypeEnum.Freeze:
+                    serializer.Serialize(writer, "Freeze");
+                    return;
+                case EffectTypeEnum.Smite:
+                    serializer.Serialize(writer, "Smite");
+                    return;
+                case EffectTypeEnum.Dodge:
+                    serializer.Serialize(writer, "Dodge");
+                    return;
+                case EffectTypeEnum.Explode:
+                    serializer.Serialize(writer, "Explode");
+                    return;
+                case EffectTypeEnum.Hypnotize:
+                    serializer.Serialize(writer, "Hypnotize");
+                    return;
+                case EffectTypeEnum.Scare:
+                    serializer.Serialize(writer, "Scare");
                     return;
             }
             throw new Exception("Cannot marshal type EffectEnum");
         }
 
-        public static readonly EffectEnumConverter Singleton = new EffectEnumConverter();
+        public static readonly EffectTypeEnumConverter Singleton = new EffectTypeEnumConverter();
     }
 
     internal class BuffTypeEnumConverter : JsonConverter
@@ -142,6 +231,8 @@ namespace Prototype.Data
                     return DamageTypeEnum.Physical;
                 case "Toxic":
                     return DamageTypeEnum.Toxic;
+                case "Frost":
+                    return DamageTypeEnum.Frost;
             }
             throw new Exception("Cannot unmarshal type DamageTypeEnum");
         }
@@ -167,6 +258,9 @@ namespace Prototype.Data
                     return;
                 case DamageTypeEnum.Toxic:
                     serializer.Serialize(writer, "Toxic");
+                    return;
+                case DamageTypeEnum.Frost:
+                    serializer.Serialize(writer, "Frost");
                     return;
             }
             throw new Exception("Cannot marshal type DamageTypeType");

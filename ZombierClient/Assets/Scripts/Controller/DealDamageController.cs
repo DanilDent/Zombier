@@ -30,6 +30,11 @@ public class DealDamageController : MonoBehaviour
         IDamaging attacker = e.Attacker;
         IDamageable defender = e.Defender;
 
+        if (attacker == null || defender == null)
+        {
+            return;
+        }
+
         float sumDmg = 0f;
         foreach (DescDamageType dmg in attacker.Damage)
         {
@@ -72,20 +77,23 @@ public class DealDamageController : MonoBehaviour
             {
                 _eventService.OnPlayerDeath();
             }
+
+            return;
         }
+
+        ApplyEffects(attacker, defender);
     }
 
     private void ApplyEffects(IDamaging attacker, IDamageable defender)
     {
         // Apply damage effects
-        //foreach (string effectId in attacker.DamagingEffects)
-        //{
-        //    EffectConfig effectCfg = _gameBalance.EffectConfigs.FirstOrDefault(_ => _.Id.Equals(effectId));
-        //    if (Helpers.TryRandom(effectCfg.Chance))
-        //    {
-        //        _eventService.OnEffectApplied(effectCfg, defender);
-        //        break;
-        //    }
-        //}
+        foreach (EffectConfig effectCfg in attacker.DamagingEffects)
+        {
+            if (Helpers.TryRandom((float)effectCfg.Chance))
+            {
+                _eventService.OnEffectApplied(new GameEventService.EffectAppliedEventArgs { EffectConfig = effectCfg, Target = defender });
+                break;
+            }
+        }
     }
 }

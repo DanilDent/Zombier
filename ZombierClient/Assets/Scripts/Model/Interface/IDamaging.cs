@@ -11,6 +11,6 @@ namespace Prototype.Model
 
         public float CritMultiplier { get; set; }
 
-        public List<EffectTypeEnum> DamagingEffects { get; }
+        public List<EffectConfig> DamagingEffects { get; }
     }
 }

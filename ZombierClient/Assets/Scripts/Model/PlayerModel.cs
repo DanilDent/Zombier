@@ -29,6 +29,7 @@ namespace Prototype.Model
 
             MaxHealth = _gameBalance.Player.PlayerConfig.MaxHealth;
             _damage = RecalcDamage();
+            DamagingEffects = new List<EffectConfig>();
         }
 
         public enum State
@@ -44,7 +45,7 @@ namespace Prototype.Model
         public DescDamage Damage => _damage;
         public float CritChance { get => _playerSession.CritChance; set => _playerSession.CritChance = value; }
         public float CritMultiplier { get => _playerSession.CritMultiplier; set => _playerSession.CritMultiplier = value; }
-        public List<EffectTypeEnum> DamagingEffects { get; private set; }
+        public List<EffectConfig> DamagingEffects { get; private set; }
         // !IDamaging
 
         // IDamageable

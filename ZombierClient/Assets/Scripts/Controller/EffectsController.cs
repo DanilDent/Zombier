@@ -1,5 +1,8 @@
-﻿using Prototype.Service;
+﻿using Prototype.Data;
+using Prototype.Model;
+using Prototype.Service;
 using Prototype.Timer;
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -8,65 +11,62 @@ namespace Prototype.Controller
     public class EffectsController : MonoBehaviour
     {
         [Inject]
-        public void Construct(TimerService timerSerivce, GameEventService eventService)
+        public void Construct(
+            TimerService timerSerivce,
+            GameEventService eventService,
+            EffectModel.Factory effectFactory)
         {
             _timerService = timerSerivce;
             _eventService = eventService;
+            _effectFactory = effectFactory;
         }
 
+        // Injected
         private TimerService _timerService;
         private GameEventService _eventService;
+        private EffectModel.Factory _effectFactory;
 
-        //private void HandleEffectApplied(EffectConfig effectCfg, IDamageable target)
-        //{
-        //    EffectModel effect = _effectFactory.Create(effectCfg);
+        private void OnEnable()
+        {
+            _eventService.EffectApplied += HandleEffectApplied;
+        }
 
-        //    Action onInit;
-        //    Action onTick;
-        //    Action onDispose;
+        private void OnDisable()
+        {
+            _eventService.EffectApplied -= HandleEffectApplied;
+        }
 
-        //    switch(effectCfg.EffectType)
-        //    {
-        //        case EffectEnum.Burn:
-        //            onInit = BurnOnInit;
-        //            onTick = BurnOnTick;
-        //            onDispose = BurnOnDispose;
-        //            break;
-        //        case EffectEnum.Frost:
-        //            onInit = FrostOnInit;
-        //            onTick = FrostOnTick;
-        //            onDispose = FrostOnDispose;
-        //            break;
-        //        case EffectEnum.Poison:
-        //            onInit = PoisonOnInit;
-        //            onTick PoisonOnTick;
-        //            onDispose = PoisonOnDispose;
-        //            break;
-        //    }
+        private void HandleEffectApplied(object sender, GameEventService.EffectAppliedEventArgs e)
+        {
+            switch (e.EffectConfig.EffectType)
+            {
+                case EffectTypeEnum.Burn:
+                    ApplyBurn(e.EffectConfig, e.Target);
+                    break;
+                default:
+                    throw new NotImplementedException($"{e.EffectConfig.EffectType} is not yet implemented");
+            }
+        }
 
-        //    _timerService.AddTimer(new TimerConfig
-        //        (
-        //        duration: effectCfg.Duration,
-        //        tickInterval: effectCfg.Interval,
-        //        onInit: onInit,
-        //        onTick: onTick,
-        //        onDispose: onDispose
-        //        ));
-        //}
+        private void ApplyBurn(EffectConfig config, object target)
+        {
+            EffectModel effect = _effectFactory.Create(config);
 
-        //private void BurnOnInit()
-        //{
-        //    _eventService.OnVisualEffectApplied(EffectEnum.Burn, target);
-        //}
-
-        //private void BurnOnTick()
-        //{
-        //    _eventService.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = EffectEnum, Defender = target });
-        //}
-
-        //private void BurnOnDispose()
-        //{
-        //    _eventService.OnVisualEffectCanceled(EffectEnum.Burn, target);
-        //}
+            _timerService.AddTimer(new TimerConfig
+               (
+               duration: (float)config.Duration,
+               tickInterval: (float)config.Interval,
+               onInit: null,
+               onTick: () =>
+               {
+                   if (target is IDamageable cast && cast != null)
+                   {
+                       _eventService.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = effect, Defender = cast });
+                   }
+               },
+               onDispose: null,
+               target: target
+               ));
+        }
     }
 }

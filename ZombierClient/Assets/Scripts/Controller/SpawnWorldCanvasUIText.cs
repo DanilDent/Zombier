@@ -74,7 +74,7 @@ namespace Prototype.Controller
 
         private void HandleDamaged(object sender, GameEventService.DamagedEventArgs e)
         {
-            if (e.DamagedEntity is Component cast && e.DamageValue > 0)
+            if (e.DamagedEntity is Component cast && e.DamageValue > 0 && cast != null)
             {
                 Vector3 offset = new Vector3(Random.Range(-.2f, .2f), 1.5f + Random.Range(-.2f, .2f), -.5f);
                 Vector3 spawnPosition = cast.transform.position + offset;
@@ -90,7 +90,7 @@ namespace Prototype.Controller
 
         private void HandleEnemyDeath(object sender, GameEventService.EnemyDeathEventArgs e)
         {
-            if (e.Entity is EnemyModel enemy)
+            if (e.Entity is EnemyModel enemy && enemy != null)
             {
                 Vector3 offset = new Vector3(Random.Range(-.2f, .2f), 2f + Random.Range(-.2f, .2f), -.5f);
                 Vector3 spawnPosition = enemy.transform.position + offset;

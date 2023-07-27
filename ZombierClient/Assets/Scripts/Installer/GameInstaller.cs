@@ -269,11 +269,12 @@ namespace Prototype
 
             //// !Game entities
 
-            //// Buffs
+            //// Buffs && Effects
 
             Container.BindFactory<string, Buff, BuffFactory>().FromFactory<BuffFromIdFactory>();
+            Container.BindFactory<EffectConfig, EffectModel, EffectModel.Factory>();
 
-            /// !Buffs
+            /// !Buffs && Effects
 
 
             // Gameplay Controllers
@@ -287,6 +288,7 @@ namespace Prototype
             Container.Bind<SpawnWorldCanvasUIText>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<ApplyBuffController>().FromComponentInHierarchy(true).AsSingle();
+            Container.Bind<EffectsController>().FromComponentInHierarchy(true).AsSingle();
             // !Gameplay Controllers
         }
 

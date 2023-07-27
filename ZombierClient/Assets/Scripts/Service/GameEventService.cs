@@ -42,10 +42,17 @@ namespace Prototype.Service
         public event EventHandler<CurrentLevelChangedEventArgs> CurrentLevelChanged;
         public event EventHandler<PlayerBuffAppliedEventArgs> PlayerBuffApplied;
         public event EventHandler BounceProjectilesEnabled;
+        public event EventHandler<EffectAppliedEventArgs> EffectApplied;
 
         #endregion
 
         #region EventArgs
+
+        public class EffectAppliedEventArgs : EventArgs
+        {
+            public EffectConfig EffectConfig;
+            public object Target;
+        }
 
         public class PlayerBuffAppliedEventArgs : EventArgs
         {
@@ -136,6 +143,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnEffectApplied(EffectAppliedEventArgs e)
+        {
+            EffectApplied?.Invoke(this, e);
+        }
 
         public void OnBounceProjectilesEnabled()
         {

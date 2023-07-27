@@ -263,18 +263,22 @@ namespace Prototype
                 _player.AppliedBuffs.Add(Config.Id);
             }
 
-            DescDamageType oldDmgType = _player.Weapon.Damage[Config.DamageType];
+            DescDamageType oldDmgType = _player.Weapon.Damage[DamageTypeEnum.Physical];
             DescDamageType newDmgType = new DescDamageType
             {
                 Type = Config.DamageType,
-                ValueRange = oldDmgType.ValueRange * (1f + (float)Config.Value),
+                ValueRange = oldDmgType.ValueRange * (float)Config.Value,
                 Chance = oldDmgType.Chance
             };
             _player.Damage[Config.DamageType] = newDmgType;
             Debug.Log($"old value range: {oldDmgType.ValueRange}");
             Debug.Log($"new value range: {newDmgType.ValueRange}");
 
-
+            EffectConfig effectCfg = _gameBalance.EffectConfigs.FirstOrDefault(_ => _.Id.Equals(Config.Effects));
+            if (effectCfg != null)
+            {
+                _player.DamagingEffects.Add(effectCfg);
+            }
         }
 
         public override void Cancel(bool updateSessionData = true)
@@ -287,6 +291,12 @@ namespace Prototype
             DescDamageType oldDmgType = _player.Weapon.Damage[Config.DamageType];
             DescDamageType newDmgType = oldDmgType;
             _player.Damage[Config.DamageType] = newDmgType;
+
+            int effectIndex = _player.DamagingEffects.FindIndex(_ => _.Id.Equals(Config.Effects));
+            if (effectIndex != -1)
+            {
+                _player.DamagingEffects.RemoveAt(effectIndex);
+            }
         }
     }
 

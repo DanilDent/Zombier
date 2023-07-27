@@ -1,6 +1,7 @@
 using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
+using Prototype.Timer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace Prototype.Controller
             EnemyModel.Factory enemyFactory,
             PlayerModel player,
             List<EnemyModel> enemies,
-            GameEventService eventService)
+            GameEventService eventService,
+            TimerService timerService)
         {
             _session = session;
             _level = level;
@@ -31,6 +33,7 @@ namespace Prototype.Controller
             _player = player;
             _enemies = enemies;
             _eventService = eventService;
+            _timerService = timerService;
         }
 
         public int EnemyCount => _enemies.Count;
@@ -79,7 +82,7 @@ namespace Prototype.Controller
         private EnemyModel.Factory _enemyFactory;
         private PlayerModel _player;
         [SerializeField] private List<EnemyModel> _enemies;
-        private List<EnemyModel> _enemiesToDestroy;
+        private TimerService _timerService;
         //
         // Minimal spawn enemy distance from player
         [SerializeField] private float _minDistanceFromPlayer = 10f;
@@ -87,6 +90,8 @@ namespace Prototype.Controller
         [SerializeField] private float _maxSampleDistance = 10f;
         // Spawn enemies only outside this range from player
         [SerializeField] private float _allowedCenterPointRange;
+        private List<EnemyModel> _enemiesToDestroy;
+
 
         private void OnEnable()
         {
@@ -153,6 +158,7 @@ namespace Prototype.Controller
                 cast.Rigidbody.velocity = Vector3.zero;
                 cast.Rigidbody.useGravity = false;
                 cast.GetComponent<Collider>().enabled = false;
+                _timerService.RemoveTimersWithTarget(cast);
                 _enemiesToDestroy.Add(cast);
 
                 if (_enemies.Count == 0)
@@ -167,13 +173,23 @@ namespace Prototype.Controller
 
         private void HandleEnemyDeathInstant(object sender, GameEventService.EnemyDeathEventArgs e)
         {
-            if (e.Entity is EnemyModel cast)
+            if (e.Entity is EnemyModel cast && cast != null)
             {
                 _enemies.Remove(cast);
-                cast.Agent.enabled = false;
-                cast.Rigidbody.velocity = Vector3.zero;
-                cast.Rigidbody.useGravity = false;
-                cast.GetComponent<Collider>().enabled = false;
+                if (cast.Agent != null)
+                {
+                    cast.Agent.enabled = false;
+                }
+                if (cast.Rigidbody != null)
+                {
+                    cast.Rigidbody.velocity = Vector3.zero;
+                    cast.Rigidbody.useGravity = false;
+                }
+                if (cast.GetComponent<Collider>() != null)
+                {
+                    cast.GetComponent<Collider>().enabled = false;
+                }
+                _timerService.RemoveTimersWithTarget(cast);
                 _eventService.OnEnemyPreDestroyed();
                 Destroy(cast.transform.parent.gameObject, 0.1f);
 

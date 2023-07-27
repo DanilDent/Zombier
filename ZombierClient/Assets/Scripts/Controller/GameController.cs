@@ -27,7 +27,8 @@ namespace Prototype.Controller
             PlayerLevelUpController playerLevelUpController,
             SpawnWorldCanvasUIText spawnDamageTextUIController,
             VFXController vfxController,
-            ApplyBuffController applyBuffController)
+            ApplyBuffController applyBuffController,
+            EffectsController effectsController)
         {
             _session = session;
             _gameEventService = eventService;
@@ -44,6 +45,7 @@ namespace Prototype.Controller
             _spawnDamageTextUIController = spawnDamageTextUIController;
             _vfxController = vfxController;
             _applyBuffController = applyBuffController;
+            _effectsController = effectsController;
         }
 
         private GameSessionData _session;
@@ -61,6 +63,7 @@ namespace Prototype.Controller
         private SpawnWorldCanvasUIText _spawnDamageTextUIController;
         private VFXController _vfxController;
         private ApplyBuffController _applyBuffController;
+        private EffectsController _effectsController;
 
         private void OnEnable()
         {
@@ -93,11 +96,11 @@ namespace Prototype.Controller
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Physical_Level_1" });
+                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Fire_Level_1" });
             }
             if (Input.GetKeyDown(KeyCode.F))
             {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Physical_Level_2" });
+                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Fire_Level_2" });
             }
             if (Input.GetKeyDown(KeyCode.B))
             {
@@ -143,6 +146,7 @@ namespace Prototype.Controller
             _spawnDamageTextUIController.gameObject.SetActive(true);
             _vfxController.gameObject.SetActive(true);
             _applyBuffController.gameObject.SetActive(true);
+            _effectsController.gameObject.SetActive(true);
         }
 
         private void SetControllersState(bool enabled)
@@ -157,6 +161,7 @@ namespace Prototype.Controller
             _spawnDamageTextUIController.gameObject.SetActive(enabled);
             _vfxController.gameObject.SetActive(enabled);
             _applyBuffController.gameObject.SetActive(enabled);
+            _effectsController.gameObject.SetActive(enabled);
         }
 
         private void HandlePlayerDeath(object sender, EventArgs e)

@@ -10,24 +10,44 @@ namespace Prototype.Timer
         public void Initialize()
         {
             _timers = new List<Timer>();
+            Timer.TimerExpired += HandleTimerExpired;
         }
 
         public void Tick()
         {
-            foreach (var timer in _timers)
+            for (int i = 0; i < _timers.Count; ++i)
             {
-                timer.Tick(Time.deltaTime);
+                _timers[i].Tick(Time.deltaTime);
             }
         }
 
         public void Dispose()
         {
             _timers.Clear();
+            Timer.TimerExpired -= HandleTimerExpired;
         }
 
         public void AddTimer(TimerConfig config)
         {
-            _timers.Add(new Timer(config.Duration, config.TickInterval, config.OnInit, config.OnTick, config.OnDispose));
+            _timers.Add(new Timer(
+                config.Duration,
+                config.TickInterval,
+                config.OnInit,
+                config.OnTick,
+                config.OnDispose,
+                config.Target));
+        }
+
+        public void RemoveTimersWithTarget(object target)
+        {
+            for (int i = 0; i < _timers.Count; ++i)
+            {
+                if (_timers[i].Target != null && _timers[i].Target == target)
+                {
+                    _timers.RemoveAt(i);
+                    --i;
+                }
+            }
         }
 
         private List<Timer> _timers;
@@ -46,13 +66,15 @@ namespace Prototype.Timer
 
             public float Duration { get; }
             public float TickInterval { get; }
+            public object Target { get; }
 
             public Timer(
               float duration,
               float tickInterval,
               Action onInit,
               Action onTick,
-              Action onDispose)
+              Action onDispose,
+              object target)
             {
                 Duration = duration;
                 TickInterval = tickInterval;
@@ -62,6 +84,7 @@ namespace Prototype.Timer
                 _onInit = onInit;
                 _onTick = onTick;
                 _onDispose = onDispose;
+                Target = target; ;
 
                 _onInit?.Invoke();
             }
@@ -93,13 +116,14 @@ namespace Prototype.Timer
 
     public class TimerConfig
     {
-        public TimerConfig(float duration, float tickInterval, Action onInit, Action onTick, Action onDispose)
+        public TimerConfig(float duration, float tickInterval, Action onInit, Action onTick, Action onDispose, object target)
         {
             Duration = duration;
             TickInterval = tickInterval;
             OnInit = onInit;
             OnTick = onTick;
             OnDispose = onDispose;
+            Target = target;
         }
 
         public float Duration { get; }
@@ -107,6 +131,7 @@ namespace Prototype.Timer
         public Action OnInit { get; }
         public Action OnTick { get; }
         public Action OnDispose { get; }
+        public object Target { get; }
     }
 
 

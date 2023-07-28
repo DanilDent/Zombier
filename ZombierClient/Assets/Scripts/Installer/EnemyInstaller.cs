@@ -26,7 +26,6 @@ namespace Prototype
 
             string idStr = _id.ToString();
             int nCharsToDisplay = 8;
-            //gameObject.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}";
 
             if (_dataTemplate != null)
             {

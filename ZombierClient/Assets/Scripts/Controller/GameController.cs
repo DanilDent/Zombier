@@ -81,6 +81,7 @@ namespace Prototype.Controller
 
         private void Update()
         {
+            // TODO: do not forget to delete these, this is for debug only 
             if (Input.GetKeyDown(KeyCode.H))
             {
                 _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_Heal_Level_1" });

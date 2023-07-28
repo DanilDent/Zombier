@@ -43,10 +43,24 @@ namespace Prototype.Service
         public event EventHandler<PlayerBuffAppliedEventArgs> PlayerBuffApplied;
         public event EventHandler BounceProjectilesEnabled;
         public event EventHandler<EffectAppliedEventArgs> EffectApplied;
+        public event EventHandler<VisualEffectAppliedEventArgs> VisualEffectApplied;
+        public event EventHandler<VisualEffectCanceledEventArgs> VisualEffectCanceled;
 
         #endregion
 
         #region EventArgs
+
+        public class VisualEffectAppliedEventArgs
+        {
+            public IdData TargetId;
+            public EffectTypeEnum EffectType;
+        }
+
+        public class VisualEffectCanceledEventArgs
+        {
+            public IdData TargetId;
+            public EffectTypeEnum EffectType;
+        }
 
         public class EffectAppliedEventArgs : EventArgs
         {
@@ -143,6 +157,16 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnVisualEffectApplied(VisualEffectAppliedEventArgs e)
+        {
+            VisualEffectApplied?.Invoke(this, e);
+        }
+
+        public void OnVisualEffectCanceled(VisualEffectCanceledEventArgs e)
+        {
+            VisualEffectCanceled?.Invoke(this, e);
+        }
 
         public void OnEffectApplied(EffectAppliedEventArgs e)
         {

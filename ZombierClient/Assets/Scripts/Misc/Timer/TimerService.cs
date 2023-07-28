@@ -44,6 +44,7 @@ namespace Prototype.Timer
             {
                 if (_timers[i].Target != null && _timers[i].Target == target)
                 {
+                    _timers[i].Dispose();
                     _timers.RemoveAt(i);
                     --i;
                 }
@@ -107,9 +108,14 @@ namespace Prototype.Timer
 
                 if (_remainingTime < 0f || Mathf.Approximately(_remainingTime, 0f))
                 {
-                    _onDispose?.Invoke();
+                    Dispose();
                     TimerExpired?.Invoke(this, EventArgs.Empty);
                 }
+            }
+
+            public void Dispose()
+            {
+                _onDispose?.Invoke();
             }
         }
     }

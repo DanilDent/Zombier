@@ -50,23 +50,32 @@ namespace Prototype.Controller
 
         private void ApplyBurn(EffectConfig config, object target)
         {
-            EffectModel effect = _effectFactory.Create(config);
+            if (target is EnemyModel enemy)
+            {
+                EffectModel effect = _effectFactory.Create(config);
 
-            _timerService.AddTimer(new TimerConfig
-               (
-               duration: (float)config.Duration,
-               tickInterval: (float)config.Interval,
-               onInit: null,
-               onTick: () =>
-               {
-                   if (target is IDamageable cast && cast != null)
+                _timerService.AddTimer(new TimerConfig
+                   (
+                   duration: (float)config.Duration,
+                   tickInterval: (float)config.Interval,
+                   onInit: () =>
                    {
-                       _eventService.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = effect, Defender = cast });
-                   }
-               },
-               onDispose: null,
-               target: target
-               ));
+                       _eventService.OnVisualEffectApplied(new GameEventService.VisualEffectAppliedEventArgs { TargetId = enemy.Id, EffectType = config.EffectType });
+                   },
+                   onTick: () =>
+                   {
+                       if (target is IDamageable cast && cast != null)
+                       {
+                           _eventService.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = effect, Defender = cast });
+                       }
+                   },
+                   onDispose: () =>
+                   {
+                       _eventService.OnVisualEffectCanceled(new GameEventService.VisualEffectCanceledEventArgs { TargetId = enemy.Id, EffectType = config.EffectType });
+                   },
+                   target: target
+                   ));
+            }
         }
     }
 }

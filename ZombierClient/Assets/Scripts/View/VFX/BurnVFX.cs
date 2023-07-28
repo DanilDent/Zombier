@@ -51,8 +51,8 @@ namespace Prototype.View
         {
             if (e.EffectType == EffectTypeEnum.Burn && _id.Equals(e.TargetId))
             {
-                _child.SetActive(false);
                 Stop();
+                _child.SetActive(false);
             }
         }
     }

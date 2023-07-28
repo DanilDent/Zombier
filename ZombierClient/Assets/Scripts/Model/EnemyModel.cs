@@ -12,7 +12,7 @@ namespace Prototype.Model
     /// <summary>
     /// Provides access to enemy non-view related gameplay runtime data
     /// </summary>
-    public class EnemyModel : MonoBehaviour, IDamaging, IDamageable
+    public class EnemyModel : MonoBehaviour, IDamaging, IDamageable, IEffectable
     {
         // Public
 
@@ -36,7 +36,8 @@ namespace Prototype.Model
 
             _damage = new DescDamage();
             RecalcDamage();
-            DamagingEffects = new List<EffectConfig>();
+            AppliableEffects = new List<EffectConfig>();
+            AppliedEffects = new List<EffectConfig>();
         }
 
         public class Factory : PlaceholderFactory<IdData, EnemyData, EnemyModel> { }
@@ -50,6 +51,10 @@ namespace Prototype.Model
         };
 
         public IdData Id => _id;
+
+        public List<EffectConfig> AppliableEffects { get; set; }
+
+        public List<EffectConfig> AppliedEffects { get; set; }
 
         // IDamaging
         public DescDamage Damage => _damage;

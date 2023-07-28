@@ -86,9 +86,27 @@ public class DealDamageController : MonoBehaviour
 
     private void ApplyEffects(IDamaging attacker, IDamageable defender)
     {
-        // Apply damage effects
-        foreach (EffectConfig effectCfg in attacker.DamagingEffects)
+        IEffectable effectApplier = attacker as IEffectable;
+        IEffectable effectTarget = defender as IEffectable;
+
+        if (effectApplier == null || effectTarget == null)
         {
+            Debug.LogError($"effectApplier and effectTarget should to be null");
+        }
+
+        // Apply damage effects
+        foreach (EffectConfig effectCfg in effectApplier.AppliableEffects)
+        {
+            if (effectCfg.ApplyEventType != ApplyEventTypeEnum.DamageTarget)
+            {
+                continue;
+            }
+
+            if (effectTarget.AppliedEffects.Count > 0)
+            {
+                break;
+            }
+
             if (Helpers.TryRandom((float)effectCfg.Chance))
             {
                 _eventService.OnEffectApplied(new GameEventService.EffectAppliedEventArgs { EffectConfig = effectCfg, Target = defender });

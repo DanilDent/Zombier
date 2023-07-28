@@ -7,7 +7,7 @@ using Zenject;
 namespace Prototype.Model
 {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerModel : MonoBehaviour, IDamaging, IDamageable
+    public class PlayerModel : MonoBehaviour, IDamaging, IDamageable, IEffectable
     {
         // Public
 
@@ -29,7 +29,8 @@ namespace Prototype.Model
 
             MaxHealth = _gameBalance.Player.PlayerConfig.MaxHealth;
             _damage = RecalcDamage();
-            DamagingEffects = new List<EffectConfig>();
+            AppliableEffects = new List<EffectConfig>();
+            AppliedEffects = new List<EffectConfig>();
         }
 
         public enum State
@@ -41,11 +42,14 @@ namespace Prototype.Model
 
         public List<string> AppliedBuffs => _playerSession.AppliedBuffs;
 
+        public List<EffectConfig> AppliableEffects { get; set; }
+
+        public List<EffectConfig> AppliedEffects { get; set; }
+
         // IDamaging
         public DescDamage Damage => _damage;
         public float CritChance { get => _playerSession.CritChance; set => _playerSession.CritChance = value; }
         public float CritMultiplier { get => _playerSession.CritMultiplier; set => _playerSession.CritMultiplier = value; }
-        public List<EffectConfig> DamagingEffects { get; private set; }
         // !IDamaging
 
         // IDamageable

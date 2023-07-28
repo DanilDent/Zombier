@@ -60,7 +60,11 @@ namespace Prototype.Controller
                    tickInterval: (float)config.Interval,
                    onInit: () =>
                    {
-                       _eventService.OnVisualEffectApplied(new GameEventService.VisualEffectAppliedEventArgs { TargetId = enemy.Id, EffectType = config.EffectType });
+                       if (target is IEffectable effectable)
+                       {
+                           effectable.AppliedEffects.Add(config);
+                           _eventService.OnVisualEffectApplied(new GameEventService.VisualEffectAppliedEventArgs { TargetId = enemy.Id, EffectType = config.EffectType });
+                       }
                    },
                    onTick: () =>
                    {
@@ -71,7 +75,11 @@ namespace Prototype.Controller
                    },
                    onDispose: () =>
                    {
-                       _eventService.OnVisualEffectCanceled(new GameEventService.VisualEffectCanceledEventArgs { TargetId = enemy.Id, EffectType = config.EffectType });
+                       if (target is IEffectable effectable)
+                       {
+                           effectable.AppliedEffects.Remove(config);
+                           _eventService.OnVisualEffectCanceled(new GameEventService.VisualEffectCanceledEventArgs { TargetId = enemy.Id, EffectType = config.EffectType });
+                       }
                    },
                    target: target
                    ));

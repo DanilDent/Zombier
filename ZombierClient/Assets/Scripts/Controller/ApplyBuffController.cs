@@ -277,7 +277,7 @@ namespace Prototype
             EffectConfig effectCfg = _gameBalance.EffectConfigs.FirstOrDefault(_ => _.Id.Equals(Config.Effects));
             if (effectCfg != null)
             {
-                _player.DamagingEffects.Add(effectCfg);
+                _player.AppliableEffects.Add(effectCfg);
             }
         }
 
@@ -292,10 +292,10 @@ namespace Prototype
             DescDamageType newDmgType = oldDmgType;
             _player.Damage[Config.DamageType] = newDmgType;
 
-            int effectIndex = _player.DamagingEffects.FindIndex(_ => _.Id.Equals(Config.Effects));
+            int effectIndex = _player.AppliableEffects.FindIndex(_ => _.Id.Equals(Config.Effects));
             if (effectIndex != -1)
             {
-                _player.DamagingEffects.RemoveAt(effectIndex);
+                _player.AppliableEffects.RemoveAt(effectIndex);
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using Prototype.Data;
-using System.Collections.Generic;
 
 namespace Prototype.Model
 {
@@ -10,7 +9,5 @@ namespace Prototype.Model
         public float CritChance { get; set; }
 
         public float CritMultiplier { get; set; }
-
-        public List<EffectConfig> DamagingEffects { get; }
     }
 }

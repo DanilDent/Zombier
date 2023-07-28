@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Prototype.Model
 {
-    public class EffectModel : IDamaging
+    public class EffectModel : IDamaging, IEffectable
     {
         public class Factory : PlaceholderFactory<EffectConfig, EffectModel> { }
 
@@ -32,7 +32,8 @@ namespace Prototype.Model
                 };
                 Damage[descDmgType.Type] = descDmgType;
             }
-
+            AppliableEffects = new List<EffectConfig>();
+            AppliedEffects = new List<EffectConfig>();
         }
 
         public EffectConfig Config { get; }
@@ -40,5 +41,7 @@ namespace Prototype.Model
         public float CritChance { get; set; }
         public float CritMultiplier { get; set; }
         public List<EffectConfig> DamagingEffects { get; }
+        public List<EffectConfig> AppliableEffects { get; set; }
+        public List<EffectConfig> AppliedEffects { get; set; }
     }
 }

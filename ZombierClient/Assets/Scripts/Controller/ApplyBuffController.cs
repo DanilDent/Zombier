@@ -267,7 +267,7 @@ namespace Prototype
             DescDamageType newDmgType = new DescDamageType
             {
                 Type = Config.DamageType,
-                ValueRange = oldDmgType.ValueRange * (float)Config.Value,
+                ValueRange = oldDmgType.ValueRange * ((Config.DamageType == DamageTypeEnum.Physical ? 1f : 0f) + (float)Config.Value),
                 Chance = oldDmgType.Chance
             };
             _player.Damage[Config.DamageType] = newDmgType;

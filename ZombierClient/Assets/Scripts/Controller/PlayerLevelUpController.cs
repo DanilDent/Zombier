@@ -33,7 +33,8 @@ namespace Prototype.Controller
             _eventService.OnPlayerLevelChanged(new GameEventService.PlayerLevelChangedEventArgs
             {
                 Level = _player.CurrentLevel,
-                SavedLevelUps = _player.SavedLevelUpCounter
+                SavedLevelUps = _player.SavedLevelUpCounter,
+                IsInit = true
             });
         }
 

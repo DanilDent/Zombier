@@ -45,10 +45,18 @@ namespace Prototype.Service
         public event EventHandler<EffectAppliedEventArgs> EffectApplied;
         public event EventHandler<VisualEffectAppliedEventArgs> VisualEffectApplied;
         public event EventHandler<VisualEffectCanceledEventArgs> VisualEffectCanceled;
+        // Buffs UI related
+        public event EventHandler<ChooseBuffWindowOpenEventArgs> ChooseBuffWindowOpen;
+        public event EventHandler ChooseBuffWindowClose;
 
         #endregion
 
         #region EventArgs
+
+        public class ChooseBuffWindowOpenEventArgs
+        {
+            public BuffConfig[] AvailableBuffs;
+        }
 
         public class VisualEffectAppliedEventArgs
         {
@@ -83,6 +91,7 @@ namespace Prototype.Service
         {
             public int Level;
             public int SavedLevelUps;
+            public bool IsInit;
         }
 
         public class PlayerCurrentExpChangedEventArgs : EventArgs
@@ -157,6 +166,16 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnChooseBuffWindowOpen(ChooseBuffWindowOpenEventArgs e)
+        {
+            ChooseBuffWindowOpen?.Invoke(this, e);
+        }
+
+        public void OnChooseBuffWindowClose()
+        {
+            ChooseBuffWindowClose?.Invoke(this, EventArgs.Empty);
+        }
 
         public void OnVisualEffectApplied(VisualEffectAppliedEventArgs e)
         {

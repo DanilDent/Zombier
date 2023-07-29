@@ -55,6 +55,12 @@
         [JsonProperty("Id")]
         public string Id { get; set; }
 
+        [JsonProperty("Name")]
+        public string Name { get; set; }
+
+        [JsonProperty("DescriptionText")]
+        public string DescriptionText { get; set; }
+
         [JsonProperty("BuffType")]
         public BuffTypeEnum BuffType { get; set; }
 

@@ -289,6 +289,8 @@ namespace Prototype
             Container.Bind<VFXController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<ApplyBuffController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<EffectsController>().FromComponentInHierarchy(true).AsSingle();
+
+            Container.Bind<ChooseBuffController>().AsSingle().NonLazy();
             // !Gameplay Controllers
         }
 

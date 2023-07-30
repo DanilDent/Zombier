@@ -1,6 +1,7 @@
 ﻿namespace Prototype.Data
 {
     using Newtonsoft.Json;
+    using Prototype.Misc;
 
     public partial class GameBalanceData
     {
@@ -47,7 +48,7 @@
         public EffectConfig[] EffectConfigs { get; set; }
     }
 
-    public partial class BuffConfig
+    public partial class BuffConfig : IWeighted
     {
         [JsonProperty("Index")]
         public long Index { get; set; }
@@ -60,6 +61,9 @@
 
         [JsonProperty("DescriptionText")]
         public string DescriptionText { get; set; }
+
+        [JsonProperty("RarityText")]
+        public string RarityText { get; set; }
 
         [JsonProperty("BuffType")]
         public BuffTypeEnum BuffType { get; set; }
@@ -75,6 +79,12 @@
 
         [JsonProperty("Effects")]
         public string Effects { get; set; }
+
+        [JsonProperty("Rarity")]
+        public RarityEnum Rarity { get; set; }
+
+        [JsonProperty("Weight")]
+        public float Weight { get; set; }
     }
 
     public partial class Damage

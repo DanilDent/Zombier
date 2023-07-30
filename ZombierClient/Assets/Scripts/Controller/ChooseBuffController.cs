@@ -1,5 +1,6 @@
 ﻿
 using Prototype.Data;
+using Prototype.Misc;
 using Prototype.Model;
 using Prototype.Service;
 using System;
@@ -111,9 +112,10 @@ namespace Prototype.Controller
             BuffConfig[] chosenBuffs = new BuffConfig[2];
             Random random = new Random();
 
-            int randomIndex = random.Next() % availableBuffsPool.Count;
-            chosenBuffs[0] = availableBuffsPool[randomIndex];
-            availableBuffsPool.RemoveAt(randomIndex);
+            WeightedRandomSelector<BuffConfig> randomSelector = new WeightedRandomSelector<BuffConfig>(availableBuffsPool);
+            chosenBuffs[0] = randomSelector.GetRandomElement();
+            availableBuffsPool.Remove(chosenBuffs[0]);
+
             if (chosenBuffs[0].BuffType == BuffTypeEnum.Heal)
             {
                 for (int i = 0; i < availableBuffsPool.Count; ++i)
@@ -126,8 +128,8 @@ namespace Prototype.Controller
                 }
             }
 
-            randomIndex = random.Next() % availableBuffsPool.Count;
-            chosenBuffs[1] = availableBuffsPool[randomIndex];
+            randomSelector = new WeightedRandomSelector<BuffConfig>(availableBuffsPool);
+            chosenBuffs[1] = randomSelector.GetRandomElement();
 
             _gameEventService.OnChooseBuffWindowOpen(new GameEventService.ChooseBuffWindowOpenEventArgs { AvailableBuffs = chosenBuffs });
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Prototype.Misc
 {
     public class WeightedRandomSelector<T>
-        where T : IWeighted
+        where T : class, IWeighted
     {
         private List<T> elements;
         private List<float> cumulativeWeights;
@@ -28,7 +28,7 @@ namespace Prototype.Misc
             random = new Random();
         }
 
-        public T GetRandomRecord()
+        public T GetRandomElement()
         {
             if (elements.Count == 0)
             {
@@ -57,9 +57,4 @@ namespace Prototype.Misc
             return (element as IWeighted).Weight;
         }
     }
-}
-
-public interface IWeighted
-{
-    public float Weight { get; }
 }

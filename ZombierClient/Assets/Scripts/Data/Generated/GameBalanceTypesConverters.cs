@@ -9,6 +9,7 @@ namespace Prototype.Data
     public enum BuffTypeEnum { Heal, IncreaseMaxHealth, IncreaseDamage, BouncingProjectiles, None };
     public enum EffectTypeEnum { Burn, Poison, Freeze, Smite, Dodge, Explode, Hypnotize, Scare, None };
     public enum ApplyEventTypeEnum { DamageTarget, DamagedByTarget, DestroyTarget, None };
+    public enum RarityEnum { Common, Rare, Epic, Legendary, None }
 
     internal static class Converter
     {
@@ -22,9 +23,66 @@ namespace Prototype.Data
                 BuffTypeEnumConverter.Singleton,
                 EffectTypeEnumConverter.Singleton,
                 ApplyEventTypEnumConverter.Singleton,
+                RarityEnumConverter.Singleton,
                 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
             },
         };
+    }
+
+    internal class RarityEnumConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(RarityEnum) || t == typeof(RarityEnum?);
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "":
+                    return RarityEnum.None;
+                case "Common":
+                    return RarityEnum.Common;
+                case "Rare":
+                    return RarityEnum.Rare;
+                case "Epic":
+                    return RarityEnum.Epic;
+                case "Legendary":
+                    return RarityEnum.Legendary;
+            }
+            throw new Exception("Cannot unmarshal type RarityEnum");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (RarityEnum)untypedValue;
+            switch (value)
+            {
+                case RarityEnum.None:
+                    serializer.Serialize(writer, "");
+                    return;
+                case RarityEnum.Common:
+                    serializer.Serialize(writer, "Common");
+                    return;
+                case RarityEnum.Rare:
+                    serializer.Serialize(writer, "Rare");
+                    return;
+                case RarityEnum.Epic:
+                    serializer.Serialize(writer, "Epic");
+                    return;
+                case RarityEnum.Legendary:
+                    serializer.Serialize(writer, "Legendary");
+                    return;
+            }
+            throw new Exception("Cannot marshal type RarityEnum");
+        }
+
+        public static readonly RarityEnumConverter Singleton = new RarityEnumConverter();
     }
 
     internal class ApplyEventTypEnumConverter : JsonConverter

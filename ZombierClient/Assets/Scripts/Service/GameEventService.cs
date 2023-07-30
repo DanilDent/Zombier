@@ -29,6 +29,7 @@ namespace Prototype.Service
 
         public event EventHandler<EnemyMovedEventArgs> EnemyMoved;
         public event EventHandler<EnemyHitEventArgs> EnemyHit;
+        public event EventHandler<EnemyHitEventArgs> EnemyHitEnd;
         public event EventHandler<EnemyAttackEventArgs> EnemyAttack;
         public event EventHandler<EnemyAttackAnimationEventArgs> EnemyAttackAnimationEvent;
 
@@ -166,6 +167,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnEnemyHitEnd(EnemyHitEventArgs e)
+        {
+            EnemyHitEnd?.Invoke(this, e);
+        }
 
         public void OnChooseBuffWindowOpen(ChooseBuffWindowOpenEventArgs e)
         {

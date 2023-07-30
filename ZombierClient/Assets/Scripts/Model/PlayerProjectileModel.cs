@@ -40,6 +40,7 @@ namespace Prototype.Model
 
                 if (damageable is EnemyModel cast)
                 {
+                    cast.CurrentState = HumanoidState.Hit;
                     _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
                     {
                         EntityId = cast.Id,

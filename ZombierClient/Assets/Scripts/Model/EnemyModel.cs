@@ -36,19 +36,15 @@ namespace Prototype.Model
             RecalcDamage();
             AppliableEffects = new List<EffectConfig>();
             AppliedEffects = new List<EffectConfig>();
+
+            CurrentState = HumanoidState.Idle;
         }
 
         public class Factory : PlaceholderFactory<IdData, EnemyData, EnemyModel> { }
 
-        public enum State
-        {
-            Idle = 0,
-            Chase,
-            Attack,
-            Dead,
-        };
-
         public IdData Id => _id;
+
+        public HumanoidState CurrentState { get; set; }
 
         public List<EffectConfig> AppliableEffects { get; set; }
 

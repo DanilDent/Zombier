@@ -2,6 +2,7 @@
 using Prototype.ObjectPool;
 using Prototype.Service;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -36,6 +37,9 @@ namespace Prototype.Controller
 
         private void OnEnable()
         {
+            // Events
+            _eventService.EnemyHitEnd += HandleEnemyHitEnd;
+
             foreach (var enemy in _enemies)
             {
                 enemy.Agent.updatePosition = false;
@@ -57,6 +61,21 @@ namespace Prototype.Controller
                 enemy.Agent.radius = _obstacleAvoidanceRadius;
                 enemy.FSMOwner.UpdateBehaviour();
             }
+        }
+
+        private void OnDisable()
+        {
+            _eventService.EnemyHitEnd -= HandleEnemyHitEnd;
+        }
+
+        private void HandleEnemyHitEnd(object sender, GameEventService.EnemyHitEventArgs e)
+        {
+            var enemy = _enemies.FirstOrDefault(_ => _.Id.Equals(e.EntityId));
+            if (enemy == null)
+            {
+                return;
+            }
+            enemy.CurrentState = HumanoidState.Chase;
         }
     }
 }

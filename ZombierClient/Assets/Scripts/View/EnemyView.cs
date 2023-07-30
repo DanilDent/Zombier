@@ -33,7 +33,7 @@ namespace Prototype.View
 
         public void OnHitEndAnimationEvent()
         {
-
+            _eventService.OnEnemyHitEnd(new GameEventService.EnemyHitEventArgs { EntityId = _id });
         }
 
         // Private

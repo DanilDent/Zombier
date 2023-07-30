@@ -40,13 +40,16 @@ namespace Prototype.Model
 
                 if (damageable is EnemyModel cast)
                 {
-                    cast.CurrentState = HumanoidState.Hit;
-                    _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
+                    if (Helpers.TryRandom(0.5f))
                     {
-                        EntityId = cast.Id,
-                        HitDirection = _rigidbody.velocity,
-                        HitPosition = transform.position
-                    });
+                        cast.CurrentState = HumanoidState.Hit;
+                        _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
+                        {
+                            EntityId = cast.Id,
+                            HitDirection = _rigidbody.velocity,
+                            HitPosition = transform.position
+                        });
+                    }
                 }
             }
             _defaultPool.Destroy(this);
@@ -60,12 +63,16 @@ namespace Prototype.Model
 
                 if (damageable is EnemyModel cast)
                 {
-                    _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
+                    if (Helpers.TryRandom(0.5f))
                     {
-                        EntityId = cast.Id,
-                        HitDirection = _rigidbody.velocity,
-                        HitPosition = transform.position
-                    });
+                        cast.CurrentState = HumanoidState.Hit;
+                        _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
+                        {
+                            EntityId = cast.Id,
+                            HitDirection = _rigidbody.velocity,
+                            HitPosition = transform.position
+                        });
+                    }
                 }
 
                 _bouncingPool.Destroy(this);

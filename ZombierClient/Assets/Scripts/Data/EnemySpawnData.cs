@@ -1,11 +1,10 @@
 using Firebase.Firestore;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Prototype.Data
 {
     [FirestoreData]
-    public class EnemySpawnData : ScriptableObject
+    public class EnemySpawnData
     {
         [FirestoreProperty]
         public List<EnemyData> Enemies { get; set; }

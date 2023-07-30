@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Prototype.Data
 {
@@ -123,7 +122,7 @@ namespace Prototype.Data
         private EnemySpawnData CreateEnemySpawnData(string enemySpawnConfigId)
         {
             var enemySpawnConfig = _gameBalance.EnemySpawnConfig.FirstOrDefault(_ => _.Id.Equals(enemySpawnConfigId));
-            var enemySpawnData = ScriptableObject.CreateInstance<EnemySpawnData>();
+            var enemySpawnData = new EnemySpawnData();
 
             enemySpawnData.MinEnemyCount = (int)enemySpawnConfig.MinEnemyCount;
             enemySpawnData.MaxEnemyCount = (int)enemySpawnConfig.MaxEnemyCount;

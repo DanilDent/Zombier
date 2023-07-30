@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5860778791831712986}
   - component: {fileID: 5860778791831712981}
   m_Layer: 12
-  m_Name: PlayerYbot
+  m_Name: PlayerYBot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

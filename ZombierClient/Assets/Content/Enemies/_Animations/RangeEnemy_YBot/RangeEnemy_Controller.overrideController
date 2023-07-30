@@ -6,21 +6,17 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MeleeEnemyController
+  m_Name: RangeEnemy_Controller
   m_Controller: {fileID: 9100000, guid: 05157118d4f8d5345b6a3601c67cfa10, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: fcf4d54161751754db20e720f9466a6d, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: fcf4d54161751754db20e720f9466a6d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e22169c25e0aa824a95d9aece1d1d56a, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: e393de34ad4baa944aafc73fcbeda1ba, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: e393de34ad4baa944aafc73fcbeda1ba, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e22169c25e0aa824a95d9aece1d1d56a, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 7b7009572a5bd99499d723d6ce2ecfe6, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 7b7009572a5bd99499d723d6ce2ecfe6, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 00249220ceb232b499acb9c3dc9e0eb1, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 00249220ceb232b499acb9c3dc9e0eb1, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: fe245c522f606fa458bdbc77f8e658e3, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: fe245c522f606fa458bdbc77f8e658e3, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 9465b1ce4beb4064ea2b4ce996d8e5ae, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 9465b1ce4beb4064ea2b4ce996d8e5ae, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 4de94d1f2af12684896c27c5e6586775, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 4de94d1f2af12684896c27c5e6586775, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: bb31149c6d94bae4a890c5dfdddcec02, type: 2}

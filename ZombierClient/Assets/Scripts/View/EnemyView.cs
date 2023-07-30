@@ -26,26 +26,23 @@ namespace Prototype.View
             _eventService.OnEnemyAttackAnimationEvent(new GameEventService.EnemyAttackAnimationEventArgs { EntityId = _id });
         }
 
-        public void OnHitEndAnimationEvent()
-        {
-            _animator.SetLayerWeight(_hitLayerIndex, 0f);
-        }
-
         public void OnDeathAnimationEvent()
         {
             _eventService.OnEnemyDeathAnimationEvent(new GameEventService.EnemyDeathAnimationEventArgs { EntityId = _id });
         }
 
+        public void OnHitEndAnimationEvent()
+        {
+
+        }
+
         // Private
 
-        private void Start()
+        private void Awake()
         {
             _attackTriggersHashes = new List<int>();
-            _hitLayerIndex = _animator.GetLayerIndex("Hit Layer");
 
             _velocityHash = Animator.StringToHash("Velocity");
-            _hitDirXHash = Animator.StringToHash("HitDirX");
-            _hitDirZHash = Animator.StringToHash("HitDirZ");
             _hitTriggerHash = Animator.StringToHash("HitTrigger");
             _attackTriggersHashes.Add(Animator.StringToHash("Attack0Trigger"));
             _attackTriggersHashes.Add(Animator.StringToHash("Attack1Trigger"));
@@ -84,12 +81,9 @@ namespace Prototype.View
         private Animator _animator;
         //
         private int _velocityHash;
-        private int _hitDirXHash;
-        private int _hitDirZHash;
         private int _hitTriggerHash;
         private List<int> _attackTriggersHashes;
         private int _deathTrigger;
-        private int _hitLayerIndex;
 
         private void HandleMovementAnimation(object sender, GameEventService.EnemyMovedEventArgs e)
         {
@@ -103,17 +97,6 @@ namespace Prototype.View
         {
             if (_id == e.EntityId)
             {
-                Vector3 localHitDir = transform.InverseTransformDirection(e.HitDirection);
-
-                float hitDirX = localHitDir.x;
-                float hitDirZ = localHitDir.z;
-
-                hitDirX = Mathf.Clamp(hitDirX, -1f, 1f);
-                hitDirZ = Mathf.Clamp(hitDirZ, -1f, 0f);
-
-                _animator.SetFloat(_hitDirXHash, hitDirX);
-                _animator.SetFloat(_hitDirZHash, hitDirZ);
-                _animator.SetLayerWeight(_hitLayerIndex, 1f);
                 _animator.SetTrigger(_hitTriggerHash);
             }
         }

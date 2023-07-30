@@ -997,7 +997,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5256041640573715809}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b9791581bf01f941a56e999292b8b50, type: 3}
   m_Name: 
@@ -1178,20 +1178,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2295060480018141455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3303761241689283249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb239487a61403d49a080fbbc8644575, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _startStateNames:
-  - Base Layer.Locomotion
 --- !u!224 &2338543822793905540
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1440,7 +1426,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2779426809226690571}
   - component: {fileID: 8102729034663352945}
-  - component: {fileID: 2295060480018141455}
   m_Layer: 0
   m_Name: MeleeEnemyYBotView
   m_TagString: Untagged
@@ -1685,7 +1670,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5080133817221494188}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df65168c16ba193489e8ad691dcdfe71, type: 3}
   m_Name: 
@@ -11081,7 +11066,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &4209451179772027947
 GameObject:
   m_ObjectHideFlags: 0
@@ -11268,19 +11253,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4736646825774232755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5080133817221494188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4bc8e54dd5651944a16f8a94b8c820d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mode: 2
 --- !u!114 &4755645357636649171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11403,7 +11375,6 @@ GameObject:
   - component: {fileID: 8631145396210390735}
   - component: {fileID: 221031767005477205}
   - component: {fileID: 3658634014139004218}
-  - component: {fileID: 4736646825774232755}
   m_Layer: 0
   m_Name: EnemyHealthBarUI
   m_TagString: Untagged
@@ -11544,7 +11515,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5256041640573715809}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7dbb6bbdf4ffb46ab7dd87ba8191e7, type: 3}
   m_Name: 
@@ -12305,7 +12276,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 931e5316f55f5904685a03fe8698d9e0, type: 3}
   m_Controller: {fileID: 22100000, guid: 97232cb298713a64b9d390f37017474d, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 1
+  m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0

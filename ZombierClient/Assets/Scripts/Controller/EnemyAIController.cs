@@ -43,9 +43,6 @@ namespace Prototype.Controller
                 enemy.Agent.updateUpAxis = false;
                 enemy.Agent.stoppingDistance = enemy.AttackRange;
 
-                enemy.MovingForce = enemy.Acceleration * enemy.Rigidbody.mass;
-                enemy.StoppingForce = enemy.Deceleration * enemy.Rigidbody.mass;
-
                 enemy.Blackboard.SetVariableValue("EventService", _eventService);
                 enemy.Blackboard.SetVariableValue("Player", _player);
                 enemy.Blackboard.SetVariableValue("ProjectilePool", _projectilePool);

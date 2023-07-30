@@ -155,8 +155,6 @@ namespace Prototype.Controller
             {
                 _enemies.Remove(cast);
                 cast.Agent.enabled = false;
-                cast.Rigidbody.velocity = Vector3.zero;
-                cast.Rigidbody.useGravity = false;
                 cast.GetComponent<Collider>().enabled = false;
                 _timerService.RemoveTimersWithTarget(cast);
                 _enemiesToDestroy.Add(cast);
@@ -179,11 +177,6 @@ namespace Prototype.Controller
                 if (cast.Agent != null)
                 {
                     cast.Agent.enabled = false;
-                }
-                if (cast.Rigidbody != null)
-                {
-                    cast.Rigidbody.velocity = Vector3.zero;
-                    cast.Rigidbody.useGravity = false;
                 }
                 if (cast.GetComponent<Collider>() != null)
                 {

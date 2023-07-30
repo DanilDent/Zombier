@@ -21,7 +21,6 @@ namespace Prototype.Model
             IdData id,
             EnemyData dataTemplate,
             NavMeshAgent agent,
-            Rigidbody rigidbody,
             MarkerTargetPoint targetPoint,
             FSMOwner fsmOwner,
             Blackboard blackboard)
@@ -29,7 +28,6 @@ namespace Prototype.Model
             _id = id;
             _data = dataTemplate.Copy();
             _agent = agent;
-            _rigidbody = rigidbody;
             _targetPoint = targetPoint;
             _fsmOwner = fsmOwner;
             _blackboard = blackboard;
@@ -73,7 +71,6 @@ namespace Prototype.Model
         public float AttackRange => _data.EnemyAttack.AttackRange;
         // Gameplay properties
         public NavMeshAgent Agent => _agent;
-        public Rigidbody Rigidbody => _rigidbody;
         public Transform TargetPoint => _targetPoint.transform;
         public Transform ShootingPoint => _shootingPoint.transform;
         public float AttackRateRpm => _data.EnemyAttack.AttackRateRPM;
@@ -107,7 +104,6 @@ namespace Prototype.Model
         // Injected
         private IdData _id;
         private NavMeshAgent _agent;
-        private Rigidbody _rigidbody;
         private MarkerTargetPoint _targetPoint;
         private FSMOwner _fsmOwner;
         private Blackboard _blackboard;

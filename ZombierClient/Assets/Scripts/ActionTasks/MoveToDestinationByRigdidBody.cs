@@ -71,42 +71,54 @@ namespace Prototype.ActionTasks
 
         private void HandleMovement(EnemyModel enemy)
         {
+            Rigidbody rigidbody;
+            if (!enemy.gameObject.TryGetComponent<Rigidbody>(out rigidbody))
+            {
+                return;
+            }
+
             if (enemy.IsMoving)
             {
                 float movingForce = enemy.MovingForce;
 
-                Vector3 localVelocity = enemy.transform.InverseTransformDirection(enemy.Rigidbody.velocity);
+                Vector3 localVelocity = enemy.transform.InverseTransformDirection(rigidbody.velocity);
                 float totalAccelerationTillMax = enemy.MaxSpeed - Mathf.Max(0f, localVelocity.z);
-                float deltaAccelerationMax = (enemy.MovingForce / enemy.Rigidbody.mass) * Time.fixedDeltaTime;
+                float deltaAccelerationMax = (enemy.MovingForce / rigidbody.mass) * Time.fixedDeltaTime;
 
                 if (deltaAccelerationMax > totalAccelerationTillMax)
                 {
-                    movingForce = (enemy.Rigidbody.mass * totalAccelerationTillMax) / Time.fixedDeltaTime;
+                    movingForce = (rigidbody.mass * totalAccelerationTillMax) / Time.fixedDeltaTime;
                 }
 
-                enemy.Rigidbody.AddForce(enemy.transform.forward * movingForce, ForceMode.Force);
-                enemy.CurrentSpeed += (movingForce / enemy.Rigidbody.mass) * Time.fixedDeltaTime;
+                rigidbody.AddForce(enemy.transform.forward * movingForce, ForceMode.Force);
+                enemy.CurrentSpeed += (movingForce / rigidbody.mass) * Time.fixedDeltaTime;
                 enemy.CurrentSpeed = Mathf.Clamp(enemy.CurrentSpeed, 0f, enemy.MaxSpeed);
 
-                Debug.DrawRay(enemy.transform.position + Vector3.up * 0.5f, enemy.Rigidbody.velocity, Color.green, 1f);
+                Debug.DrawRay(enemy.transform.position + Vector3.up * 0.5f, rigidbody.velocity, Color.green, 1f);
             }
             else if (enemy.CurrentSpeed > 0)
             {
-                enemy.CurrentSpeed -= (enemy.StoppingForce / enemy.Rigidbody.mass) * Time.fixedDeltaTime;
+                enemy.CurrentSpeed -= (enemy.StoppingForce / rigidbody.mass) * Time.fixedDeltaTime;
                 enemy.CurrentSpeed = Mathf.Clamp(enemy.CurrentSpeed, 0f, enemy.MaxSpeed);
             }
         }
 
         private void HandleRotationNoFight(EnemyModel enemy)
         {
+            Rigidbody rigidbody;
+            if (!enemy.gameObject.TryGetComponent<Rigidbody>(out rigidbody))
+            {
+                return;
+            }
+
             Vector3 positionToLookAt = new Vector3(enemy.CurrentMovement.x, 0f, enemy.CurrentMovement.z).normalized;
 
             if (enemy.IsMoving && positionToLookAt != Vector3.zero)
             {
-                Vector3 velocityLocalZ = new Vector3(0f, 0f, Mathf.Max(0f, enemy.transform.InverseTransformDirection(enemy.Rigidbody.velocity).z));
+                Vector3 velocityLocalZ = new Vector3(0f, 0f, Mathf.Max(0f, enemy.transform.InverseTransformDirection(rigidbody.velocity).z));
                 Vector3 velocityZ = enemy.transform.TransformDirection(velocityLocalZ);
                 Vector3 newVelocityZ = Vector3.Slerp(velocityZ, positionToLookAt, enemy.RotationMultiplier * Time.fixedDeltaTime);
-                enemy.Rigidbody.velocity = newVelocityZ + (enemy.Rigidbody.velocity - velocityZ);
+                rigidbody.velocity = newVelocityZ + (rigidbody.velocity - velocityZ);
 
                 Quaternion currentRotation = enemy.transform.rotation;
                 Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);

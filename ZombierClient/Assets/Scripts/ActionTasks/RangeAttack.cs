@@ -54,6 +54,7 @@ namespace Prototype.ActionTasks
 
         private void Execute()
         {
+            agent.CurrentState = HumanoidState.PerformingAttack;
             EventService.value.OnEnemyAttack(new GameEventService.EnemyAttackEventArgs { EntityId = agent.Id });
         }
 

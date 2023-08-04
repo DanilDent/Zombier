@@ -2,8 +2,11 @@ using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
+
+using Random = UnityEngine.Random;
 
 namespace Prototype.View
 {
@@ -12,11 +15,18 @@ namespace Prototype.View
         // Public
 
         [Inject]
-        public void Construct(IdData id, GameEventService eventService, Animator animator)
+        public void Construct(
+            IdData id,
+            GameEventService eventService,
+            Animator animator,
+            GameConfigData gameConfig,
+            EnemyModel enemyModel)
         {
             _id = id;
             _eventService = eventService;
             _animator = animator;
+            _gameConfig = gameConfig;
+            _enemyModel = enemyModel;
         }
 
         public class Factory : PlaceholderFactory<UnityEngine.Object, EnemyView> { }
@@ -36,6 +46,11 @@ namespace Prototype.View
             _eventService.OnEnemyHitEnd(new GameEventService.EnemyHitEventArgs { EntityId = _id });
         }
 
+        public void OnAttackEndAnimationEvent()
+        {
+            _eventService.OnEnemyAttackEnd(new GameEventService.EnemyAttackEventArgs { EntityId = _id });
+        }
+
         // Private
 
         private void Awake()
@@ -46,7 +61,8 @@ namespace Prototype.View
             _hitTriggerHash = Animator.StringToHash("HitTrigger");
             _attackTriggersHashes.Add(Animator.StringToHash("Attack0Trigger"));
             _attackTriggersHashes.Add(Animator.StringToHash("Attack1Trigger"));
-            _deathTrigger = Animator.StringToHash("DeathTrigger");
+            _deathTriggerHash = Animator.StringToHash("DeathTrigger");
+            _animMultiplierHash = Animator.StringToHash("AnimMultiplier");
 
             float offset = Random.Range(0f, 1f);
             foreach (var fullStateName in _startStateNames)
@@ -65,6 +81,16 @@ namespace Prototype.View
             _eventService.EnemyDeath += HandleDeathAnimaiton;
         }
 
+        private void Start()
+        {
+            UpdateAnimScaling();
+        }
+
+        private void Update()
+        {
+            UpdateAnimScaling();
+        }
+
         private void OnDisable()
         {
             _eventService.EnemyMoved -= HandleMovementAnimation;
@@ -79,17 +105,21 @@ namespace Prototype.View
         private IdData _id;
         private GameEventService _eventService;
         private Animator _animator;
+        private GameConfigData _gameConfig;
+        private EnemyModel _enemyModel;
         //
         private int _velocityHash;
         private int _hitTriggerHash;
         private List<int> _attackTriggersHashes;
-        private int _deathTrigger;
+        private int _deathTriggerHash;
+        private int _animMultiplierHash;
 
         private void HandleMovementAnimation(object sender, GameEventService.EnemyMovedEventArgs e)
         {
             if (_id == e.Id)
             {
                 _animator.SetFloat(_velocityHash, e.Value);
+                UpdateAnimScaling();
             }
         }
 
@@ -98,6 +128,7 @@ namespace Prototype.View
             if (_id == e.EntityId)
             {
                 _animator.SetTrigger(_hitTriggerHash);
+                UpdateAnimScaling();
             }
         }
 
@@ -107,6 +138,7 @@ namespace Prototype.View
             {
                 int attackTriggerHash = _attackTriggersHashes[Random.Range(0, _attackTriggersHashes.Count)];
                 _animator.SetTrigger(attackTriggerHash);
+                UpdateAnimScaling();
             }
         }
 
@@ -114,7 +146,36 @@ namespace Prototype.View
         {
             if (e.Entity is EnemyModel cast && _id == cast.Id)
             {
-                _animator.SetTrigger(_deathTrigger);
+                _animator.SetTrigger(_deathTriggerHash);
+                UpdateAnimScaling();
+            }
+        }
+
+        private string GetCurrentAnimationClipName()
+        {
+            AnimatorClipInfo[] clipInfo = _animator.GetCurrentAnimatorClipInfo(0);
+            if (clipInfo.Length > 0)
+            {
+                return clipInfo[0].clip.name;
+            }
+
+            return string.Empty;
+        }
+
+        private void UpdateAnimScaling()
+        {
+            var animName = GetCurrentAnimationClipName();
+            float multiplier = 1f;
+            if (_gameConfig.AnimScaling.Multipliers.ContainsKey(animName))
+            {
+                float multiplierFromConfig = _gameConfig.AnimScaling.Multipliers[animName].Item2;
+                float multiplierFromModel = (float)typeof(EnemyModel).GetProperties()
+                    .FirstOrDefault(_ => _.Name.Equals(_gameConfig.AnimScaling.Multipliers[animName].Item1)).GetValue(_enemyModel);
+                _animator.SetFloat(_animMultiplierHash, multiplierFromConfig * multiplierFromModel);
+            }
+            else
+            {
+                _animator.SetFloat(_animMultiplierHash, multiplier);
             }
         }
     }

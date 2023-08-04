@@ -7,6 +7,7 @@
         Chase,
         Fight,
         Hit,
+        PerformingAttack,
         Dead
     }
 }

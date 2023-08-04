@@ -30,6 +30,9 @@ namespace Prototype
 
         public override void InstallBindings()
         {
+            // Game config
+            Container.Bind<GameConfigData>().FromInstance(_gameConfig).AsSingle();
+
             // Game data
             _currentGameSession = _appData.User.GameSession.Copy();
             Container.Bind<GameSessionData>().FromInstance(_currentGameSession).AsSingle();

@@ -25,3 +25,4 @@ MonoBehaviour:
     type: 2}
   ProjectileBouncePhysMat: {fileID: 13400000, guid: d06e41eb821fb1549a4fa150b729ff7f,
     type: 2}
+  AnimScaling: {fileID: 11400000, guid: ea7040e973e8edd4ba6d06a51adad060, type: 2}

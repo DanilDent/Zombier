@@ -45,15 +45,18 @@ namespace Prototype.ActionTasks
         private void Subscribe()
         {
             EventService.value.EnemyAttackAnimationEvent += HandleAttackAnimationEvent;
+            EventService.value.EnemyAttackEnd += HandleAttackAnimationEnd;
         }
 
         private void Unsubscribe()
         {
             EventService.value.EnemyAttackAnimationEvent -= HandleAttackAnimationEvent;
+            EventService.value.EnemyAttackEnd -= HandleAttackAnimationEnd;
         }
 
         private void Execute()
         {
+            agent.CurrentState = HumanoidState.PerformingAttack;
             EventService.value.OnEnemyAttack(new GameEventService.EnemyAttackEventArgs { EntityId = agent.Id });
         }
 
@@ -68,6 +71,14 @@ namespace Prototype.ActionTasks
                 {
                     EventService.value.OnDamageDealt(new GameEventService.DamageDealtEventArgs { Attacker = agent, Defender = Player.value });
                 }
+            }
+        }
+
+        private void HandleAttackAnimationEnd(object sender, GameEventService.EnemyAttackEventArgs e)
+        {
+            if (agent.Id == e.EntityId)
+            {
+                agent.CurrentState = HumanoidState.Idle;
             }
         }
     }

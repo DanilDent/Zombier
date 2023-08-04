@@ -31,6 +31,7 @@ namespace Prototype.Service
         public event EventHandler<EnemyHitEventArgs> EnemyHit;
         public event EventHandler<EnemyHitEventArgs> EnemyHitEnd;
         public event EventHandler<EnemyAttackEventArgs> EnemyAttack;
+        public event EventHandler<EnemyAttackEventArgs> EnemyAttackEnd;
         public event EventHandler<EnemyAttackAnimationEventArgs> EnemyAttackAnimationEvent;
 
         public event EventHandler<LevelClearedEventArgs> LevelCleared;
@@ -167,6 +168,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnEnemyAttackEnd(EnemyAttackEventArgs e)
+        {
+            EnemyAttackEnd?.Invoke(this, e);
+        }
 
         public void OnEnemyHitEnd(EnemyHitEventArgs e)
         {

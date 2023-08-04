@@ -17,5 +17,7 @@ namespace Prototype.Data
         //
         public PhysicMaterial ProjectileDefaultPhysMat;
         public PhysicMaterial ProjectileBouncePhysMat;
+
+        public AnimScalingConfigData AnimScaling;
     }
 }

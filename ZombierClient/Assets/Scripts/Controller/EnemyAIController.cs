@@ -1,4 +1,5 @@
-﻿using Prototype.Model;
+﻿using Prototype.Data;
+using Prototype.Model;
 using Prototype.ObjectPool;
 using Prototype.Service;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace Prototype.Controller
 {
     public class EnemyAIController : MonoBehaviour
     {
-        // Public 
-
+        // Public
+        // 
         [Inject]
         public void Construct(
             GameEventService eventService,
@@ -34,6 +35,13 @@ namespace Prototype.Controller
         private MonoObjectPool<EnemyProjectileModel> _projectilePool;
         // From inspector
         [SerializeField] private float _obstacleAvoidanceRadius = 1f;
+        //
+        private Dictionary<IdData, Coroutine> _restoreFromHitCoroutines;
+
+        private void Awake()
+        {
+            _restoreFromHitCoroutines = new Dictionary<IdData, Coroutine>();
+        }
 
         private void OnEnable()
         {
@@ -60,6 +68,7 @@ namespace Prototype.Controller
                 enemy.Agent.stoppingDistance = enemy.AttackRange;
                 enemy.Agent.radius = _obstacleAvoidanceRadius;
                 enemy.FSMOwner.UpdateBehaviour();
+                Debug.Log($"Current state: {enemy.CurrentState}");
             }
         }
 
@@ -75,7 +84,23 @@ namespace Prototype.Controller
             {
                 return;
             }
-            enemy.CurrentState = HumanoidState.Chase;
+            if (enemy.CurrentState != HumanoidState.Hit)
+            {
+                return;
+            }
+            if (_restoreFromHitCoroutines.ContainsKey(enemy.Id))
+            {
+                StopCoroutine(_restoreFromHitCoroutines[enemy.Id]);
+            }
+            enemy.CurrentState = HumanoidState.RestoringFromHit;
+            float restoreDelaySec = 0.25f;
+            _restoreFromHitCoroutines[enemy.Id] = StartCoroutine(Helpers.InvokeWithDelay(() =>
+            {
+                if (enemy.CurrentState == HumanoidState.RestoringFromHit)
+                {
+                    enemy.CurrentState = HumanoidState.Idle;
+                }
+            }, restoreDelaySec));
         }
     }
 }

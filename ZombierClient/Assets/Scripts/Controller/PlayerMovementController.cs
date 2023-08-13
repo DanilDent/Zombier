@@ -33,6 +33,11 @@ namespace Prototype.Controller
         private void Update()
         {
             _currentMovement = new Vector3(_inputService.Direction.x, 0f, _inputService.Direction.y);
+
+#if DEBUG
+            _currentMovement = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+#endif
+
             HandleMovement();
             switch (_playerModel.CurrentState)
             {

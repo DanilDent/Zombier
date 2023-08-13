@@ -79,36 +79,6 @@ namespace Prototype.Controller
             FireInitUIEvents();
         }
 
-        private void Update()
-        {
-            // TODO: do not forget to delete these, this is for debug only 
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_Heal_Level_1" });
-            }
-
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseMaxHealth_Level_1" });
-            }
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseMaxHealth_Level_2" });
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Fire_Level_1" });
-            }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_IncreaseDamage_Fire_Level_2" });
-            }
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                _gameEventService.OnPlayerBuffApplied(new GameEventService.PlayerBuffAppliedEventArgs { BuffId = "Id_Buff_BouncingProjectiles" });
-            }
-        }
-
         private void FireInitUIEvents()
         {
             _gameEventService.OnDamaged(new GameEventService.DamagedEventArgs

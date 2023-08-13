@@ -99,6 +99,7 @@ namespace Prototype.Controller
 
         private void HandleResumeGameSession(object sender, EventArgs e)
         {
+            _appData.User.GameSession.Location = _sessionConfigurator.CreateLocationData(_appData.User.GameSession.LocationId);
             _appEventService.OnLoadScene(new LoadSceneEventArgs { To = Scene.Game });
             Debug.Log("Game session resume.");
         }

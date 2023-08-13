@@ -13,9 +13,31 @@ namespace Prototype.Data
         public GameSessionData CreateGameSession(string locationId)
         {
             var session = new GameSessionData();
+            session.LocationId = locationId;
             session.Player = CreatePlayerData();
             session.Location = CreateLocationData(locationId);
             return session;
+        }
+
+        public LocationData CreateLocationData(string locationId)
+        {
+            var locationCfg = _gameBalance.Locations.FirstOrDefault(_ => _.Id.Equals(locationId));
+            var locationData = new LocationData();
+
+            var levelsCfg = _gameBalance.Levels
+                .Where(_ => locationCfg.Levels.Contains(_.Id)).ToArray();
+            locationData.Levels = levelsCfg
+                .Select(_ => CreateLevelData(_.Id)).ToArray();
+
+            locationData.LocationLevelPrefabAddress = locationCfg.LocationLevelPrefabAddress;
+            locationData.GroundPrefabAddress = locationCfg.GroundPrefabAddress;
+            locationData.WallPrefabsLabel = locationCfg.WallPrefabsLabel;
+            locationData.ObstaclePrefabsLabel = locationCfg.ObstaclePrefabsLabel;
+            locationData.ExitPrefabAddress = locationCfg.ExitPrefabAddress;
+            locationData.EnvGroundPrefabAddress = locationCfg.EnvGroundPrefabAddress;
+            locationData.EnvObstaclePrefabsLabel = locationCfg.EnvObstaclePrefabsLabel;
+
+            return locationData;
         }
 
         private readonly AppData _appData;
@@ -93,6 +115,8 @@ namespace Prototype.Data
             enemyAttackData.Recoil = 0.1f;
             enemyAttackData.Damage = CreateDescDamage(enemyAttackCfg.Damage);
             enemyAttackData.ProjectileData = new ProjectileData { PrefabAddress = enemyAttackCfg.ProjectilePrefabAddress };
+            enemyAttackData.Attack0SpeedMultiplier = (float)enemyAttackCfg.Attack0SpeedMultiplier;
+            enemyAttackData.Attack1SpeedMultiplier = (float)enemyAttackCfg.Attack1SpeedMultiplier;
 
             return enemyAttackData;
         }
@@ -104,8 +128,12 @@ namespace Prototype.Data
 
             var enemyData = new EnemyData();
 
+            enemyData.EnemyId = enemyId;
+            enemyData.Level = enemyLevel;
             enemyData.ModelPrefabAddress = enemyCfg.ModelPrefabAddress;
             enemyData.ViewPrefabAddress = enemyCfg.ViewPrefabAddress;
+            enemyData.HitFromFront0Speed = (float)enemyCfg.HitFromFront0Speed;
+
             enemyData.MaxSpeed = (float)enemyLvlCfg.MaxSpeed;
             enemyData.Damage = CreateDescDamage(enemyLvlCfg.Damage);
             enemyData.CritChance = (float)enemyLvlCfg.CritChance;
@@ -147,27 +175,6 @@ namespace Prototype.Data
             levelData.LevelSize = (int)levelCfg.LevelSize;
 
             return levelData;
-        }
-
-        private LocationData CreateLocationData(string locationId)
-        {
-            var locationCfg = _gameBalance.Locations.FirstOrDefault(_ => _.Id.Equals(locationId));
-            var locationData = new LocationData();
-
-            var levelsCfg = _gameBalance.Levels
-                .Where(_ => locationCfg.Levels.Contains(_.Id)).ToArray();
-            locationData.Levels = levelsCfg
-                .Select(_ => CreateLevelData(_.Id)).ToArray();
-
-            locationData.LocationLevelPrefabAddress = locationCfg.LocationLevelPrefabAddress;
-            locationData.GroundPrefabAddress = locationCfg.GroundPrefabAddress;
-            locationData.WallPrefabsLabel = locationCfg.WallPrefabsLabel;
-            locationData.ObstaclePrefabsLabel = locationCfg.ObstaclePrefabsLabel;
-            locationData.ExitPrefabAddress = locationCfg.ExitPrefabAddress;
-            locationData.EnvGroundPrefabAddress = locationCfg.EnvGroundPrefabAddress;
-            locationData.EnvObstaclePrefabsLabel = locationCfg.EnvObstaclePrefabsLabel;
-
-            return locationData;
         }
     }
 }

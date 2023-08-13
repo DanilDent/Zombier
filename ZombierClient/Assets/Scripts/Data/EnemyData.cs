@@ -7,39 +7,37 @@ namespace Prototype.Data
     public class EnemyData
     {
         [FirestoreProperty]
+        public string EnemyId { get; set; }
+
+        [FirestoreProperty]
         public string ModelPrefabAddress { get; set; }
 
         [FirestoreProperty]
         public string ViewPrefabAddress { get; set; }
 
         [FirestoreProperty]
+        public int Level { get; set; }
+
         public float MaxSpeed { get; set; }
 
-        [FirestoreProperty]
         public DescDamage Damage { get; set; }
 
-        [FirestoreProperty]
         public float CritChance { get; set; }
 
-        [FirestoreProperty]
         public float CritMultiplier { get; set; }
 
-        [FirestoreProperty]
         public float Health { get; set; }
 
-        [FirestoreProperty]
         public float MaxHealth { get; set; }
 
-        [FirestoreProperty]
         public DescDamage Resists { get; set; }
 
-        [FirestoreProperty]
         public EnemyAttackData EnemyAttack { get; set; }
 
-        [FirestoreProperty]
         public List<DescAttackStrategy> AttackStrategies { get; set; }
 
-        [FirestoreProperty]
         public int ExpReward { get; set; }
+
+        public float HitFromFront0Speed { get; set; }
     }
 }

@@ -62,9 +62,12 @@ namespace Prototype.Model
         public DescDamage Resists => _data.Resists;
         // !IDamageable
 
-        public int ExpReward => _data.ExpReward;
         public float MaxSpeed => _data.MaxSpeed;
+        public int ExpReward => _data.ExpReward;
         public float AttackRange => _data.EnemyAttack.AttackRange;
+        public float Attack0SpeedMultiplier => _data.EnemyAttack.Attack0SpeedMultiplier;
+        public float Attack1SpeedMultiplier => _data.EnemyAttack.Attack1SpeedMultiplier;
+        public float HitFromFront0Speed => _data.HitFromFront0Speed;
         // Gameplay properties
         public NavMeshAgent Agent => _agent;
         public Transform TargetPoint => _targetPoint.transform;

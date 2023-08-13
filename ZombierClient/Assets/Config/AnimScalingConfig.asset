@@ -34,7 +34,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 4
     - Name: 
       Entry: 7
       Data: 
@@ -51,6 +51,72 @@ MonoBehaviour:
     - Name: m_Item2
       Entry: 4
       Data: 2.25
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Enemy0Attack0
+    - Name: $v
+      Entry: 7
+      Data: 3|System.Tuple`2[[System.String, mscorlib],[System.Single, mscorlib]],
+        mscorlib
+    - Name: m_Item1
+      Entry: 1
+      Data: Attack0SpeedMultiplier
+    - Name: m_Item2
+      Entry: 4
+      Data: 2.7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Enemy0Attack1
+    - Name: $v
+      Entry: 7
+      Data: 4|System.Tuple`2[[System.String, mscorlib],[System.Single, mscorlib]],
+        mscorlib
+    - Name: m_Item1
+      Entry: 1
+      Data: Attack1SpeedMultiplier
+    - Name: m_Item2
+      Entry: 4
+      Data: 2.7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Enemy0HitFromFront0
+    - Name: $v
+      Entry: 7
+      Data: 5|System.Tuple`2[[System.String, mscorlib],[System.Single, mscorlib]],
+        mscorlib
+    - Name: m_Item1
+      Entry: 1
+      Data: HitFromFront0Speed
+    - Name: m_Item2
+      Entry: 4
+      Data: 3
     - Name: 
       Entry: 8
       Data: 

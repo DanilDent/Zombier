@@ -12,6 +12,8 @@ namespace Prototype.Data
         public int CurrentLevelIndex { get; set; }
 
         [FirestoreProperty]
+        public string LocationId { get; set; }
+
         public LocationData Location { get; set; }
     }
 }

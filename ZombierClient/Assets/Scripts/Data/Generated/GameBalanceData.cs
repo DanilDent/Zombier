@@ -194,8 +194,11 @@
         [JsonProperty("Damage")]
         public string Damage { get; set; }
 
-        [JsonProperty("AttackSpeedMultiplier")]
-        public double AttackSpeedMultiplier { get; set; }
+        [JsonProperty("Attack0SpeedMultiplier")]
+        public double Attack0SpeedMultiplier { get; set; }
+
+        [JsonProperty("Attack1SpeedMultiplier")]
+        public double Attack1SpeedMultiplier { get; set; }
 
         [JsonProperty("AttackRange")]
         public double AttackRange { get; set; }

@@ -9,6 +9,9 @@ namespace Prototype.Data
         public float AttackRateRPM { get; set; }
 
         [FirestoreProperty]
+        public float AttackSpeedMultiplier { get; set; }
+
+        [FirestoreProperty]
         public float AttackRange { get; set; }
 
         [FirestoreProperty]

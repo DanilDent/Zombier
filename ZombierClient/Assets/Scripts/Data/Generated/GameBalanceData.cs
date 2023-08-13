@@ -169,6 +169,15 @@
 
         [JsonProperty("Level")]
         public string Level { get; set; }
+
+        [JsonProperty("Attack0Speed")]
+        public double Attack0Speed { get; set; }
+
+        [JsonProperty("Attack1Speed")]
+        public double Attack1Speed { get; set; }
+
+        [JsonProperty("HitFromFront0Speed")]
+        public double HitFromFront0Speed { get; set; }
     }
 
     public partial class EnemyAttack
@@ -184,6 +193,9 @@
 
         [JsonProperty("Damage")]
         public string Damage { get; set; }
+
+        [JsonProperty("AttackSpeedMultiplier")]
+        public double AttackSpeedMultiplier { get; set; }
 
         [JsonProperty("AttackRange")]
         public double AttackRange { get; set; }
@@ -211,6 +223,12 @@
 
         [JsonProperty("MaxSpeed")]
         public double MaxSpeed { get; set; }
+
+        [JsonProperty("HitDurationMultiplier")]
+        public double HitDurationMultiplier { get; set; }
+
+        [JsonProperty("DeathSpeedMultiplier")]
+        public double DeathSpeedMultiplier { get; set; }
 
         [JsonProperty("Damage")]
         public string Damage { get; set; }

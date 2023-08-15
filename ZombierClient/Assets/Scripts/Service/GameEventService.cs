@@ -153,6 +153,7 @@ namespace Prototype.Service
             public IdData EntityId;
             public Vector3 HitDirection;
             public Vector3 HitPosition;
+            public bool PlayAnimation;
         }
 
         public class EnemyAttackEventArgs : EventArgs

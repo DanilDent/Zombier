@@ -40,7 +40,8 @@ namespace Prototype.Model
 
                 if (damageable is EnemyModel cast)
                 {
-                    if (Helpers.TryRandom(0.5f))
+                    float hitAnimProbability = 0.25f;
+                    if (Helpers.TryRandom(hitAnimProbability))
                     {
                         cast.CurrentState = HumanoidState.Hit;
                         _eventService.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = cast.Id, Value = 0f });
@@ -48,7 +49,18 @@ namespace Prototype.Model
                         {
                             EntityId = cast.Id,
                             HitDirection = _rigidbody.velocity,
-                            HitPosition = transform.position
+                            HitPosition = transform.position,
+                            PlayAnimation = true
+                        });
+                    }
+                    else
+                    {
+                        _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
+                        {
+                            EntityId = cast.Id,
+                            HitDirection = _rigidbody.velocity,
+                            HitPosition = transform.position,
+                            PlayAnimation = false
                         });
                     }
                 }
@@ -64,7 +76,8 @@ namespace Prototype.Model
 
                 if (damageable is EnemyModel cast)
                 {
-                    if (Helpers.TryRandom(0.5f))
+                    float hitAnimProbability = 0.25f;
+                    if (Helpers.TryRandom(hitAnimProbability))
                     {
                         cast.CurrentState = HumanoidState.Hit;
                         _eventService.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = cast.Id, Value = 0f });
@@ -72,7 +85,18 @@ namespace Prototype.Model
                         {
                             EntityId = cast.Id,
                             HitDirection = _rigidbody.velocity,
-                            HitPosition = transform.position
+                            HitPosition = transform.position,
+                            PlayAnimation = true
+                        });
+                    }
+                    else
+                    {
+                        _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
+                        {
+                            EntityId = cast.Id,
+                            HitDirection = _rigidbody.velocity,
+                            HitPosition = transform.position,
+                            PlayAnimation = false
                         });
                     }
                 }

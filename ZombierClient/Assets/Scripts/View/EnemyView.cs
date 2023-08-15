@@ -127,8 +127,11 @@ namespace Prototype.View
         {
             if (_id == e.EntityId)
             {
-                _animator.SetTrigger(_hitTriggerHash);
-                UpdateAnimScaling();
+                if (e.PlayAnimation)
+                {
+                    _animator.SetTrigger(_hitTriggerHash);
+                    UpdateAnimScaling();
+                }
             }
         }
 

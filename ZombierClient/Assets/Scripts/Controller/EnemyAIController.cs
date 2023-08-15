@@ -93,7 +93,7 @@ namespace Prototype.Controller
                 StopCoroutine(_restoreFromHitCoroutines[enemy.Id]);
             }
             enemy.CurrentState = HumanoidState.RestoringFromHit;
-            float restoreDelaySec = 0.25f;
+            float restoreDelaySec = 1f;
             _restoreFromHitCoroutines[enemy.Id] = StartCoroutine(Helpers.InvokeWithDelay(() =>
             {
                 if (enemy.CurrentState == HumanoidState.RestoringFromHit)

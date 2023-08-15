@@ -43,6 +43,7 @@ namespace Prototype.Model
                     if (Helpers.TryRandom(1f))
                     {
                         cast.CurrentState = HumanoidState.Hit;
+                        _eventService.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = cast.Id, Value = 0f });
                         _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
                         {
                             EntityId = cast.Id,
@@ -66,6 +67,7 @@ namespace Prototype.Model
                     if (Helpers.TryRandom(0.5f))
                     {
                         cast.CurrentState = HumanoidState.Hit;
+                        _eventService.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = cast.Id, Value = 0f });
                         _eventService.OnEnemyHit(new GameEventService.EnemyHitEventArgs
                         {
                             EntityId = cast.Id,

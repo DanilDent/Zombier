@@ -28,9 +28,12 @@ namespace Prototype.Model
             _gameBalance = appData.GameBalance;
 
             MaxHealth = _gameBalance.Player.PlayerConfig.MaxHealth;
+            Speed = (float)_gameBalance.Player.PlayerConfig.MaxSpeed;
+
             _damage = RecalcDamage();
             AppliableEffects = new List<EffectConfig>();
             AppliedEffects = new List<EffectConfig>();
+
         }
 
         public enum State
@@ -80,11 +83,7 @@ namespace Prototype.Model
         public WeaponModel Weapon => _weaponModel;
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
-        public float Speed
-        {
-            get => _playerSession.MaxSpeed;
-            set => _playerSession.MaxSpeed = value;
-        }
+        public float Speed { get; set; }
         public float RotationSpeed => _rotationSpeed;
         public State CurrentState { get; set; }
         public EnemyModel CurrentTarget { get => _currentTarget; set => _currentTarget = value; }

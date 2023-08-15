@@ -6,7 +6,16 @@ using System.Globalization;
 namespace Prototype.Data
 {
     public enum DamageTypeEnum { Electric, Fire, Physical, Toxic, Frost, None };
-    public enum BuffTypeEnum { Heal, IncreaseMaxHealth, IncreaseDamage, BouncingProjectiles, None };
+    public enum BuffTypeEnum
+    {
+        None,
+        Heal,
+        IncreaseMaxHealth,
+        IncreaseDamage,
+        BouncingProjectiles,
+        IncreaseMovementSpeed,
+    };
+
     public enum EffectTypeEnum { Burn, Poison, Freeze, Smite, Dodge, Explode, Hypnotize, Scare, None };
     public enum ApplyEventTypeEnum { DamageTarget, DamagedByTarget, DestroyTarget, None };
     public enum RarityEnum { Common, Rare, Epic, Legendary, None }
@@ -233,6 +242,8 @@ namespace Prototype.Data
                     return BuffTypeEnum.IncreaseDamage;
                 case "BouncingProjectiles":
                     return BuffTypeEnum.BouncingProjectiles;
+                case "IncreaseMovementSpeed":
+                    return BuffTypeEnum.IncreaseMovementSpeed;
             }
             throw new Exception("Cannot unmarshal type BuffTypeEnum");
         }
@@ -261,6 +272,9 @@ namespace Prototype.Data
                     return;
                 case BuffTypeEnum.BouncingProjectiles:
                     serializer.Serialize(writer, "BouncingProjectiles");
+                    return;
+                case BuffTypeEnum.IncreaseMovementSpeed:
+                    serializer.Serialize(writer, "IncreaseMovementSpeed");
                     return;
             }
             throw new Exception("Cannot marshal type BuffTypeEnum");

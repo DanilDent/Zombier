@@ -40,7 +40,7 @@ namespace Prototype.Model
 
                 if (damageable is EnemyModel cast)
                 {
-                    if (Helpers.TryRandom(1f))
+                    if (Helpers.TryRandom(0.5f))
                     {
                         cast.CurrentState = HumanoidState.Hit;
                         _eventService.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = cast.Id, Value = 0f });

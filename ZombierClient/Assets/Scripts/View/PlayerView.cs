@@ -1,6 +1,9 @@
-﻿using Prototype.Service;
+﻿using Prototype.Data;
+using Prototype.Model;
+using Prototype.Service;
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using Zenject;
@@ -12,9 +15,15 @@ namespace Prototype.View
         // Public 
 
         [Inject]
-        public void Construct(GameEventService eventService, Rig aimRig)
+        public void Construct(
+            GameEventService eventService,
+            GameConfigData gameConfig,
+            PlayerModel playerModel,
+            Rig aimRig)
         {
             _eventService = eventService;
+            _gameConfig = gameConfig;
+            _playerModel = playerModel;
             _aimRig = aimRig;
         }
 
@@ -29,6 +38,8 @@ namespace Prototype.View
 
         // Injected
         private GameEventService _eventService;
+        private GameConfigData _gameConfig;
+        private PlayerModel _playerModel;
         private Rig _aimRig;
         //
 
@@ -41,6 +52,7 @@ namespace Prototype.View
 
 
         private Animator _animator;
+        private int _baseLayerIndex;
         private int _aimLayerIndex;
         private int _aimMovementLayerIndex;
 
@@ -50,6 +62,7 @@ namespace Prototype.View
         private int _shootTriggerHash;
         private int _deathTriggerHash;
         private int _reviveTriggerHash;
+        private int _animMultiplierHash;
 
         private State _state;
 
@@ -67,7 +80,9 @@ namespace Prototype.View
             _shootTriggerHash = Animator.StringToHash("ShootTrigger");
             _deathTriggerHash = Animator.StringToHash("DeathTrigger");
             _reviveTriggerHash = Animator.StringToHash("ReviveTrigger");
+            _animMultiplierHash = Animator.StringToHash("AnimMultiplier");
 
+            _baseLayerIndex = _animator.GetLayerIndex("Base Layer");
             _aimLayerIndex = _animator.GetLayerIndex("Aim");
             _aimMovementLayerIndex = _animator.GetLayerIndex("Aim movement");
         }
@@ -98,11 +113,13 @@ namespace Prototype.View
             {
                 case State.NoAim:
                     _animator.SetFloat(_velocityHash, e.Movement.magnitude);
+                    UpdateAnimScaling();
                     break;
                 case State.Aim:
                     Vector3 movementInLocalSpace = transform.InverseTransformDirection(e.Movement);
                     _animator.SetFloat(_velocityXHash, movementInLocalSpace.x);
                     _animator.SetFloat(_velocityZHash, movementInLocalSpace.z);
+                    UpdateAnimScaling();
                     break;
                 case State.Death:
                     break;
@@ -180,6 +197,35 @@ namespace Prototype.View
 
             _animator.SetLayerWeight(_aimLayerIndex, targetValue);
             _animator.SetLayerWeight(_aimMovementLayerIndex, targetValue);
+        }
+
+        private void UpdateAnimScaling()
+        {
+            var animName = GetCurrentAnimationClipName();
+            float multiplier = 1f;
+            if (_gameConfig.AnimScaling.Multipliers.ContainsKey(animName))
+            {
+                float multiplierFromConfig = _gameConfig.AnimScaling.Multipliers[animName].Item2;
+                float multiplierFromModel = (float)typeof(PlayerModel).GetProperties()
+                    .FirstOrDefault(_ => _.Name.Equals(_gameConfig.AnimScaling.Multipliers[animName].Item1)).GetValue(_playerModel);
+                _animator.SetFloat(_animMultiplierHash, multiplierFromConfig * multiplierFromModel);
+            }
+            else
+            {
+                _animator.SetFloat(_animMultiplierHash, multiplier);
+            }
+        }
+
+        private string GetCurrentAnimationClipName()
+        {
+            AnimatorClipInfo[] clipInfo = _animator
+                .GetCurrentAnimatorClipInfo(_state == State.NoAim ? _baseLayerIndex : _aimMovementLayerIndex);
+            if (clipInfo.Length > 0)
+            {
+                return clipInfo[0].clip.name;
+            }
+
+            return string.Empty;
         }
     }
 }

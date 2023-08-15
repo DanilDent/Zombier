@@ -9,7 +9,6 @@ namespace Prototype.Data
         [FirestoreProperty]
         public string PlayerPrefabAddress { get; set; }
 
-        [FirestoreProperty]
         public float MaxSpeed { get; set; }
 
         [FirestoreProperty]

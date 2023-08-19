@@ -1,4 +1,6 @@
-﻿namespace Prototype.LevelGeneration
+﻿using System.Runtime.CompilerServices;
+
+namespace Prototype.LevelGeneration
 {
     public partial class LevelGenerator
     {
@@ -46,6 +48,7 @@
                 return IsCellEquals(TileType.Empty, x, y);
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool IsCellEquals(TileType type, int x, int y)
             {
                 x = IndexInternal(x);
@@ -63,9 +66,11 @@
 
             private TileType[,] _map;
             private int _maxSize;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private int IndexInternal(int index)
             {
-                return index + _maxSize / 2;
+                return index + (_maxSize >> 1);
             }
         }
     }

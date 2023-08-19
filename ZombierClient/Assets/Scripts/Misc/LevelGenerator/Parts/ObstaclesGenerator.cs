@@ -21,7 +21,6 @@ namespace Prototype.LevelGeneration
            int minCnt,
            int maxCnt)
         {
-            _tempTransform = new GameObject("TempTransform").transform;
             _tempGameObjects = new List<GameObject>();
 
             int counter = Random.Range(minCnt, maxCnt);
@@ -43,20 +42,24 @@ namespace Prototype.LevelGeneration
                 --counter;
             }
 
-            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = _meshCombiner.Combine(gameObjectName);
-            if (obstacleType == TileType.Obstacle && result != null)
+            if (obstacleType == TileType.Obstacle)
             {
-                result.AddComponent<MeshCollider>();
-                NavMeshModifier navMeshModifier = result.AddComponent<NavMeshModifier>();
-                navMeshModifier.overrideArea = true;
-                navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);
+                foreach (var obstacle in _tempGameObjects)
+                {
+                    NavMeshModifier navMeshModifier = obstacle.AddComponent<NavMeshModifier>();
+                    navMeshModifier.overrideArea = true;
+                    navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);
+                }
+            }
+
+            GameObject result = new GameObject(gameObjectName);
+            foreach (var obstacle in _tempGameObjects)
+            {
+                obstacle.transform.SetParent(result.transform);
             }
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;
-            Object.DestroyImmediate(_tempTransform.gameObject);
-            _tempTransform = null;
 
             return result;
         }
@@ -80,7 +83,7 @@ namespace Prototype.LevelGeneration
                 if (CanPlaceObstacleOn(groundType, position.x, position.y, size))
                 {
                     Quaternion rot = Quaternion.Euler(0f, rotY, 0f);
-                    GameObject instance = Object.Instantiate(prefab, new Vector3(position.x, 0f, position.y), rot, _tempTransform);
+                    GameObject instance = Object.Instantiate(prefab, new Vector3(position.x, 0f, position.y), rot);
                     _tempGameObjects.Add(instance);
 
                     for (int xOffset = -size.x / 2; xOffset < size.x / 2 + size.x % 2; ++xOffset)

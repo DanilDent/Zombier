@@ -80,7 +80,7 @@ namespace Prototype.LevelGeneration
 
             float endTime = Time.realtimeSinceStartup;
 
-            Debug.Log($"Level generation took {endTime - startTime} seconds");
+            Debug.Log($"Level generation took {(endTime - startTime) * 1000f} ms");
 
             return levelInstance;
         }

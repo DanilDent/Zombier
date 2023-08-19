@@ -34,6 +34,8 @@ namespace Prototype.LevelGeneration
 
         public GameObject GenerateLevel()
         {
+            float startTime = Time.realtimeSinceStartup;
+
             GameObject ground = GenerateGround();
             GameObject exit = GenerateExit();
             GameObject walls = GenerateWalls();
@@ -75,6 +77,10 @@ namespace Prototype.LevelGeneration
             levelInstance.transform.position += levelOffset;
 
             navMeshSurface.BuildNavMesh();
+
+            float endTime = Time.realtimeSinceStartup;
+
+            Debug.Log($"Level generation took {endTime - startTime} seconds");
 
             return levelInstance;
         }

@@ -68,7 +68,6 @@ namespace Prototype.Controller
                 enemy.Agent.stoppingDistance = enemy.AttackRange;
                 enemy.Agent.radius = _obstacleAvoidanceRadius;
                 enemy.FSMOwner.UpdateBehaviour();
-                Debug.Log($"Current state: {enemy.CurrentState}");
             }
         }
 

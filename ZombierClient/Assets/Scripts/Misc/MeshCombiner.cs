@@ -119,7 +119,7 @@ namespace Prototype.MeshCombine
             }
 
             _objectsToCombine.Clear();
-            return resultGO;
+            return resultGO == null ? new GameObject(newGameObjectName) : resultGO;
         }
 
         public void SetObjectsToCombine(GameObject[] objectsToCombine)

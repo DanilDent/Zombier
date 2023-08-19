@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: LevelGeneratorConfig
   m_EditorClassIdentifier: 
   MaxLevelSize: 1000
-  MinRoomWidth: 10
-  MaxRoomWidth: 50
+  MinRoomWidth: 7
+  MaxRoomWidth: 21
   MinRoomHeight: 10
-  MaxRoomHeight: 50
+  MaxRoomHeight: 30
   MinRoomEntryWidth: 4
-  EnvSurroundSize: 10
+  EnvSurroundSize: 7
   SpawnPosY: 3
-  MinObstacleCountPerRoom: 2
-  MaxObstacleCountPerRoom: 4
-  MinEnvObstacleCountPerRoom: 3
-  MaxEnvObstacleCountPerRoom: 5
+  MinObstacleCountPerRoom: 1
+  MaxObstacleCountPerRoom: 3
+  MinEnvObstacleCountPerRoom: 1
+  MaxEnvObstacleCountPerRoom: 3

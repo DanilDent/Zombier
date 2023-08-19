@@ -227,42 +227,6 @@ namespace Prototype.LevelGeneration
 
         private GameObject GenerateEnvGround()
         {
-            //_tempTransform = new GameObject("TempTransform").transform;
-            //_tempGameObjects = new List<GameObject>();
-
-            //int envSurroundSize = _levelGeneratorData.EnvSurroundSize;
-            //int minX = Mathf.Max(_minX, _minGroundCoordX - envSurroundSize);
-            //int maxX = Mathf.Min(_maxX, _maxGroundCoordX + envSurroundSize);
-            //int minY = Mathf.Max(_minY, _minGroundCoordY - envSurroundSize);
-            //int maxY = Mathf.Min(_maxY, _maxGroundCoordY + envSurroundSize);
-
-            //for (int x = minX; x < maxX; ++x)
-            //{
-            //    for (int y = minY; y < maxY; ++y)
-            //    {
-            //        if (_groundMap.IsCellEmpty(x, y))
-            //        {
-            //            _groundMap[x, y] = TileType.EnvironmentGround;
-            //            var instance = Object.Instantiate(
-            //                _envGroundPrefab,
-            //                new Vector3(x, 1f, y),
-            //                Quaternion.identity,
-            //                _tempTransform);
-            //            _tempGameObjects.Add(instance);
-            //        }
-            //    }
-            //}
-
-            //_meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            //GameObject result = _meshCombiner.Combine("EnvironmentGround");
-
-            //_tempGameObjects.Clear();
-            //_tempGameObjects = null;
-            //Object.DestroyImmediate(_tempTransform.gameObject);
-            //_tempTransform = null;
-
-            //return result;
-
             _tempTransform = new GameObject("TempTransform").transform;
             _tempGameObjects = new List<GameObject>();
 
@@ -276,15 +240,26 @@ namespace Prototype.LevelGeneration
             {
                 for (int y = minY; y < maxY; ++y)
                 {
-                    if (_groundMap.IsCellEmpty(x, y))
+                    if (!_wallsMap.IsCellEquals(TileType.Wall, x, y))
                     {
-                        _groundMap[x, y] = TileType.EnvironmentGround;
-                        var instance = Object.Instantiate(
-                            _envGroundPrefab,
-                            new Vector3(x, 1f, y),
-                            Quaternion.identity,
-                            _tempTransform);
-                        _tempGameObjects.Add(instance);
+                        continue;
+                    }
+
+                    for (int offsetX = -envSurroundSize; offsetX <= envSurroundSize; ++offsetX)
+                    {
+                        for (int offsetY = -envSurroundSize; offsetY <= envSurroundSize; ++offsetY)
+                        {
+                            if (_groundMap.IsCellEmpty(x + offsetX, y + offsetY) && _wallsMap.IsCellEmpty(x + offsetX, y + offsetY))
+                            {
+                                _groundMap[x + offsetX, y + offsetY] = TileType.EnvironmentGround;
+                                var instance = Object.Instantiate(
+                                    _envGroundPrefab,
+                                    new Vector3(x + offsetX, 1f, y + offsetY),
+                                    Quaternion.identity,
+                                    _tempTransform);
+                                _tempGameObjects.Add(instance);
+                            }
+                        }
                     }
                 }
             }

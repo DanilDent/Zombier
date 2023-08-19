@@ -7,7 +7,6 @@ using UnityEngine.AI;
 
 namespace Prototype.LevelGeneration
 {
-    // TODO: Make non MonoBehaviour, reorganize order, split private types in different files 
     public partial class LevelGenerator
     {
         public LevelGenerator(

@@ -36,7 +36,7 @@ namespace Prototype.LevelGeneration
                 }
             }
 
-            while (counter > 0)
+            while (counter > 0 && groundCells.Count > 0)
             {
                 PlaceNextObstacle(groundCells, obstaclesPrefabs, obstacleType, groundType);
                 --counter;

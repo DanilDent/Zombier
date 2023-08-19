@@ -196,7 +196,6 @@ namespace Prototype.Service
             }
 
             _targetOperation.allowSceneActivation = true;
-
             Time.timeScale = 0f;
             yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y + loadingScreenCanvasRect.rect.height, transitionDuration)
                 .SetUpdate(UpdateType.Normal, true)

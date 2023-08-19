@@ -45,7 +45,14 @@ namespace Prototype.Data
 
         private DescDamage CreateDescDamage(string damageId)
         {
-            var dmgTypesCfg = _gameBalance.DamageTypes.Where(_ => _.Damage.Equals(damageId)).ToList();
+            var dmgTypesCfg = new List<DamageType>();
+            foreach (var dmgType in _gameBalance.DamageTypes)
+            {
+                if (dmgType.Damage.Equals(damageId))
+                {
+                    dmgTypesCfg.Add(dmgType);
+                }
+            }
 
             var descDmgTypes = dmgTypesCfg.Select(_ =>
             {

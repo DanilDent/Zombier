@@ -1,3 +1,4 @@
+using Prototype.Misc;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,8 +6,7 @@ using UnityEngine;
 
 namespace Prototype.MeshCombine
 {
-    // TODO: Rewrite so it's non MonoBehaviour
-    public class MeshCombiner
+    public class MeshCombiner : ICombiner
     {
         public MeshCombiner()
         {

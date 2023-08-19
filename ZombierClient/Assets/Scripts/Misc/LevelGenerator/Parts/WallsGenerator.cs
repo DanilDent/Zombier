@@ -37,9 +37,9 @@ namespace Prototype.LevelGeneration
                 }
             }
 
-            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = _meshCombiner.Combine("Walls");
-            result.AddComponent<MeshCollider>();
+            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _combiner.Combine("Walls");
+            //result.AddComponent<MeshCollider>();
             NavMeshModifier navMeshModifier = result.AddComponent<NavMeshModifier>();
             navMeshModifier.overrideArea = true;
             navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);

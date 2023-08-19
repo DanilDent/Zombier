@@ -1,6 +1,7 @@
 ﻿using Prototype.Data;
-using Prototype.MeshCombine;
+using Prototype.Misc;
 using Prototype.Service;
+using Prototype.StaticBatch;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,7 +19,7 @@ namespace Prototype.LevelGeneration
             _locationData = locationData;
             _levelData = levelData;
 
-            _meshCombiner = new MeshCombiner();
+            _combiner = new StaticBatcher();
             LoadPrefabs();
             Init();
         }
@@ -92,7 +93,7 @@ namespace Prototype.LevelGeneration
         private LevelData _levelData;
         private LevelGeneratorData _levelGeneratorData;
         //
-        private MeshCombiner _meshCombiner;
+        private ICombiner _combiner;
         private Transform _tempTransform;
         private List<GameObject> _tempGameObjects;
         private int _minX;

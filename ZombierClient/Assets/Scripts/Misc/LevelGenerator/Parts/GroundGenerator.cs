@@ -58,9 +58,9 @@ namespace Prototype.LevelGeneration
                 GenerateNextRoomGround(_prevRoom);
             }
 
-            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = _meshCombiner.Combine("Ground");
-            result.AddComponent<MeshCollider>();
+            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _combiner.Combine("Ground");
+            //result.AddComponent<MeshCollider>();
             result.AddComponent<MarkerGround>();
 
             _tempGameObjects.Clear();
@@ -264,8 +264,8 @@ namespace Prototype.LevelGeneration
                 }
             }
 
-            _meshCombiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = _meshCombiner.Combine("EnvironmentGround");
+            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _combiner.Combine("EnvironmentGround");
 
             _tempGameObjects.Clear();
             _tempGameObjects = null;

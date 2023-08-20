@@ -3,20 +3,19 @@ using Prototype.Data;
 using UnityEngine;
 using Zenject;
 
-public class LevelModel : MonoBehaviour
+public class LevelModel
 {
     [Inject]
-    public void Construct(GameSessionData session, MarkerLevelExitPoint exitPoint)
+    public void Construct(GameSessionData session)
     {
         _session = session;
-        ExitPoint = exitPoint;
     }
 
-    public class Factory : PlaceholderFactory<LevelModel> { }
-
     // Injected
-    public MarkerLevelExitPoint ExitPoint { get; private set; }
+    public MarkerLevelExitPoint ExitPoint { get; set; }
     // Properties
+    public GameObject LevelView { get; set; }
+
     public EnemySpawnData EnemySpawnData
     {
         get => _session.Location.Levels[_session.CurrentLevelIndex].EnemySpawnData;

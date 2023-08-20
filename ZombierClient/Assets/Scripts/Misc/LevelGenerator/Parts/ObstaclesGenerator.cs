@@ -25,14 +25,14 @@ namespace Prototype.LevelGeneration
 
             int counter = Random.Range(minCnt, maxCnt);
             List<Vector2Int> groundCells = new List<Vector2Int>();
-            for (int x = _minX; x < _maxX; ++x)
+            foreach ((int, int) keyPos in _groundMap.Keys)
             {
-                for (int y = _minY; y < _maxY; ++y)
+                int x = keyPos.Item1;
+                int y = keyPos.Item2;
+
+                if (_groundMap[x, y] == groundType)
                 {
-                    if (_groundMap[x, y] == groundType)
-                    {
-                        groundCells.Add(new Vector2Int(x, y));
-                    }
+                    groundCells.Add(new Vector2Int(x, y));
                 }
             }
 

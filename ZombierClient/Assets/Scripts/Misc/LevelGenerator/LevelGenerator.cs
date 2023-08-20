@@ -2,15 +2,27 @@
 using Prototype.MeshCombine;
 using Prototype.Misc;
 using Prototype.Service;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
+using Object = UnityEngine.Object;
+
 namespace Prototype.LevelGeneration
 {
     public partial class LevelGenerator
     {
+        public event EventHandler<LevelGeneratedEventArgs> LevelGenerated;
+
+        public class LevelGeneratedEventArgs
+        {
+            public GameObject LevelGameObject;
+            public GameObject ExitGameObject;
+        }
+
         public LevelGenerator(
             LevelGeneratorData levelGeneratorData,
             LocationData locationData,
@@ -33,7 +45,7 @@ namespace Prototype.LevelGeneration
             _roomCount = 0;
         }
 
-        public GameObject GenerateLevel()
+        public IEnumerator GenerateLevel()
         {
             float startTime = Time.realtimeSinceStartup;
 
@@ -64,7 +76,8 @@ namespace Prototype.LevelGeneration
             float genEnvGroundEndTime = Time.realtimeSinceStartup;
 
             float instGroundAndWallsStartTime = Time.realtimeSinceStartup;
-            GameObject[] groundAndWalls = InstantiateGroundsAndWalls();
+            List<GameObject> groundAndWalls = new List<GameObject>();
+            yield return CoroutineRunner.Instance.StartCoroutine(InstantiateGroundsAndWalls(groundAndWalls));
             float instGroundAnddWallsEndTime = Time.realtimeSinceStartup;
 
             float genEnvObsStartTime = Time.realtimeSinceStartup;
@@ -113,43 +126,71 @@ namespace Prototype.LevelGeneration
             //Debug.Log($"Env ground instantiate time: {(instEnvGroundEndTime - instEnvGroundStartTime) * 1000f} ms");
             Debug.Log($"Gen env obstacles time: {(genEnvObsEndTime - genEnvObsStartTime) * 1000f} ms");
 
-            return levelInstance;
+            LevelGenerated?.Invoke(this, new LevelGeneratedEventArgs
+            {
+                LevelGameObject = levelInstance,
+                ExitGameObject = exit
+            });
         }
 
-        private GameObject[] InstantiateGroundsAndWalls()
+        private IEnumerator InstantiateGroundsAndWalls(List<GameObject> results)
         {
-            List<GameObject> results = new List<GameObject>();
+            const int instantiatePerFrameCount = 600;
+            int instantiatedCount = instantiatePerFrameCount;
+
             List<GameObject> groundGOs = new List<GameObject>();
             List<GameObject> wallsGOs = new List<GameObject>();
             List<GameObject> envGroundGOs = new List<GameObject>();
 
-            for (int x = _minX; x < _maxX; ++x)
+            foreach ((int, int) posKey in _groundMap.Keys)
             {
-                for (int y = _minY; y < _maxY; ++y)
+                int x = posKey.Item1;
+                int y = posKey.Item2;
+
+                if (_groundMap.IsCellEquals(TileType.Ground, x, y))
                 {
-                    if (_groundMap.IsCellEquals(TileType.Ground, x, y))
-                    {
-                        GameObject instance = Object.Instantiate(
-                        _groundPrefab,
-                        new Vector3(x, 0f, y),
-                        Quaternion.identity);
-                        groundGOs.Add(instance);
-                    }
-                    if (_wallsMap.IsCellEquals(TileType.Wall, x, y))
-                    {
-                        Vector3 position = new Vector3(x, 0f, y);
-                        var instance = Object
-                            .Instantiate(_wallPrefab, position, Quaternion.identity);
-                        wallsGOs.Add(instance);
-                    }
-                    if (_groundMap.IsCellEquals(TileType.EnvironmentGround, x, y))
-                    {
-                        var instance = Object.Instantiate(
-                              _envGroundPrefab,
-                              new Vector3(x, 1f, y),
-                              Quaternion.identity);
-                        envGroundGOs.Add(instance);
-                    }
+                    GameObject instance = Object.Instantiate(
+                    _groundPrefab,
+                    new Vector3(x, 0f, y),
+                    Quaternion.identity);
+                    groundGOs.Add(instance);
+                    instantiatedCount--;
+                }
+                if (_groundMap.IsCellEquals(TileType.EnvironmentGround, x, y))
+                {
+                    var instance = Object.Instantiate(
+                          _envGroundPrefab,
+                          new Vector3(x, 1f, y),
+                          Quaternion.identity);
+                    envGroundGOs.Add(instance);
+                    instantiatedCount--;
+                }
+
+                if (instantiatedCount <= 0)
+                {
+                    instantiatedCount = instantiatePerFrameCount;
+                    yield return null;
+                }
+            }
+
+            foreach ((int, int) posKey in _wallsMap.Keys)
+            {
+                int x = posKey.Item1;
+                int y = posKey.Item2;
+
+                if (_wallsMap.IsCellEquals(TileType.Wall, x, y))
+                {
+                    Vector3 position = new Vector3(x, 0f, y);
+                    var instance = Object
+                        .Instantiate(_wallPrefab, position, Quaternion.identity);
+                    wallsGOs.Add(instance);
+                    instantiatedCount--;
+                }
+
+                if (instantiatedCount <= 0)
+                {
+                    instantiatedCount = instantiatePerFrameCount;
+                    yield return null;
                 }
             }
 
@@ -172,11 +213,10 @@ namespace Prototype.LevelGeneration
             results.Add(wallsRes);
             results.Add(envGroundRes);
 
+
             groundGOs.ForEach(_ => Object.Destroy(_));
             wallsGOs.ForEach(_ => Object.Destroy(_));
             envGroundGOs.ForEach(_ => Object.Destroy(_));
-
-            return results.ToArray();
         }
 
         private GameObject InstantiateGround()
@@ -324,9 +364,9 @@ namespace Prototype.LevelGeneration
             _minGroundCoordY = _maxY;
             _maxGroundCoordY = _minY;
 
-            _groundMap = new TileMap(_levelGeneratorData.MaxLevelSize);
-            _wallsMap = new TileMap(_levelGeneratorData.MaxLevelSize);
-            _obstaclesMap = new TileMap(_levelGeneratorData.MaxLevelSize);
+            _groundMap = new TileMap();
+            _wallsMap = new TileMap();
+            _obstaclesMap = new TileMap();
         }
 
         private GameObject GenerateExit()

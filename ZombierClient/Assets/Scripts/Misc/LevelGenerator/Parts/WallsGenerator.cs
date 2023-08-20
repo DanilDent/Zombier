@@ -6,21 +6,21 @@
 
         private void GenerateWalls()
         {
-            for (int x = _minX; x < _maxX; ++x)
+            foreach ((int, int) keyPos in _groundMap.Keys)
             {
-                for (int y = _minY; y < _maxY; ++y)
+                int x = keyPos.Item1;
+                int y = keyPos.Item2;
+
+                if (_groundMap.IsCellEquals(TileType.Ground, x, y))
                 {
-                    if (_groundMap[x, y] == TileType.Ground)
+                    for (int xOffset = -1; xOffset <= 1; ++xOffset)
                     {
-                        for (int xOffset = -1; xOffset <= 1; ++xOffset)
+                        for (int yOffset = -1; yOffset <= 1; ++yOffset)
                         {
-                            for (int yOffset = -1; yOffset <= 1; ++yOffset)
+                            if (_groundMap.IsCellEmpty(x + xOffset, y + yOffset) &&
+                                _wallsMap.IsCellEmpty(x + xOffset, y + yOffset))
                             {
-                                if (_groundMap.IsCellEmpty(x + xOffset, y + yOffset) &&
-                                    _wallsMap.IsCellEmpty(x + xOffset, y + yOffset))
-                                {
-                                    _wallsMap[x + xOffset, y + yOffset] = TileType.Wall;
-                                }
+                                _wallsMap[x + xOffset, y + yOffset] = TileType.Wall;
                             }
                         }
                     }

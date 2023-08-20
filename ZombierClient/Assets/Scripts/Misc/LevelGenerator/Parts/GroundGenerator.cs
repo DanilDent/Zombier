@@ -208,28 +208,24 @@ namespace Prototype.LevelGeneration
         private void GenerateEnvGround()
         {
             int envSurroundSize = _levelGeneratorData.EnvSurroundSize;
-            int minX = Mathf.Max(_minX, _minGroundCoordX - envSurroundSize);
-            int maxX = Mathf.Min(_maxX, _maxGroundCoordX + envSurroundSize);
-            int minY = Mathf.Max(_minY, _minGroundCoordY - envSurroundSize);
-            int maxY = Mathf.Min(_maxY, _maxGroundCoordY + envSurroundSize);
 
-            for (int x = minX; x < maxX; ++x)
+            foreach ((int, int) keyPos in _wallsMap.Keys)
             {
-                for (int y = minY; y < maxY; ++y)
-                {
-                    if (!_wallsMap.IsCellEquals(TileType.Wall, x, y))
-                    {
-                        continue;
-                    }
+                int x = keyPos.Item1;
+                int y = keyPos.Item2;
 
-                    for (int offsetX = -envSurroundSize; offsetX <= envSurroundSize; ++offsetX)
+                if (!_wallsMap.IsCellEquals(TileType.Wall, x, y))
+                {
+                    continue;
+                }
+
+                for (int offsetX = -envSurroundSize; offsetX <= envSurroundSize; ++offsetX)
+                {
+                    for (int offsetY = -envSurroundSize; offsetY <= envSurroundSize; ++offsetY)
                     {
-                        for (int offsetY = -envSurroundSize; offsetY <= envSurroundSize; ++offsetY)
+                        if (_groundMap.IsCellEmpty(x + offsetX, y + offsetY) && _wallsMap.IsCellEmpty(x + offsetX, y + offsetY))
                         {
-                            if (_groundMap.IsCellEmpty(x + offsetX, y + offsetY) && _wallsMap.IsCellEmpty(x + offsetX, y + offsetY))
-                            {
-                                _groundMap[x + offsetX, y + offsetY] = TileType.EnvironmentGround;
-                            }
+                            _groundMap[x + offsetX, y + offsetY] = TileType.EnvironmentGround;
                         }
                     }
                 }

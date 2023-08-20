@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4849a86ff89472249b0c7c0cfe094784, type: 3}
   m_Name: LevelGeneratorConfig
   m_EditorClassIdentifier: 
-  MaxLevelSize: 2000
+  MaxLevelSize: 10000
   MinRoomWidth: 6
   MaxRoomWidth: 18
   MinRoomHeight: 10
   MaxRoomHeight: 25
   MinRoomEntryWidth: 4
-  EnvSurroundSize: 7
+  EnvSurroundSize: 6
   SpawnPosY: 3
   MinObstacleCountPerRoom: 1
   MaxObstacleCountPerRoom: 3

@@ -1,4 +1,5 @@
 using Prototype.Data;
+using Prototype.LevelGeneration;
 using Prototype.Model;
 using Prototype.Service;
 using System;
@@ -17,6 +18,11 @@ namespace Prototype.Controller
             GameEventService eventService,
             AppEventService appEventService,
             PlayerModel player,
+            LevelGeneratorData levelGeneratorData,
+            LocationData locationData,
+            LevelData levelData,
+            MarkerLevel markerLevel,
+            LevelModel levelModel,
             // Controllers
             DealDamageController dealDamageController,
             EnemyAIController enemyAIController,
@@ -34,6 +40,11 @@ namespace Prototype.Controller
             _gameEventService = eventService;
             _appEventService = appEventService;
             _player = player;
+            _generatorConfig = levelGeneratorData;
+            _locationData = locationData;
+            _levelData = levelData;
+            _markerLevel = markerLevel;
+            _levelModel = levelModel;
             // Controllers
             _dealDamageController = dealDamageController;
             _enemyAIController = enemyAIController;
@@ -52,6 +63,12 @@ namespace Prototype.Controller
         private GameEventService _gameEventService;
         private AppEventService _appEventService;
         private PlayerModel _player;
+        // Level Generation dependencies
+        private LevelGeneratorData _generatorConfig;
+        private LocationData _locationData;
+        private LevelData _levelData;
+        private MarkerLevel _markerLevel;
+        private LevelModel _levelModel;
         // Controllers
         private DealDamageController _dealDamageController;
         private EnemyAIController _enemyAIController;
@@ -75,8 +92,7 @@ namespace Prototype.Controller
 
         private void Start()
         {
-            InitGame();
-            FireInitUIEvents();
+            GenerateLevel();
         }
 
         private void FireInitUIEvents()
@@ -100,6 +116,26 @@ namespace Prototype.Controller
                 CurrentExp = _player.CurrentExp,
                 MaxExp = _player.CurrentLevelExpThreshold
             });
+        }
+
+        private void GenerateLevel()
+        {
+            LevelGenerator levelGenerator = new LevelGenerator(_generatorConfig, _locationData, _levelData);
+            levelGenerator.LevelGenerated += HandleLevelGenerated;
+            StartCoroutine(levelGenerator.GenerateLevel());
+        }
+
+        private void HandleLevelGenerated(object sender, LevelGenerator.LevelGeneratedEventArgs e)
+        {
+            _levelModel.LevelView = e.LevelGameObject;
+            _levelModel.ExitPoint = e.ExitGameObject.GetComponent<MarkerLevelExitPoint>();
+
+            _levelModel.LevelView.transform.SetParent(_markerLevel.transform);
+
+            InitGame();
+            FireInitUIEvents();
+
+            _appEventService.OnGameInitialized();
         }
 
         private void InitGame()

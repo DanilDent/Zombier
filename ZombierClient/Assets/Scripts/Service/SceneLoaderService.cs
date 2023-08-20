@@ -26,9 +26,9 @@ namespace Prototype.Service
             //
             RegisterTransition(Scene.Bootstrap, Scene.MainMenu, LoadWithLoadingScreenAndFooter, new TransitionSettings { ShouldFetchGameBalance = true });
 
-            RegisterTransition(Scene.Game, Scene.Game, LoadWithLoadingScreen);
+            RegisterTransition(Scene.Game, Scene.Game, LoadWithLoadingScreenWaitForGameInit);
 
-            RegisterTransition(Scene.MainMenu, Scene.Game, LoadWithLoadingScreen);
+            RegisterTransition(Scene.MainMenu, Scene.Game, LoadWithLoadingScreenWaitForGameInit);
             RegisterTransition(Scene.Game, Scene.MainMenu, LoadWithLoadingScreenAndFooter);
             RegisterTransition(Scene.Game, Scene.Results, LoadWithLoadingScreen);
             RegisterTransition(Scene.Results, Scene.MainMenu, LoadWithLoadingScreenAndFooter);
@@ -43,11 +43,13 @@ namespace Prototype.Service
             RegisterTransition(Scene.Inventory, Scene.Shop, LoadHorizontalTransitionRight);
             //
             _appEventService.LoadScene += HandleLoadScene;
+            _appEventService.GameInitialized += HandleGameInitialized;
         }
 
         ~SceneLoaderService()
         {
             _appEventService.LoadScene -= HandleLoadScene;
+            _appEventService.GameInitialized -= HandleGameInitialized;
         }
 
         public float GetLoadingProgress()
@@ -65,24 +67,6 @@ namespace Prototype.Service
             public bool ShouldFetchGameBalance;
         }
 
-        private class CoroutineRunner : MonoBehaviour
-        {
-            private static CoroutineRunner instance;
-            public static CoroutineRunner Instance
-            {
-                get
-                {
-                    if (instance == null)
-                    {
-                        GameObject gameObject = new GameObject("CoroutineRunner");
-                        instance = gameObject.AddComponent<CoroutineRunner>();
-                        DontDestroyOnLoad(gameObject);
-                    }
-                    return instance;
-                }
-            }
-        }
-
         // Injected
         private AppEventService _appEventService;
         // Internal variables
@@ -93,10 +77,16 @@ namespace Prototype.Service
             Tuple<Scene, Scene>,
             Tuple<Func<Scene, TransitionSettings, IEnumerator>, TransitionSettings>> _transitionsGraph;
         private Scene _currentScene;
+        private bool _isGameInitilized;
 
         private void HandleLoadScene(object sender, LoadSceneEventArgs e)
         {
             Load(e.To);
+        }
+
+        private void HandleGameInitialized(object sender, EventArgs e)
+        {
+            _isGameInitilized = true;
         }
 
         private void RegisterTransition(Scene from, Scene to, Func<Scene, TransitionSettings, IEnumerator> transition, TransitionSettings settings = default)
@@ -128,6 +118,95 @@ namespace Prototype.Service
         }
 
         #region Transition Coroutines
+
+        private IEnumerator LoadWithLoadingScreenWaitForGameInit(Scene targetSceneName, TransitionSettings settings = default)
+        {
+            _isGameInitilized = false;
+            Scene currentSceneName = _currentScene;
+
+            _loadingOperation = SceneManager.LoadSceneAsync(Scene.Loading.ToString(), LoadSceneMode.Additive);
+            _loadingOperation.allowSceneActivation = false;
+
+            while (_loadingOperation.progress < .9f)
+            {
+                yield return null;
+            }
+
+            _loadingOperation.allowSceneActivation = true;
+
+            yield return new WaitUntil(() => SceneManager.GetSceneByName(Scene.Loading.ToString()).isLoaded);
+
+            var loadindScene = SceneManager.GetSceneByName(Scene.Loading.ToString());
+
+            RectTransform loadingScreenRect = loadindScene
+                .GetRootGameObjects().Where(_ => _.GetComponentInChildren<LoadingScreenUIView>() != null)
+                .Select(_ => _.GetComponentInChildren<LoadingScreenUIView>())
+                .FirstOrDefault().GetComponent<RectTransform>();
+            RectTransform loadingScreenCanvasRect = loadingScreenRect.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+
+            Camera loadingSceneCamera = loadindScene
+                .GetRootGameObjects().Where(_ => _.GetComponentInChildren<Camera>() != null)
+                .Select(_ => _.GetComponentInChildren<Camera>())
+                .FirstOrDefault().GetComponent<Camera>();
+
+            loadingSceneCamera.enabled = false;
+
+            float transitionDuration = .5f;
+            yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y - loadingScreenCanvasRect.rect.height, transitionDuration)
+                .From()
+                .WaitForCompletion();
+
+            loadingSceneCamera.enabled = true;
+
+            var footerScene = SceneManager.GetSceneByName(Scene.Footer.ToString());
+            AsyncOperation footerUnloadOperation = null;
+            if (footerScene.isLoaded)
+            {
+                footerUnloadOperation = SceneManager.UnloadSceneAsync(footerScene.name);
+            }
+
+            while (footerUnloadOperation != null && !footerUnloadOperation.isDone)
+            {
+                yield return null;
+            }
+
+            var footerCanvas = UnityEngine.Object.FindObjectOfType<FooterCanvasUIView>();
+            if (footerCanvas != null)
+            {
+                UnityEngine.Object.Destroy(footerCanvas.gameObject);
+            }
+
+            SceneManager.UnloadSceneAsync(currentSceneName.ToString());
+
+            _targetOperation = SceneManager.LoadSceneAsync(targetSceneName.ToString(), LoadSceneMode.Additive);
+            _targetOperation.allowSceneActivation = false;
+
+            while (_targetOperation.progress < .9f)
+            {
+                yield return null;
+            }
+
+            _targetOperation.allowSceneActivation = true;
+
+            Time.timeScale = 0f;
+
+            while (!_isGameInitilized)
+            {
+                yield return null;
+            }
+
+            yield return null;
+
+            yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y + loadingScreenCanvasRect.rect.height, transitionDuration)
+                .SetUpdate(UpdateType.Normal, true)
+                .WaitForCompletion();
+
+            _currentScene = targetSceneName;
+            SceneManager.UnloadSceneAsync(Scene.Loading.ToString());
+            isSceneLoading = false;
+            Time.timeScale = 1f;
+            UnityEngine.Object.Destroy(CoroutineRunner.Instance.gameObject);
+        }
 
         private IEnumerator LoadWithLoadingScreen(Scene targetSceneName, TransitionSettings settings = default)
         {

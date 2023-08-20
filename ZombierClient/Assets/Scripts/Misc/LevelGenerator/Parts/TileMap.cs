@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Prototype.LevelGeneration
 {
@@ -17,31 +18,32 @@ namespace Prototype.LevelGeneration
 
         private class TileMap
         {
-            public TileMap(int maxSize)
+            public TileMap()
             {
-                _maxSize = maxSize;
-                _map = new TileType[_maxSize, _maxSize];
-
-                for (int x = 0; x < _maxSize; ++x)
-                {
-                    for (int y = 0; y < _maxSize; ++y)
-                    {
-                        _map[x, y] = TileType.Empty;
-                    }
-                }
+                _map = new Dictionary<(int, int), TileType>();
             }
 
             public TileType this[int x, int y]
             {
                 get
                 {
-                    return _map[IndexInternal(x), IndexInternal(y)];
+                    _map.TryGetValue((x, y), out TileType value);
+                    return value;
                 }
                 set
                 {
-                    _map[IndexInternal(x), IndexInternal(y)] = value;
+                    if (value == TileType.Empty)
+                    {
+                        _map.Remove((x, y));
+                    }
+                    else
+                    {
+                        _map[(x, y)] = value;
+                    }
                 }
             }
+
+            public Dictionary<(int, int), TileType>.KeyCollection Keys => _map.Keys;
 
             public bool IsCellEmpty(int x, int y)
             {
@@ -51,12 +53,7 @@ namespace Prototype.LevelGeneration
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool IsCellEquals(TileType type, int x, int y)
             {
-                x = IndexInternal(x);
-                y = IndexInternal(y);
-
-                if (x >= 0 && x < _maxSize &&
-                    y >= 0 && y < _maxSize &&
-                    _map[x, y] == type)
+                if (this[x, y] == type)
                 {
                     return true;
                 }
@@ -64,14 +61,7 @@ namespace Prototype.LevelGeneration
                 return false;
             }
 
-            private TileType[,] _map;
-            private int _maxSize;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            private int IndexInternal(int index)
-            {
-                return index + (_maxSize >> 1);
-            }
+            private Dictionary<(int, int), TileType> _map;
         }
     }
 }

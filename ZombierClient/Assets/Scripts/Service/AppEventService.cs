@@ -7,6 +7,7 @@ namespace Prototype.Service
     {
         #region Events
 
+        public event EventHandler GameInitialized;
         public event EventHandler CameraOnDeadPlayer;
         public event EventHandler<LoadSceneEventArgs> LoadScene;
         public event EventHandler GamePause;
@@ -21,6 +22,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnGameInitialized()
+        {
+            GameInitialized?.Invoke(this, EventArgs.Empty);
+        }
 
         public void OnResetGameSession()
         {

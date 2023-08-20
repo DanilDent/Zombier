@@ -2,7 +2,6 @@ using Cinemachine;
 using Prototype.Controller;
 using Prototype.Data;
 using Prototype.Extensions;
-using Prototype.Factory;
 using Prototype.LevelGeneration;
 using Prototype.Model;
 using Prototype.ObjectPool;
@@ -153,7 +152,7 @@ namespace Prototype
             Container.Bind<LevelGeneratorData>().FromInstance(_gameConfig.LevelGeneratorConfig).AsSingle();
             Container.Bind<LocationData>().FromInstance(_currentGameSession.Location).AsSingle();
             Container.Bind<LevelData>().FromInstance(_currentGameSession.Location.Levels[_currentGameSession.CurrentLevelIndex]);
-            Container.Bind<LevelModel>().FromFactory<ProceduralLevelFactory>().AsSingle().NonLazy();
+            Container.Bind<LevelModel>().AsSingle().NonLazy();
 
             // Player
             Container.Bind<PlayerModel>()

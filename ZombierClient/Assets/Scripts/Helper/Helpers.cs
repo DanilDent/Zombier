@@ -33,6 +33,25 @@ namespace Prototype
             probability = Mathf.Clamp01(probability);
             return UnityEngine.Random.Range(0f, 1f) < probability;
         }
+
+
     }
 
+    public class CoroutineRunner : MonoBehaviour
+    {
+        private static CoroutineRunner instance;
+        public static CoroutineRunner Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    GameObject gameObject = new GameObject("CoroutineRunner");
+                    instance = gameObject.AddComponent<CoroutineRunner>();
+                    DontDestroyOnLoad(gameObject);
+                }
+                return instance;
+            }
+        }
+    }
 }

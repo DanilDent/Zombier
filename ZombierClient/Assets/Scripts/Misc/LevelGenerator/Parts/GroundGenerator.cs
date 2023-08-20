@@ -44,11 +44,8 @@ namespace Prototype.LevelGeneration
 
         private TileMap _groundMap;
 
-        private GameObject GenerateGround()
+        private void GenerateGround()
         {
-            _tempTransform = new GameObject("TempTransform").transform;
-            _tempGameObjects = new List<GameObject>();
-
             _roomCount = _levelData.LevelSize;
 
             GenerateFirstRoomGround();
@@ -57,18 +54,6 @@ namespace Prototype.LevelGeneration
             {
                 GenerateNextRoomGround(_prevRoom);
             }
-
-            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = _combiner.Combine("Ground");
-            //result.AddComponent<MeshCollider>();
-            result.AddComponent<MarkerGround>();
-
-            _tempGameObjects.Clear();
-            _tempGameObjects = null;
-            Object.DestroyImmediate(_tempTransform.gameObject);
-            _tempTransform = null;
-
-            return result;
         }
 
         private void GenerateFirstRoomGround()
@@ -210,12 +195,7 @@ namespace Prototype.LevelGeneration
                 {
                     Vector2Int position = new Vector2Int(desc.Position.x + xOffset, desc.Position.y + yOffset);
                     _groundMap[position.x, position.y] = TileType.Ground;
-                    GameObject instance = Object.Instantiate(
-                        _groundPrefab,
-                        new Vector3(position.x, 0f, position.y),
-                        Quaternion.identity,
-                        _tempTransform);
-                    _tempGameObjects.Add(instance);
+
 
                     _minGroundCoordX = Mathf.Min(_minGroundCoordX, position.x);
                     _maxGroundCoordX = Mathf.Max(_maxGroundCoordX, position.x);
@@ -225,11 +205,8 @@ namespace Prototype.LevelGeneration
             }
         }
 
-        private GameObject GenerateEnvGround()
+        private void GenerateEnvGround()
         {
-            _tempTransform = new GameObject("TempTransform").transform;
-            _tempGameObjects = new List<GameObject>();
-
             int envSurroundSize = _levelGeneratorData.EnvSurroundSize;
             int minX = Mathf.Max(_minX, _minGroundCoordX - envSurroundSize);
             int maxX = Mathf.Min(_maxX, _maxGroundCoordX + envSurroundSize);
@@ -252,27 +229,11 @@ namespace Prototype.LevelGeneration
                             if (_groundMap.IsCellEmpty(x + offsetX, y + offsetY) && _wallsMap.IsCellEmpty(x + offsetX, y + offsetY))
                             {
                                 _groundMap[x + offsetX, y + offsetY] = TileType.EnvironmentGround;
-                                var instance = Object.Instantiate(
-                                    _envGroundPrefab,
-                                    new Vector3(x + offsetX, 1f, y + offsetY),
-                                    Quaternion.identity,
-                                    _tempTransform);
-                                _tempGameObjects.Add(instance);
                             }
                         }
                     }
                 }
             }
-
-            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
-            GameObject result = _combiner.Combine("EnvironmentGround");
-
-            _tempGameObjects.Clear();
-            _tempGameObjects = null;
-            Object.DestroyImmediate(_tempTransform.gameObject);
-            _tempTransform = null;
-
-            return result;
         }
     }
 }

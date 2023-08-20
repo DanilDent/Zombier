@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxLevelSize: 2000
   MinRoomWidth: 6
-  MaxRoomWidth: 19
+  MaxRoomWidth: 18
   MinRoomHeight: 10
-  MaxRoomHeight: 30
+  MaxRoomHeight: 25
   MinRoomEntryWidth: 4
-  EnvSurroundSize: 9
+  EnvSurroundSize: 7
   SpawnPosY: 3
   MinObstacleCountPerRoom: 1
   MaxObstacleCountPerRoom: 3
-  MinEnvObstacleCountPerRoom: 1
-  MaxEnvObstacleCountPerRoom: 3
+  MinEnvObstacleCountPerRoom: 0
+  MaxEnvObstacleCountPerRoom: 2

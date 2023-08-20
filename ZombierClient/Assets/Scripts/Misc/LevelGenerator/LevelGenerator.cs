@@ -1,8 +1,9 @@
 ﻿using Prototype.Data;
+using Prototype.MeshCombine;
 using Prototype.Misc;
 using Prototype.Service;
-using Prototype.StaticBatch;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,7 +20,7 @@ namespace Prototype.LevelGeneration
             _locationData = locationData;
             _levelData = levelData;
 
-            _combiner = new StaticBatcher();
+            _combiner = new MeshCombiner();
             LoadPrefabs();
             Init();
         }
@@ -36,10 +37,17 @@ namespace Prototype.LevelGeneration
         {
             float startTime = Time.realtimeSinceStartup;
 
-            GameObject ground = GenerateGround();
-            GameObject exit = GenerateExit();
-            GameObject walls = GenerateWalls();
+            float genGroundStartTime = Time.realtimeSinceStartup;
+            GenerateGround();
+            float genGroundEndTime = Time.realtimeSinceStartup;
 
+            GameObject exit = GenerateExit();
+
+            float genWallsStartTime = Time.realtimeSinceStartup;
+            GenerateWalls();
+            float genWallsEndTime = Time.realtimeSinceStartup;
+
+            float genObsStartTime = Time.realtimeSinceStartup;
             GameObject obstacles = GenerateObstacles(
                 "Obstacles",
                 _obstaclePrefabs,
@@ -47,10 +55,19 @@ namespace Prototype.LevelGeneration
                 TileType.Ground,
                 _minObstacleCount,
                 _maxObstacleCount);
+            float genObsEndTime = Time.realtimeSinceStartup;
 
             GameObject environment = new GameObject("Environment");
-            GameObject envGround = GenerateEnvGround();
 
+            float genEnvGroundStartTime = Time.realtimeSinceStartup;
+            GenerateEnvGround();
+            float genEnvGroundEndTime = Time.realtimeSinceStartup;
+
+            float instGroundAndWallsStartTime = Time.realtimeSinceStartup;
+            GameObject[] groundAndWalls = InstantiateGroundsAndWalls();
+            float instGroundAnddWallsEndTime = Time.realtimeSinceStartup;
+
+            float genEnvObsStartTime = Time.realtimeSinceStartup;
             GameObject envObstacles = GenerateObstacles(
                 "EnvironmentObstacles",
                 _envObstaclePrefabs,
@@ -58,6 +75,9 @@ namespace Prototype.LevelGeneration
                 TileType.EnvironmentGround,
                 _minEnvObstacleCount,
                 _maxEnvObstacleCount);
+            float genEnvObsEndTime = Time.realtimeSinceStartup;
+
+            var envGround = groundAndWalls.ToList().FirstOrDefault(_ => _.name.Equals("EnvironmentGround"));
             envGround.transform.SetParent(environment.transform);
             envObstacles.transform.SetParent(environment.transform);
             float environmentYOffset = 0f;
@@ -68,8 +88,10 @@ namespace Prototype.LevelGeneration
 
             environment.transform.SetParent(levelInstance.transform);
 
+            var ground = groundAndWalls.ToList().FirstOrDefault(_ => _.name.Equals("Ground"));
             ground.transform.SetParent(navMeshSurface.transform);
             exit.transform.SetParent(navMeshSurface.transform);
+            var walls = groundAndWalls.ToList().FirstOrDefault(_ => _.name.Equals("Walls"));
             walls.transform.SetParent(navMeshSurface.transform);
             obstacles?.transform.SetParent(navMeshSurface.transform);
 
@@ -81,8 +103,169 @@ namespace Prototype.LevelGeneration
             float endTime = Time.realtimeSinceStartup;
 
             Debug.Log($"Level generation took {(endTime - startTime) * 1000f} ms");
+            Debug.Log($"Ground gen time: {(genGroundEndTime - genGroundStartTime) * 1000f} ms");
+            //Debug.Log($"Ground instantiate time: {(instGroundEndTime - instGroundStartTime) * 1000f} ms");
+            Debug.Log($"Walls gen time: {(genWallsEndTime - genWallsStartTime) * 1000f} ms");
+            //Debug.Log($"Walls instantiate time: {(instWallsEndTime - instWallsStartTime) * 1000f} ms");
+            Debug.Log($"Gen obstacles time: {(genObsEndTime - genObsStartTime) * 1000f} ms");
+            Debug.Log($"Gen env ground time: {(genEnvGroundEndTime - genEnvGroundStartTime) * 1000f} ms");
+            Debug.Log($"Instantiate ground and walls time: {(instGroundAnddWallsEndTime - instGroundAndWallsStartTime) * 1000f} ms");
+            //Debug.Log($"Env ground instantiate time: {(instEnvGroundEndTime - instEnvGroundStartTime) * 1000f} ms");
+            Debug.Log($"Gen env obstacles time: {(genEnvObsEndTime - genEnvObsStartTime) * 1000f} ms");
 
             return levelInstance;
+        }
+
+        private GameObject[] InstantiateGroundsAndWalls()
+        {
+            List<GameObject> results = new List<GameObject>();
+            List<GameObject> groundGOs = new List<GameObject>();
+            List<GameObject> wallsGOs = new List<GameObject>();
+            List<GameObject> envGroundGOs = new List<GameObject>();
+
+            for (int x = _minX; x < _maxX; ++x)
+            {
+                for (int y = _minY; y < _maxY; ++y)
+                {
+                    if (_groundMap.IsCellEquals(TileType.Ground, x, y))
+                    {
+                        GameObject instance = Object.Instantiate(
+                        _groundPrefab,
+                        new Vector3(x, 0f, y),
+                        Quaternion.identity);
+                        groundGOs.Add(instance);
+                    }
+                    if (_wallsMap.IsCellEquals(TileType.Wall, x, y))
+                    {
+                        Vector3 position = new Vector3(x, 0f, y);
+                        var instance = Object
+                            .Instantiate(_wallPrefab, position, Quaternion.identity);
+                        wallsGOs.Add(instance);
+                    }
+                    if (_groundMap.IsCellEquals(TileType.EnvironmentGround, x, y))
+                    {
+                        var instance = Object.Instantiate(
+                              _envGroundPrefab,
+                              new Vector3(x, 1f, y),
+                              Quaternion.identity);
+                        envGroundGOs.Add(instance);
+                    }
+                }
+            }
+
+            _combiner.SetObjectsToCombine(groundGOs.ToArray());
+            GameObject groundRes = _combiner.Combine("Ground");
+            groundRes.AddComponent<MeshCollider>();
+            groundRes.AddComponent<MarkerGround>();
+
+            _combiner.SetObjectsToCombine(wallsGOs.ToArray());
+            GameObject wallsRes = _combiner.Combine("Walls");
+            wallsRes.AddComponent<MeshCollider>();
+            NavMeshModifier navMeshModifier = wallsRes.AddComponent<NavMeshModifier>();
+            navMeshModifier.overrideArea = true;
+            navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);
+
+            _combiner.SetObjectsToCombine(envGroundGOs.ToArray());
+            GameObject envGroundRes = _combiner.Combine("EnvironmentGround");
+
+            results.Add(groundRes);
+            results.Add(wallsRes);
+            results.Add(envGroundRes);
+
+            groundGOs.ForEach(_ => Object.Destroy(_));
+            wallsGOs.ForEach(_ => Object.Destroy(_));
+            envGroundGOs.ForEach(_ => Object.Destroy(_));
+
+            return results.ToArray();
+        }
+
+        private GameObject InstantiateGround()
+        {
+            _tempGameObjects = new List<GameObject>();
+
+            for (int x = _minX; x < _maxX; ++x)
+            {
+                for (int y = _minY; y < _maxY; ++y)
+                {
+                    if (_groundMap.IsCellEquals(TileType.Ground, x, y))
+                    {
+                        GameObject instance = Object.Instantiate(
+                        _groundPrefab,
+                        new Vector3(x, 0f, y),
+                        Quaternion.identity);
+                        _tempGameObjects.Add(instance);
+                    }
+                }
+            }
+
+            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _combiner.Combine("Ground");
+            //result.AddComponent<MeshCollider>();
+            result.AddComponent<MarkerGround>();
+
+            _tempGameObjects.Clear();
+            _tempGameObjects = null;
+
+            return result;
+        }
+
+        private GameObject InstantiateWalls()
+        {
+            _tempGameObjects = new List<GameObject>();
+
+            for (int x = _minX; x < _maxX; ++x)
+            {
+                for (int y = _minY; y < _maxY; ++y)
+                {
+                    if (_wallsMap.IsCellEquals(TileType.Wall, x, y))
+                    {
+                        Vector3 position = new Vector3(x, 0f, y);
+                        var instance = Object
+                            .Instantiate(_wallPrefab, position, Quaternion.identity);
+                        _tempGameObjects.Add(instance);
+                    }
+                }
+            }
+
+            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _combiner.Combine("Walls");
+            //result.AddComponent<MeshCollider>();
+            NavMeshModifier navMeshModifier = result.AddComponent<NavMeshModifier>();
+            navMeshModifier.overrideArea = true;
+            navMeshModifier.area = NavMesh.GetAreaFromName(NOT_WALKABLE);
+
+            _tempGameObjects.Clear();
+            _tempGameObjects = null;
+
+            return result;
+        }
+
+        private GameObject InstantiateEnvGround()
+        {
+            _tempGameObjects = new List<GameObject>();
+
+            for (int x = _minX; x < _maxX; ++x)
+            {
+                for (int y = _minY; y < _maxY; ++y)
+                {
+                    if (_groundMap.IsCellEquals(TileType.EnvironmentGround, x, y))
+                    {
+                        var instance = Object.Instantiate(
+                              _envGroundPrefab,
+                              new Vector3(x, 1f, y),
+                              Quaternion.identity);
+                        _tempGameObjects.Add(instance);
+                    }
+                }
+            }
+
+            _combiner.SetObjectsToCombine(_tempGameObjects.ToArray());
+            GameObject result = _combiner.Combine("EnvironmentGround");
+
+            _tempGameObjects.Clear();
+            _tempGameObjects = null;
+
+            return result;
         }
 
         #region Private

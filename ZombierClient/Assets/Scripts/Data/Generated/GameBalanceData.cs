@@ -285,7 +285,7 @@
         public long MaxEnemyLevel { get; set; }
     }
 
-    public partial class EnemySpawnType
+    public partial class EnemySpawnType : IWeighted
     {
         [JsonProperty("Index")]
         public long Index { get; set; }
@@ -302,8 +302,8 @@
         [JsonProperty("Enemy")]
         public string Enemy { get; set; }
 
-        [JsonProperty("Chance")]
-        public double Chance { get; set; }
+        [JsonProperty("Weight")]
+        public float Weight { get; set; }
     }
 
     public partial class Level

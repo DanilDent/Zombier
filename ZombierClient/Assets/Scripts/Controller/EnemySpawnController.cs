@@ -1,4 +1,5 @@
 using Prototype.Data;
+using Prototype.Misc;
 using Prototype.Model;
 using Prototype.Service;
 using Prototype.Timer;
@@ -75,11 +76,13 @@ namespace Prototype.Controller
         // Internal variables
         NavMeshTriangulation _triangulation;
         private int _countLeftToSpawn;
+        WeightedRandomSelector<EnemySpawnTypeData> _randomSelector;
 
 
         private void OnEnable()
         {
             _triangulation = NavMesh.CalculateTriangulation();
+            _randomSelector = new WeightedRandomSelector<EnemySpawnTypeData>(_level.EnemySpawnData.Enemies);
             // Events
             _eventService.EnemyDeath += HandleEnemyDeath;
             _eventService.EnemyDeathAnimationEvent += HandleEnemyDeathAnimationEvent;
@@ -117,8 +120,8 @@ namespace Prototype.Controller
             {
                 if (GetRandomPointOnNavmeshTriangulationDistantFrom(groupCenterPoint, _groupSpawnRange, out var newPosition))
                 {
-                    int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
-                    EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
+                    EnemySpawnTypeData spawnTypeData = _randomSelector.GetRandomElement();
+                    EnemyData enemyData = spawnTypeData.EnemyData;
                     IdData id = IdProviderService.GetNewId();
                     EnemyModel enemy = _enemyFactory.Create(id, enemyData);
                     string idStr = id.ToString();

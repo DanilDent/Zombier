@@ -166,9 +166,18 @@ namespace Prototype.Data
 
             var enemySpawnTypesCfg = _gameBalance.EnemySpawnTypes
                 .Where(_ => enemySpawnConfig.EnemySpawnTypes.Contains(_.Id)).ToArray(); ;
-            var enemies = enemySpawnTypesCfg
-                .Select(_ => CreateEnemyData(_.Enemy, 1)).ToList();
-            enemySpawnData.Enemies = enemies;
+
+            var enemySpawnTypesData = enemySpawnTypesCfg
+                .Select(_ =>
+                {
+                    EnemySpawnTypeData result = new EnemySpawnTypeData();
+                    EnemyData enemyData = CreateEnemyData(_.Enemy, 1);
+                    result.EnemyData = enemyData;
+                    result.Weight = _.Weight;
+                    return result;
+                }).ToList();
+
+            enemySpawnData.Enemies = enemySpawnTypesData;
 
             return enemySpawnData;
         }

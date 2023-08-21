@@ -7,7 +7,7 @@ namespace Prototype.Data
     public class EnemySpawnData
     {
         [FirestoreProperty]
-        public List<EnemyData> Enemies { get; set; }
+        public List<EnemySpawnTypeData> Enemies { get; set; }
 
         [FirestoreProperty]
         public int MinEnemyCount { get; set; }

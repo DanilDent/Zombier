@@ -53,7 +53,7 @@ namespace Prototype.ActionTasks
                 enemy.CurrentMovement = Vector3.zero;
             }
 
-            Debug.DrawRay(enemy.transform.position + Vector3.up * 0.5f, enemy.CurrentMovement * 10f, Color.cyan, 1f);
+            //Debug.DrawRay(enemy.transform.position + Vector3.up * 0.5f, enemy.CurrentMovement * 10f, Color.cyan, 1f);
         }
 
         private void HandleMovement(EnemyModel enemy)

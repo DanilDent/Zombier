@@ -34,7 +34,7 @@ namespace Prototype.Controller
         private PlayerModel _player;
         private MonoObjectPool<EnemyProjectileModel> _projectilePool;
         // From inspector
-        [SerializeField] private float _obstacleAvoidanceRadius = 1f;
+        [SerializeField] private float _obstacleAvoidanceRadius = 2f;
         //
         private Dictionary<IdData, Coroutine> _restoreFromHitCoroutines;
 

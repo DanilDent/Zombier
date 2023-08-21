@@ -78,7 +78,8 @@ namespace Prototype.Controller
                     }
                 }
 
-                if (buffCfg.BuffType == BuffTypeEnum.IncreaseMaxHealth)
+                if (buffCfg.BuffType == BuffTypeEnum.IncreaseMaxHealth ||
+                    buffCfg.BuffType == BuffTypeEnum.IncreaseMovementSpeed)
                 {
                     var buffIdOfThisTypeInPlayer = _player.AppliedBuffs.FirstOrDefault(buffIdInPlayer =>
                     {

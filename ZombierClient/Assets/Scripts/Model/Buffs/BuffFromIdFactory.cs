@@ -42,6 +42,9 @@ namespace Prototype.Model
                 case BuffTypeEnum.BouncingProjectiles:
                     result = new BouncingProjectilesBuff(buffCfg, _player, _eventService, _gameBalance);
                     break;
+                case BuffTypeEnum.IncreaseMovementSpeed:
+                    result = new IncreaseMovementSpeedBuff(buffCfg, _player, _eventService, _gameBalance);
+                    break;
                 default:
                     throw new System.Exception($"Unknown buff type: {buffCfg.BuffType}");
             }

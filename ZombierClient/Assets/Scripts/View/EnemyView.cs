@@ -86,11 +86,6 @@ namespace Prototype.View
             UpdateAnimScaling();
         }
 
-        private void Update()
-        {
-            UpdateAnimScaling();
-        }
-
         private void OnDisable()
         {
             _eventService.EnemyMoved -= HandleMovementAnimation;

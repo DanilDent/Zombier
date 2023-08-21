@@ -32,7 +32,7 @@ namespace Prototype.ActionTasks
             HandleRotationNoFight(enemy);
             HandleMovement(enemy);
 
-            EventService?.value?.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = 1f });
+            EventService?.value?.OnEnemyMoved(new GameEventService.EnemyMovedEventArgs { Id = enemy.Id, Value = enemy.CurrentMovement == Vector3.zero ? 0f : 1f });
         }
 
         private void SyncAgentWithTransform(EnemyModel enemy)

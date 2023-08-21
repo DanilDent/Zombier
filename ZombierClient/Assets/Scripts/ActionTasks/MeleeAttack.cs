@@ -76,7 +76,7 @@ namespace Prototype.ActionTasks
 
         private void HandleAttackAnimationEnd(object sender, GameEventService.EnemyAttackEventArgs e)
         {
-            if (agent.Id == e.EntityId)
+            if (agent != null && agent.Id == e.EntityId)
             {
                 agent.CurrentState = HumanoidState.Idle;
             }

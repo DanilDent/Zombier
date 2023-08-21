@@ -195,7 +195,11 @@ namespace Prototype.Service
                 yield return null;
             }
 
-            yield return null;
+            int framesToSkip = 20;
+            for (int i = 0; i < framesToSkip; ++i)
+            {
+                yield return null;
+            }
 
             yield return loadingScreenRect.DOAnchorPosY(loadingScreenRect.anchoredPosition.y + loadingScreenCanvasRect.rect.height, transitionDuration)
                 .SetUpdate(UpdateType.Normal, true)

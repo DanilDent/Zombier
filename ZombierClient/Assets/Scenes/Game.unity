@@ -1937,7 +1937,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: []
-  _minDistanceFromPlayer: 10
+  _minDistanceFromPlayer: 12
   _navMeshSampleRange: 4
   _maxSampleDistance: 3
+  _minGroupSize: 1
+  _maxGroupSize: 20
+  _groupSpawnRange: 10
   _allowedCenterPointRange: 0

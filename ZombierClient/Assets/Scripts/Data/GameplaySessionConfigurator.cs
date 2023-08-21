@@ -52,6 +52,7 @@ namespace Prototype.Data
             enemyData.ModelPrefabAddress = enemyCfg.ModelPrefabAddress;
             enemyData.ViewPrefabAddress = enemyCfg.ViewPrefabAddress;
             enemyData.HitFromFront0Speed = (float)enemyCfg.HitFromFront0Speed;
+            enemyData.ChaseRange = (float)enemyCfg.ChaseRange;
 
             enemyData.MaxSpeed = (float)enemyLvlCfg.MaxSpeed;
             enemyData.Damage = CreateDescDamage(enemyLvlCfg.Damage);
@@ -102,7 +103,7 @@ namespace Prototype.Data
 
             weaponData.AttackRateRPM = (float)weaponLvlCfg.FireRateAps * 60f;
             // TODO: add this variable to config
-            weaponData.AttackRange = 12f;
+            weaponData.AttackRange = (float)weaponLvlCfg.AttackRange;
             // TODO: add this variable to config
             weaponData.Thrust = (float)weaponLvlCfg.StoppingPower;
             weaponData.Recoil = (float)weaponLvlCfg.Recoil;

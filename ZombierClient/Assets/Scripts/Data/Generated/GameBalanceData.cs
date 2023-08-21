@@ -178,6 +178,9 @@
 
         [JsonProperty("HitFromFront0Speed")]
         public double HitFromFront0Speed { get; set; }
+
+        [JsonProperty("ChaseRange")]
+        public double ChaseRange { get; set; }
     }
 
     public partial class EnemyAttack
@@ -439,6 +442,9 @@
 
         [JsonProperty("StoppingPower")]
         public double StoppingPower { get; set; }
+
+        [JsonProperty("AttackRange")]
+        public double AttackRange { get; set; }
     }
 
     public partial class Weapon

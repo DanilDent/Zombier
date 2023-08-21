@@ -123,6 +123,10 @@ namespace Prototype.Controller
             {
                 if (GetRandomPointOnNavmeshTriangulationDistantFrom(groupCenterPoint, _groupSpawnRange, out var newPosition))
                 {
+                    if (Vector3.Distance(newPosition, _player.transform.position) < _minDistanceFromPlayer)
+                    {
+                        continue;
+                    }
                     EnemySpawnTypeData spawnTypeData = _randomSelector.GetRandomElement();
                     int enemyLevel = Random.Range(_level.EnemySpawnData.MinEnemyLevel, _level.EnemySpawnData.MaxEnemyLevel);
                     EnemyData enemyData = _sessionConfigurator.CreateEnemyData(spawnTypeData.EnemyId, enemyLevel);

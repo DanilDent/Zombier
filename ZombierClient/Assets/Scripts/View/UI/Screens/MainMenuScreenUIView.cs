@@ -55,7 +55,7 @@ namespace Prototype.View
 
         private void OnPlay()
         {
-            _appEventService.OnPlay(new PlayEventArgs { LocationId = "Id_Locaiton0" });
+            _appEventService.OnPlay(new PlayEventArgs { LocationId = "Id_Location_Laboratory" });
         }
 
         private void OnYesResume()

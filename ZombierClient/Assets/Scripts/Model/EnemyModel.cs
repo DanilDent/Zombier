@@ -62,6 +62,7 @@ namespace Prototype.Model
         public DescDamage Resists => _data.Resists;
         // !IDamageable
 
+        public float ChaseRange => _data.ChaseRange;
         public float MaxSpeed => _data.MaxSpeed;
         public int ExpReward => _data.ExpReward;
         public float AttackRange => _data.EnemyAttack.AttackRange;

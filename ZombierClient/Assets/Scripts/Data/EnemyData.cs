@@ -39,5 +39,7 @@ namespace Prototype.Data
         public int ExpReward { get; set; }
 
         public float HitFromFront0Speed { get; set; }
+
+        public float ChaseRange { get; set; }
     }
 }

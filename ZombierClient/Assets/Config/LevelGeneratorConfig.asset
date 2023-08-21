@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxLevelSize: 15000
   MinRoomWidth: 6
-  MaxRoomWidth: 19
+  MaxRoomWidth: 18
   MinRoomHeight: 10
   MaxRoomHeight: 30
   MinRoomEntryWidth: 4

@@ -270,7 +270,7 @@ MonoBehaviour:
   _parentBlackboard: {fileID: 0}
   _serializedBlackboard: '{"_variables":{"position":{"_propertyPath":"UnityEngine.Transform.position","_name":"position","_id":"ed1f0ef6-68e1-410d-9cb3-b6190ad90926","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector3,
     UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Player":{"_name":"Player","_id":"bb1844e7-6acb-458f-9ebe-61b88451c989","$type":"NodeCanvas.Framework.Variable`1[[Prototype.Model.PlayerModel,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"chaseRange":{"_value":100.0,"_name":"chaseRange","_id":"df0b1dba-1c2f-4e5e-9437-1346c44f9f1c","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"chaseRange":{"_value":25.0,"_propertyPath":"Prototype.Model.EnemyModel.ChaseRange","_name":"chaseRange","_id":"df0b1dba-1c2f-4e5e-9437-1346c44f9f1c","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AttackRange":{"_propertyPath":"Prototype.Model.EnemyModel.AttackRange","_name":"AttackRange","_id":"dd27e524-73af-4688-824a-8da6223ee261","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AttackRateRpm":{"_propertyPath":"Prototype.Model.EnemyModel.AttackRateRpm","_name":"AttackRateRpm","_id":"0e72d432-be94-4b76-b0be-dc8eca8a81d6","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"AttackTimer":{"_propertyPath":"Prototype.Model.EnemyModel.AttackTimerMax","_name":"AttackTimer","_id":"9492ff7a-d111-488b-9dad-ff648bf4ad7d","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
@@ -290,7 +290,7 @@ MonoBehaviour:
   - _json: '{"_name":"Player","_id":"bb1844e7-6acb-458f-9ebe-61b88451c989","$type":"NodeCanvas.Framework.Variable`1[[Prototype.Model.PlayerModel,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
     _references: []
-  - _json: '{"_value":100.0,"_name":"chaseRange","_id":"df0b1dba-1c2f-4e5e-9437-1346c44f9f1c","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+  - _json: '{"_value":25.0,"_propertyPath":"Prototype.Model.EnemyModel.ChaseRange","_name":"chaseRange","_id":"df0b1dba-1c2f-4e5e-9437-1346c44f9f1c","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
       mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}'
     _references: []
   - _json: '{"_propertyPath":"Prototype.Model.EnemyModel.AttackRange","_name":"AttackRange","_id":"dd27e524-73af-4688-824a-8da6223ee261","$type":"NodeCanvas.Framework.Variable`1[[System.Single,

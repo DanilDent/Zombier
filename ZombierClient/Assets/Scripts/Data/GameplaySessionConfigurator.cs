@@ -40,6 +40,32 @@ namespace Prototype.Data
             return locationData;
         }
 
+        public EnemyData CreateEnemyData(string enemyId, int enemyLevel)
+        {
+            var enemyCfg = _gameBalance.Enemies.FirstOrDefault(_ => _.Id.Equals(enemyId));
+            var enemyLvlCfg = _gameBalance.EnemyLevel.FirstOrDefault(_ => _.Level == enemyLevel && _.EnemyId.Equals(enemyCfg.Id));
+
+            var enemyData = new EnemyData();
+
+            enemyData.EnemyId = enemyId;
+            enemyData.Level = enemyLevel;
+            enemyData.ModelPrefabAddress = enemyCfg.ModelPrefabAddress;
+            enemyData.ViewPrefabAddress = enemyCfg.ViewPrefabAddress;
+            enemyData.HitFromFront0Speed = (float)enemyCfg.HitFromFront0Speed;
+
+            enemyData.MaxSpeed = (float)enemyLvlCfg.MaxSpeed;
+            enemyData.Damage = CreateDescDamage(enemyLvlCfg.Damage);
+            enemyData.CritChance = (float)enemyLvlCfg.CritChance;
+            enemyData.CritMultiplier = (float)enemyLvlCfg.CritMultipleir;
+            enemyData.MaxHealth = (float)enemyLvlCfg.MaxHealth;
+            enemyData.Health = enemyData.MaxHealth;
+            enemyData.Resists = CreateDescDamage(enemyLvlCfg.Resists);
+            enemyData.EnemyAttack = CreateEnemyAttackData(enemyLvlCfg.Attacks);
+            enemyData.ExpReward = (int)enemyLvlCfg.ExpReward;
+
+            return enemyData;
+        }
+
         private readonly AppData _appData;
         private GameBalanceData _gameBalance => _appData.GameBalance;
 
@@ -128,32 +154,6 @@ namespace Prototype.Data
             return enemyAttackData;
         }
 
-        private EnemyData CreateEnemyData(string enemyId, int enemyLevel)
-        {
-            var enemyCfg = _gameBalance.Enemies.FirstOrDefault(_ => _.Id.Equals(enemyId));
-            var enemyLvlCfg = _gameBalance.EnemyLevel.FirstOrDefault(_ => _.Level == enemyLevel && _.EnemyId.Equals(enemyCfg.Id));
-
-            var enemyData = new EnemyData();
-
-            enemyData.EnemyId = enemyId;
-            enemyData.Level = enemyLevel;
-            enemyData.ModelPrefabAddress = enemyCfg.ModelPrefabAddress;
-            enemyData.ViewPrefabAddress = enemyCfg.ViewPrefabAddress;
-            enemyData.HitFromFront0Speed = (float)enemyCfg.HitFromFront0Speed;
-
-            enemyData.MaxSpeed = (float)enemyLvlCfg.MaxSpeed;
-            enemyData.Damage = CreateDescDamage(enemyLvlCfg.Damage);
-            enemyData.CritChance = (float)enemyLvlCfg.CritChance;
-            enemyData.CritMultiplier = (float)enemyLvlCfg.CritMultipleir;
-            enemyData.MaxHealth = (float)enemyLvlCfg.MaxHealth;
-            enemyData.Health = enemyData.MaxHealth;
-            enemyData.Resists = CreateDescDamage(enemyLvlCfg.Resists);
-            enemyData.EnemyAttack = CreateEnemyAttackData(enemyLvlCfg.Attacks);
-            enemyData.ExpReward = (int)enemyLvlCfg.ExpReward;
-
-            return enemyData;
-        }
-
         private EnemySpawnData CreateEnemySpawnData(string enemySpawnConfigId)
         {
             var enemySpawnConfig = _gameBalance.EnemySpawnConfig.FirstOrDefault(_ => _.Id.Equals(enemySpawnConfigId));
@@ -171,8 +171,7 @@ namespace Prototype.Data
                 .Select(_ =>
                 {
                     EnemySpawnTypeData result = new EnemySpawnTypeData();
-                    EnemyData enemyData = CreateEnemyData(_.Enemy, 1);
-                    result.EnemyData = enemyData;
+                    result.EnemyId = _.Enemy;
                     result.Weight = _.Weight;
                     return result;
                 }).ToList();

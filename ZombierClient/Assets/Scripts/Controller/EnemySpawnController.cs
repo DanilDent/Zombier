@@ -26,7 +26,8 @@ namespace Prototype.Controller
             PlayerModel player,
             List<EnemyModel> enemies,
             GameEventService eventService,
-            TimerService timerService)
+            TimerService timerService,
+            GameplaySessionConfigurator sessionConfigurator)
         {
             _session = session;
             _level = level;
@@ -35,6 +36,7 @@ namespace Prototype.Controller
             _enemies = enemies;
             _eventService = eventService;
             _timerService = timerService;
+            _sessionConfigurator = sessionConfigurator;
         }
 
         public int EnemyCount => _enemies.Count;
@@ -61,6 +63,7 @@ namespace Prototype.Controller
         private PlayerModel _player;
         [SerializeField] private List<EnemyModel> _enemies;
         private TimerService _timerService;
+        private GameplaySessionConfigurator _sessionConfigurator;
         //
         // Minimal spawn enemy distance from player
         [SerializeField] private float _minDistanceFromPlayer = 10f;
@@ -121,7 +124,8 @@ namespace Prototype.Controller
                 if (GetRandomPointOnNavmeshTriangulationDistantFrom(groupCenterPoint, _groupSpawnRange, out var newPosition))
                 {
                     EnemySpawnTypeData spawnTypeData = _randomSelector.GetRandomElement();
-                    EnemyData enemyData = spawnTypeData.EnemyData;
+                    int enemyLevel = Random.Range(_level.EnemySpawnData.MinEnemyLevel, _level.EnemySpawnData.MaxEnemyLevel);
+                    EnemyData enemyData = _sessionConfigurator.CreateEnemyData(spawnTypeData.EnemyId, enemyLevel);
                     IdData id = IdProviderService.GetNewId();
                     EnemyModel enemy = _enemyFactory.Create(id, enemyData);
                     string idStr = id.ToString();

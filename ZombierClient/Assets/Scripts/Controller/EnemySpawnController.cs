@@ -40,34 +40,11 @@ namespace Prototype.Controller
 
         public void SpawnEnemies()
         {
-            int countLeftToSpawn = Random.Range(_level.EnemySpawnData.MinEnemyCount, _level.EnemySpawnData.MaxEnemyCount + 1);
+            _countLeftToSpawn = Random.Range(_level.EnemySpawnData.MinEnemyCount, _level.EnemySpawnData.MaxEnemyCount + 1);
 
-            while (countLeftToSpawn > 0)
+            while (_countLeftToSpawn > 0)
             {
-                if (GetRandomPointOnNavmeshDistantFromPlayerTriangulation(out var newPosition))
-                {
-                    int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
-                    EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
-                    IdData id = IdProviderService.GetNewId();
-                    EnemyModel enemy = _enemyFactory.Create(id, enemyData);
-                    string idStr = id.ToString();
-                    int nCharsToDisplay = 8;
-                    enemy.gameObject.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}";
-
-                    newPosition.y = 0f;
-                    enemy.transform.position = newPosition;
-                    enemy.transform.rotation = Quaternion.Euler(0f, Random.Range(-180f, 180f), 0f);
-                    enemy.Agent.Warp(newPosition);
-                    enemy.Agent.SetDestination(enemy.transform.position);
-                    enemy.Agent.enabled = true;
-                    _enemies.Add(enemy);
-
-                    --countLeftToSpawn;
-                }
-                else
-                {
-                    //Debug.LogWarning("Can't find random position on navmesh surface");
-                }
+                SpawnNextGroup();
             }
         }
 
@@ -91,11 +68,14 @@ namespace Prototype.Controller
         // Groups config
         [SerializeField] private int _minGroupSize = 1;
         [SerializeField] private int _maxGroupSize = 20;
+        [SerializeField] private float _groupSpawnRange = 10f;
         // Spawn enemies only outside this range from player
         [SerializeField] private float _allowedCenterPointRange;
         private List<EnemyModel> _enemiesToDestroy;
         // Internal variables
         NavMeshTriangulation _triangulation;
+        private int _countLeftToSpawn;
+
 
         private void OnEnable()
         {
@@ -122,6 +102,45 @@ namespace Prototype.Controller
 #if DEBUG
             //DebugDrawSpawnPosition();
 #endif
+        }
+
+        private void SpawnNextGroup()
+        {
+            int groupSize = Random.Range(_minGroupSize, Mathf.Min(_maxGroupSize, _countLeftToSpawn));
+            if (!GetRandomPointOnNavmeshTriangulationDistantFrom(_player.transform.position, _minDistanceFromPlayer, out Vector3 groupCenterPoint))
+            {
+                Debug.LogWarning($"Can't find center point for new spawn group");
+                return;
+            }
+            int leftToSpawnInGroup = groupSize;
+            while (leftToSpawnInGroup > 0)
+            {
+                if (GetRandomPointOnNavmeshTriangulationDistantFrom(groupCenterPoint, _groupSpawnRange, out var newPosition))
+                {
+                    int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
+                    EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
+                    IdData id = IdProviderService.GetNewId();
+                    EnemyModel enemy = _enemyFactory.Create(id, enemyData);
+                    string idStr = id.ToString();
+                    int nCharsToDisplay = 8;
+                    enemy.gameObject.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}";
+
+                    newPosition.y = 0f;
+                    enemy.transform.position = newPosition;
+                    enemy.transform.rotation = Quaternion.Euler(0f, Random.Range(-180f, 180f), 0f);
+                    enemy.Agent.Warp(newPosition);
+                    enemy.Agent.SetDestination(enemy.transform.position);
+                    enemy.Agent.enabled = true;
+                    _enemies.Add(enemy);
+
+                    --leftToSpawnInGroup;
+                }
+                else
+                {
+                    Debug.LogWarning("Can't find random position on navmesh surface");
+                }
+            }
+            _countLeftToSpawn -= groupSize;
         }
 
         private bool GetRandomPointOnNavmeshDistantFromPlayerRandomSphere(out Vector3 result)
@@ -154,13 +173,13 @@ namespace Prototype.Controller
             return false;
         }
 
-        private bool GetRandomPointOnNavmeshDistantFromPlayerTriangulation(out Vector3 result)
+        private bool GetRandomPointOnNavmeshTriangulationDistantFrom(Vector3 distantFrom, float range, out Vector3 result)
         {
             int maxIterations = 100;
             for (int i = 0; i < maxIterations; ++i)
             {
                 Vector3 point;
-                if (GetRandomPointOnNavmeshTriangulation(out point) && Vector3.Distance(_player.transform.position, point) > _minDistanceFromPlayer)
+                if (GetRandomPointOnNavmeshTriangulation(out point) && Vector3.Distance(distantFrom, point) > range)
                 {
                     result = point;
                     return true;

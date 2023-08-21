@@ -44,7 +44,7 @@ namespace Prototype.Controller
 
             while (countLeftToSpawn > 0)
             {
-                if (GetRandomPointOnNavmeshDistantFromPlayer(out var newPosition))
+                if (GetRandomPointOnNavmeshDistantFromPlayerTriangulation(out var newPosition))
                 {
                     int randomIndex = Random.Range(0, _level.EnemySpawnData.Enemies.Count);
                     EnemyData enemyData = _level.EnemySpawnData.Enemies[randomIndex];
@@ -88,13 +88,18 @@ namespace Prototype.Controller
         [SerializeField] private float _minDistanceFromPlayer = 10f;
         [SerializeField] private float _navMeshSampleRange = 10f;
         [SerializeField] private float _maxSampleDistance = 10f;
+        // Groups config
+        [SerializeField] private int _minGroupSize = 1;
+        [SerializeField] private int _maxGroupSize = 20;
         // Spawn enemies only outside this range from player
         [SerializeField] private float _allowedCenterPointRange;
         private List<EnemyModel> _enemiesToDestroy;
-
+        // Internal variables
+        NavMeshTriangulation _triangulation;
 
         private void OnEnable()
         {
+            _triangulation = NavMesh.CalculateTriangulation();
             // Events
             _eventService.EnemyDeath += HandleEnemyDeath;
             _eventService.EnemyDeathAnimationEvent += HandleEnemyDeathAnimationEvent;
@@ -119,11 +124,11 @@ namespace Prototype.Controller
 #endif
         }
 
-        private bool GetRandomPointOnNavmeshDistantFromPlayer(out Vector3 result)
+        private bool GetRandomPointOnNavmeshDistantFromPlayerRandomSphere(out Vector3 result)
         {
             Vector3 sampleCenter = _level.ExitPoint.transform.position + Random.insideUnitSphere * _allowedCenterPointRange;
             Vector3 point;
-            if (GetRandomPointOnNavmesh(sampleCenter, _navMeshSampleRange, out point))
+            if (GetRandomPointOnNavmeshRandomSpehere(sampleCenter, _navMeshSampleRange, out point))
             {
                 result = point;
                 return true;
@@ -132,7 +137,7 @@ namespace Prototype.Controller
             return false;
         }
 
-        private bool GetRandomPointOnNavmesh(Vector3 center, float range, out Vector3 result)
+        private bool GetRandomPointOnNavmeshRandomSpehere(Vector3 center, float range, out Vector3 result)
         {
             int maxIterations = 100;
             for (int i = 0; i < maxIterations; i++)
@@ -140,6 +145,41 @@ namespace Prototype.Controller
                 Vector3 randomPoint = center + Random.insideUnitSphere * range;
                 NavMeshHit hit;
                 if (NavMesh.SamplePosition(randomPoint, out hit, _maxSampleDistance, NavMesh.AllAreas))
+                {
+                    result = hit.position;
+                    return true;
+                }
+            }
+            result = Vector3.zero;
+            return false;
+        }
+
+        private bool GetRandomPointOnNavmeshDistantFromPlayerTriangulation(out Vector3 result)
+        {
+            int maxIterations = 100;
+            for (int i = 0; i < maxIterations; ++i)
+            {
+                Vector3 point;
+                if (GetRandomPointOnNavmeshTriangulation(out point) && Vector3.Distance(_player.transform.position, point) > _minDistanceFromPlayer)
+                {
+                    result = point;
+                    return true;
+                }
+            }
+
+            result = Vector3.zero;
+            return false;
+        }
+
+        private bool GetRandomPointOnNavmeshTriangulation(out Vector3 result)
+        {
+            int maxIterations = 100;
+            for (int i = 0; i < maxIterations; i++)
+            {
+                int vertexIndex = Random.Range(0, _triangulation.vertices.Length);
+
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(_triangulation.vertices[vertexIndex], out hit, _maxSampleDistance, NavMesh.AllAreas))
                 {
                     result = hit.position;
                     return true;
@@ -207,7 +247,7 @@ namespace Prototype.Controller
         // Debug 
         private void DebugDrawSpawnPosition()
         {
-            if (GetRandomPointOnNavmeshDistantFromPlayer(out var point))
+            if (GetRandomPointOnNavmeshDistantFromPlayerRandomSphere(out var point))
             {
                 Debug.DrawRay(point, Vector3.up, Color.red, 1.0f);
             }

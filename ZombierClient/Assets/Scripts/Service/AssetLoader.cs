@@ -50,12 +50,20 @@ namespace Prototype.Service
 
         public T Get(string address)
         {
+            if (!_loadAssetOpHandles.ContainsKey(address))
+            {
+                throw new System.Exception($"The key {address} is not represented in dictionary");
+            }
             return _loadAssetOpHandles[address].Result;
         }
 
         public TCast Get<TCast>(string address)
         where TCast : class
         {
+            if (!_loadAssetOpHandles.ContainsKey(address))
+            {
+                throw new System.Exception($"The key {address} is not represented in dictionary");
+            }
             return _loadAssetOpHandles[address].Result as TCast;
         }
 

@@ -50,10 +50,16 @@ namespace Prototype.Service
         // Buffs UI related
         public event EventHandler<ChooseBuffWindowOpenEventArgs> ChooseBuffWindowOpen;
         public event EventHandler ChooseBuffWindowClose;
+        public event EventHandler<WeaponInstantiatedEventArgs> WeaponInstantiated;
 
         #endregion
 
         #region EventArgs
+
+        public class WeaponInstantiatedEventArgs
+        {
+            public WeaponModel WeaponInstance;
+        }
 
         public class ChooseBuffWindowOpenEventArgs
         {
@@ -169,6 +175,11 @@ namespace Prototype.Service
         #endregion
 
         #region Invokers
+
+        public void OnWeaponInstantiated(WeaponInstantiatedEventArgs e)
+        {
+            WeaponInstantiated?.Invoke(this, e);
+        }
 
         public void OnEnemyAttackEnd(EnemyAttackEventArgs e)
         {

@@ -86,7 +86,7 @@ namespace Prototype.Controller
             if (_player.CurrentTarget != null)
             {
                 WeaponModel weapon = _player.Weapon;
-                Vector3 shootDir = (_player.CurrentTarget.TargetPoint.position - weapon.ShootingPoint.position).normalized;
+                Vector3 shootDir = weapon.ShootingPoint.forward;
 
                 float recoilX = UnityEngine.Random.Range(-weapon.Recoil, weapon.Recoil);
                 float recoilY = UnityEngine.Random.Range(-weapon.Recoil, weapon.Recoil);

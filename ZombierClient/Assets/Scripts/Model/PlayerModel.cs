@@ -15,14 +15,12 @@ namespace Prototype.Model
         public void Construct(
             GameSessionData session,
             GameEventService eventService,
-            WeaponModel weaponModel,
             MarkerDefaulTargetPoint targetPoint,
             TargetHandleModel targetHandle,
             AppData appData)
         {
             _playerSession = session.Player;
             _eventService = eventService;
-            _weaponModel = weaponModel;
             _targetPoint = targetPoint;
             _targetHandle = targetHandle;
             _gameBalance = appData.GameBalance;
@@ -80,7 +78,7 @@ namespace Prototype.Model
         public int SavedLevelUpCounter { get => _playerSession.SavedLevelUpCounter; set => _playerSession.SavedLevelUpCounter = value; }
         public int CurrentExp { get => _playerSession.CurrentExp; set => _playerSession.CurrentExp = value; }
         public int CurrentLevelExpThreshold => _playerSession.LevelExpThresholds[CurrentLevel - 1];
-        public WeaponModel Weapon => _weaponModel;
+        public WeaponModel Weapon { get => _weaponModel; set => _weaponModel = value; }
         public TargetHandleModel TargetHandle => _targetHandle;
         public Transform DefaultTargetPoint => _targetPoint.transform;
         public float Speed { get; set; }

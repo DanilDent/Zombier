@@ -15,6 +15,8 @@ namespace Prototype.Model
             _shootingPoint = shootingPoint;
         }
 
+        public class Factory : PlaceholderFactory<UnityEngine.Object, WeaponModel> { }
+
         // Properties
 
         public float AttackRange
@@ -40,10 +42,14 @@ namespace Prototype.Model
             }
         }
 
+        public WeaponViewDataNameEnum WeaponViewDataName => _weaponViewDataName;
+
         public DescDamage Damage => _weaponData.Damage;
 
         public Transform ShootingPoint => _shootingPoint.transform;
+
         public float Thrust => _weaponData.Thrust;
+
         public float Recoil => _weaponData.Recoil;
 
         // Private
@@ -52,6 +58,6 @@ namespace Prototype.Model
         private MarkerShootingPointPlayer _shootingPoint;
         //
         private WeaponData _weaponData;
+        [SerializeField] private WeaponViewDataNameEnum _weaponViewDataName;
     }
 }
-

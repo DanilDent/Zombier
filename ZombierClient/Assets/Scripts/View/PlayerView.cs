@@ -1,6 +1,7 @@
 ﻿using Prototype.Data;
 using Prototype.Model;
 using Prototype.Service;
+using Prototype.UnityComponent;
 using System;
 using System.Collections;
 using System.Linq;
@@ -69,8 +70,22 @@ namespace Prototype.View
         [SerializeField] private float _aimTransitionMultiplier = 15f;
         private IEnumerator _smoothLayerTransitionCoroutine = null;
 
+        // From inspector
+        [SerializeField] private WeaponViewDataContainer _weaponViewDataContainer;
+        [SerializeField] private Transform _handAim;
+        [SerializeField] private Transform _leftHand;
+        [SerializeField] private Transform _rightHand;
+        [SerializeField] private Transform _leftHandHint;
+        [SerializeField] private Transform _rightHandHint;
+        [SerializeField] private Transform _rightHandTarget;
+        [SerializeField] private Transform _leftHandTarget;
+        [SerializeField] private MultiAimConstraint _bodyAimConstraint;
+        [SerializeField] private MultiAimConstraint _handAimConstraint;
+        //
+        [SerializeField] private Transform _pistolPosition;
+        [SerializeField] private Transform _riflePosition;
 
-        private void Start()
+        private void Awake()
         {
             _animator = GetComponent<Animator>();
 
@@ -95,6 +110,7 @@ namespace Prototype.View
             _eventService.PlayerShoot += HandleShootAnimation;
             _eventService.PlayerDeath += HandlePlayerDeath;
             _eventService.PlayerRevive += HandlePlayerRevive;
+            _eventService.WeaponInstantiated += HandleWeaponInstantiated;
         }
 
         private void OnDisable()
@@ -105,6 +121,46 @@ namespace Prototype.View
             _eventService.PlayerShoot -= HandleShootAnimation;
             _eventService.PlayerDeath -= HandlePlayerDeath;
             _eventService.PlayerRevive -= HandlePlayerRevive;
+            _eventService.WeaponInstantiated -= HandleWeaponInstantiated;
+        }
+
+        private void HandleWeaponInstantiated(object sender, GameEventService.WeaponInstantiatedEventArgs e)
+        {
+            WeaponViewData weaponViewData = _weaponViewDataContainer.GetWeaponViewDataByName(e.WeaponInstance.WeaponViewDataName);
+
+            _handAim.transform.localPosition = weaponViewData.HandAim.transform.localPosition;
+            _leftHand.transform.localPosition = weaponViewData.LeftHand.transform.localPosition;
+            _rightHand.transform.localPosition = weaponViewData.RightHand.transform.localPosition;
+
+            _leftHandHint.transform.localPosition = weaponViewData.LeftHandHint.transform.localPosition;
+            _leftHandHint.transform.localRotation = weaponViewData.LeftHandHint.transform.localRotation;
+
+            _rightHandHint.transform.localPosition = weaponViewData.RightHandHint.transform.localPosition;
+            _rightHandHint.transform.localRotation = weaponViewData.RightHandHint.transform.localRotation;
+
+            _rightHandTarget.transform.localPosition = weaponViewData.RightHandTarget.transform.localPosition;
+            _rightHandTarget.transform.localRotation = weaponViewData.RightHandTarget.transform.localRotation;
+
+            _leftHandTarget.transform.localPosition = weaponViewData.LeftHandTarget.transform.localPosition;
+            _leftHandTarget.transform.localRotation = weaponViewData.LeftHandTarget.transform.localRotation;
+
+            _bodyAimConstraint.data.offset = weaponViewData.BodyAimOffset;
+            _handAimConstraint.data.offset = weaponViewData.HandAimOffset;
+
+            _animator.runtimeAnimatorController = (RuntimeAnimatorController)weaponViewData.AnimatorController;
+
+            switch (e.WeaponInstance.WeaponViewDataName)
+            {
+                case WeaponViewDataNameEnum.Pistol:
+                    e.WeaponInstance.GetComponent<BindTransforms>().VirtualParentTransform = _pistolPosition;
+                    break;
+                case WeaponViewDataNameEnum.Rifle:
+                    e.WeaponInstance.GetComponent<BindTransforms>().VirtualParentTransform = _riflePosition;
+                    break;
+                default:
+                    throw new System.Exception($"Unknown weapon view data name {e.WeaponInstance.WeaponViewDataName}");
+
+            }
         }
 
         private void HandleMovementAnimations(object sender, GameEventService.PlayerMovedEventArgs e)

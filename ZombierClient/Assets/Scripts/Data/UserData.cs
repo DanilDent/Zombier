@@ -7,6 +7,7 @@ namespace Prototype.Data
     {
         [FirestoreProperty]
         public GameSessionData GameSession { get; set; }
+        public string CurrentWeaponId { get; set; }
 
         public bool IsInitComplete { get; set; }
     }

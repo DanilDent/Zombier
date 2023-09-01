@@ -6,6 +6,12 @@ namespace Prototype.Data
     public class WeaponData
     {
         [FirestoreProperty]
+        public string Id { get; set; }
+
+        [FirestoreProperty]
+        public string PrefabAddress { get; set; }
+
+        [FirestoreProperty]
         public float AttackRateRPM { get; set; }
 
         [FirestoreProperty]

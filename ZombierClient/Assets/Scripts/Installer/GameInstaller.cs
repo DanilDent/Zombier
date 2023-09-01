@@ -41,6 +41,7 @@ namespace Prototype
             {
                 _currentGameSession.Player.PlayerPrefabAddress,
                 _currentGameSession.Player.Weapon.ProjectileData.PrefabAddress,
+                _currentGameSession.Player.Weapon.PrefabAddress,
                 //
                 _gameConfig.EnemyContextAddress,
                 _gameConfig.EnemyProjectilePrefabAddress,
@@ -160,14 +161,19 @@ namespace Prototype
                 .WithGameObjectName("Player")
                 .UnderTransform(GetMarker<MarkerEntities>)
                 .AsSingle()
-                .OnInstantiated<PlayerModel>(SetPlayerPositionToZero);
+                .OnInstantiated<PlayerModel>((context, player) =>
+                {
+                    SetPlayerPositionToZero(context, player);
+                    SpawnPlayerWeapon(context, player);
+                });
 
-            Container.Bind<WeaponModel>().FromComponentInChildren(includeInactive: false).AsSingle();
             Container.Bind<TargetHandleModel>().FromComponentInChildren().AsSingle();
             Container.Bind<Rig>().FromComponentInChildren().AsSingle();
             Container.Bind<MarkerDefaulTargetPoint>().FromComponentInChildren().AsSingle();
 
             // Weapon
+            Container.BindFactory<UnityEngine.Object, WeaponModel, WeaponModel.Factory>()
+                .FromFactory<PrefabFactory<WeaponModel>>();
             Container.Bind<MarkerProjectiles>().FromComponentInHierarchy().AsSingle();
 
             Container.BindFactory<UnityEngine.Object, PlayerProjectileModel, PoolObjectFactory<PlayerProjectileModel>>()
@@ -322,6 +328,22 @@ namespace Prototype
         private void SetPlayerPositionToZero(InjectContext context, PlayerModel player)
         {
             player.transform.position = Vector3.zero;
+        }
+
+        private void SpawnPlayerWeapon(InjectContext context, PlayerModel player)
+        {
+            GameEventService eventService = context.Container.Resolve<GameEventService>();
+            WeaponModel.Factory weaponFactory = context.Container.Resolve<WeaponModel.Factory>();
+
+            WeaponModel weaponPrefab = _assetLoader.GetComponent<WeaponModel>(_currentGameSession.Player.Weapon.PrefabAddress);
+            MarkerPlayerWeapons markerPlayerWeapons = player.GetComponentInChildren<MarkerPlayerWeapons>();
+            WeaponModel weaponInstance = weaponFactory.Create(weaponPrefab);
+            weaponInstance.transform.parent = markerPlayerWeapons.transform;
+            eventService.OnWeaponInstantiated(new GameEventService.WeaponInstantiatedEventArgs
+            {
+                WeaponInstance = weaponInstance
+            });
+            player.Weapon = weaponInstance;
         }
     }
 }

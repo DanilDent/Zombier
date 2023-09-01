@@ -101,10 +101,10 @@ namespace Prototype.Data
 
             var weaponData = new WeaponData();
 
+            weaponData.Id = weaponId;
+            weaponData.PrefabAddress = weaponCfg.PrefabAddress;
             weaponData.AttackRateRPM = (float)weaponLvlCfg.FireRateAps * 60f;
-            // TODO: add this variable to config
             weaponData.AttackRange = (float)weaponLvlCfg.AttackRange;
-            // TODO: add this variable to config
             weaponData.Thrust = (float)weaponLvlCfg.StoppingPower;
             weaponData.Recoil = (float)weaponLvlCfg.Recoil;
             weaponData.Damage = CreateDescDamage(weaponLvlCfg.Damage);

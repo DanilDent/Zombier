@@ -180,7 +180,14 @@ namespace Prototype.Controller
 
         private void HandleEnemyPreDestroyed(object sender, EventArgs e)
         {
-            UpdateTargetHandle(_player.DefaultTargetPoint);
+            if (_player.CurrentTarget == null)
+            {
+                UpdateTargetHandle(_player.DefaultTargetPoint);
+            }
+            else
+            {
+                UpdateTargetHandle(_player.CurrentTarget.TargetPoint);
+            }
         }
 
         private void OnDisable()

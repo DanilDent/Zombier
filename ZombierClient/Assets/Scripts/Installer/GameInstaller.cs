@@ -162,7 +162,7 @@ namespace Prototype
                 .AsSingle()
                 .OnInstantiated<PlayerModel>(SetPlayerPositionToZero);
 
-            Container.Bind<WeaponModel>().FromComponentInChildren().AsSingle();
+            Container.Bind<WeaponModel>().FromComponentInChildren(includeInactive: false).AsSingle();
             Container.Bind<TargetHandleModel>().FromComponentInChildren().AsSingle();
             Container.Bind<Rig>().FromComponentInChildren().AsSingle();
             Container.Bind<MarkerDefaulTargetPoint>().FromComponentInChildren().AsSingle();

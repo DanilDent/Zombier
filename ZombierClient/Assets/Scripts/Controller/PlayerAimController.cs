@@ -72,8 +72,12 @@ namespace Prototype.Controller
                         if (Vector3.Distance(_player.transform.position, enemy.transform.position) < _player.Weapon.AttackRange)
                         {
                             // Enemy is in range of current weapon
-                            _player.CurrentState = PlayerModel.State.Fight;
-                            UpdateCurrentTarget(enemy);
+                            UpdateCurrentTarget(
+                                enemy,
+                                () =>
+                                {
+                                    _player.CurrentState = PlayerModel.State.Fight;
+                                });
                             _eventService.OnPlayerStartFight();
                         }
                         else
@@ -138,20 +142,21 @@ namespace Prototype.Controller
             return value != null;
         }
 
-        private void UpdateCurrentTarget(EnemyModel target)
+        private void UpdateCurrentTarget(EnemyModel target, Action onComplete = null)
         {
             _player.CurrentTarget = target;
             if (_player.CurrentTarget != null)
             {
-                UpdateTargetHandle(_player.CurrentTarget.TargetPoint);
+                UpdateTargetHandle(_player.CurrentTarget.TargetPoint, onComplete);
             }
             else
             {
-                UpdateTargetHandle(_player.DefaultTargetPoint);
+                UpdateTargetHandle(_player.DefaultTargetPoint, onComplete);
             }
         }
 
-        private void UpdateTargetHandle(Transform parent)
+
+        private void UpdateTargetHandle(Transform parent, Action onComplete = null)
         {
             _player.TargetHandle.transform.SetParent(parent);
             _player.TargetHandle.transform.localEulerAngles = Vector3.zero;
@@ -160,15 +165,16 @@ namespace Prototype.Controller
             {
                 StopCoroutine(_targetTransitionCoroutine);
             }
-            _targetTransitionCoroutine = SmoothTransitionToNewPositionCoroutine(_player.TargetHandle, Vector3.zero);
+            _targetTransitionCoroutine = SmoothTransitionToNewPositionCoroutine(_player.TargetHandle, Vector3.zero, onComplete);
             StartCoroutine(_targetTransitionCoroutine);
         }
 
-        private IEnumerator SmoothTransitionToNewPositionCoroutine(TargetHandleModel handle, Vector3 targetPos)
+        private IEnumerator SmoothTransitionToNewPositionCoroutine(TargetHandleModel handle, Vector3 targetPos, Action onComplete = null)
         {
+            const float eps = 1f;
             Vector3 currentPos = handle.transform.localPosition;
             yield return null;
-            while (currentPos != targetPos)
+            while (Vector3.Distance(currentPos, targetPos) > eps)
             {
                 currentPos = handle.transform.localPosition;
                 handle.transform.localPosition = Vector3.Lerp(currentPos, targetPos, _targetTranstiionMultiplier * Time.deltaTime);
@@ -176,6 +182,7 @@ namespace Prototype.Controller
             }
 
             handle.transform.localPosition = Vector3.zero;
+            onComplete?.Invoke();
         }
 
         private void HandleEnemyPreDestroyed(object sender, EventArgs e)

@@ -49,6 +49,7 @@ namespace Prototype.Controller
             {
                 SpawnNextGroup();
             }
+            Debug.Log($"Spawn complete");
         }
 
         // Private
@@ -112,14 +113,17 @@ namespace Prototype.Controller
 
         private void SpawnNextGroup()
         {
-            int groupSize = Random.Range(_minGroupSize, Mathf.Min(_maxGroupSize, _countLeftToSpawn));
+            const int MAX_ITERATIONS = 500;
+            int iteration = 0;
+
+            int groupSize = Random.Range(_minGroupSize, Mathf.Min(_maxGroupSize, _countLeftToSpawn) + 1);
             if (!GetRandomPointOnNavmeshTriangulationDistantFrom(_player.transform.position, _minDistanceFromPlayer, out Vector3 groupCenterPoint))
             {
                 Debug.LogWarning($"Can't find center point for new spawn group");
                 return;
             }
             int leftToSpawnInGroup = groupSize;
-            while (leftToSpawnInGroup > 0)
+            while (leftToSpawnInGroup > 0 && iteration < MAX_ITERATIONS)
             {
                 if (GetRandomPointOnNavmeshTriangulationDistantFrom(groupCenterPoint, _groupSpawnRange, out var newPosition))
                 {
@@ -150,6 +154,12 @@ namespace Prototype.Controller
                 {
                     Debug.LogWarning("Can't find random position on navmesh surface");
                 }
+
+                ++iteration;
+            }
+            if (iteration >= MAX_ITERATIONS)
+            {
+                Debug.LogWarning($"Can't find a place to spawn next group of enemies");
             }
             _countLeftToSpawn -= groupSize;
         }

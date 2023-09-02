@@ -1,7 +1,7 @@
 ﻿using Prototype.Data;
-using Prototype.MeshCombine;
 using Prototype.Misc;
 using Prototype.Service;
+using Prototype.StaticBatch;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace Prototype.LevelGeneration
             _locationData = locationData;
             _levelData = levelData;
 
-            _combiner = new MeshCombiner();
+            _combiner = new StaticBatcher();
             LoadPrefabs();
             Init();
         }
@@ -110,7 +110,6 @@ namespace Prototype.LevelGeneration
 
             Vector3 levelOffset = new Vector3(-_firstRoomWidth / 2, 0f, -_levelGeneratorData.SpawnPosY);
             levelInstance.transform.position += levelOffset;
-
             navMeshSurface.BuildNavMesh();
 
             float endTime = Time.realtimeSinceStartup;
@@ -214,9 +213,9 @@ namespace Prototype.LevelGeneration
             results.Add(envGroundRes);
 
 
-            groundGOs.ForEach(_ => Object.Destroy(_));
-            wallsGOs.ForEach(_ => Object.Destroy(_));
-            envGroundGOs.ForEach(_ => Object.Destroy(_));
+            //groundGOs.ForEach(_ => Object.Destroy(_));
+            //wallsGOs.ForEach(_ => Object.Destroy(_));
+            //envGroundGOs.ForEach(_ => Object.Destroy(_));
         }
 
         private GameObject InstantiateGround()

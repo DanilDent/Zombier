@@ -19,6 +19,7 @@ namespace Prototype.Data
     public enum EffectTypeEnum { Burn, Poison, Freeze, Smite, Dodge, Explode, Hypnotize, Scare, None };
     public enum ApplyEventTypeEnum { DamageTarget, DamagedByTarget, DestroyTarget, None };
     public enum RarityEnum { Common, Rare, Epic, Legendary, None }
+    public enum ShootingTypeEnum { None, Plain, Shotgun }
 
     internal static class Converter
     {
@@ -33,9 +34,56 @@ namespace Prototype.Data
                 EffectTypeEnumConverter.Singleton,
                 ApplyEventTypEnumConverter.Singleton,
                 RarityEnumConverter.Singleton,
+                ShootingTypeEnumConverter.Singleton,
                 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
             },
         };
+    }
+
+    internal class ShootingTypeEnumConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(ShootingTypeEnum) || t == typeof(ShootingTypeEnum?);
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "":
+                    return ShootingTypeEnum.None;
+                case "Plain":
+                    return ShootingTypeEnum.Plain;
+                case "Shotgun":
+                    return ShootingTypeEnum.Shotgun;
+            }
+            throw new Exception("Cannot unmarshal type ShootinTypeEnum");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (ShootingTypeEnum)untypedValue;
+            switch (value)
+            {
+                case ShootingTypeEnum.None:
+                    serializer.Serialize(writer, "");
+                    return;
+                case ShootingTypeEnum.Plain:
+                    serializer.Serialize(writer, "Plain");
+                    return;
+                case ShootingTypeEnum.Shotgun:
+                    serializer.Serialize(writer, "Shotgun");
+                    return;
+            }
+            throw new Exception("Cannot marshal type ShootingTypeEnum");
+        }
+
+        public static readonly ShootingTypeEnumConverter Singleton = new ShootingTypeEnumConverter();
     }
 
     internal class RarityEnumConverter : JsonConverter

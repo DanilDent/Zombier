@@ -284,12 +284,37 @@ namespace Prototype
 
             /// !Buffs && Effects
 
-
             // Gameplay Controllers
             Container.Bind<EnemySpawnController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<PlayerMovementController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<PlayerAimController>().FromComponentInHierarchy(true).AsSingle();
-            Container.Bind<PlayerShootController>().FromComponentInHierarchy(true).AsSingle();
+
+            switch (_currentGameSession.Player.Weapon.ShootingType)
+            {
+                case ShootingTypeEnum.Plain:
+                    Container.Bind<ShootingControllerBase>().To<ShootingControllerPlain>().FromNewComponentOnNewGameObject()
+                    .WithGameObjectName("PlayerShootingController")
+                    .UnderTransform(GetMarker<MarkerControllers>)
+                    .AsSingle()
+                     .OnInstantiated((InjectContext ctx, ShootingControllerBase controller) =>
+                     {
+                         controller.gameObject.SetActive(false);
+                     });
+                    break;
+                case ShootingTypeEnum.Shotgun:
+                    Container.Bind<ShootingControllerBase>().To<ShootingControllerShotgun>().FromNewComponentOnNewGameObject()
+                     .WithGameObjectName("PlayerShootingController")
+                     .UnderTransform(GetMarker<MarkerControllers>)
+                     .AsSingle()
+                      .OnInstantiated((InjectContext ctx, ShootingControllerBase controller) =>
+                      {
+                          controller.gameObject.SetActive(false);
+                      });
+                    break;
+                default:
+                    throw new System.Exception($"Unknown shooting type {_currentGameSession.Player.Weapon.ShootingType}");
+            }
+
             Container.Bind<PlayerLevelUpController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<DealDamageController>().FromComponentInHierarchy(true).AsSingle();
             Container.Bind<EnemyAIController>().FromComponentInHierarchy(true).AsSingle();

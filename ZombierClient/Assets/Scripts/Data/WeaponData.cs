@@ -28,5 +28,8 @@ namespace Prototype.Data
 
         [FirestoreProperty]
         public ProjectileData ProjectileData { get; set; }
+
+        [FirestoreProperty]
+        public ShootingTypeEnum ShootingType { get; set; }
     }
 }

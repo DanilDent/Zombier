@@ -8,7 +8,7 @@ using Zenject;
 
 namespace Prototype.Controller
 {
-    public class PlayerShootController : MonoBehaviour
+    public class ShootingControllerPlain : ShootingControllerBase
     {
         // Public
 
@@ -97,7 +97,7 @@ namespace Prototype.Controller
                 PlayerProjectileModel projectile = _projectilePool.Create(weapon.ShootingPoint.position, rot);
                 projectile.Sender = _player;
 
-                projectile.Rigidbody.AddForce(shootDir * weapon.Thrust, ForceMode.Impulse);
+                projectile.Rigidbody.AddForce(projectile.transform.forward * weapon.Thrust, ForceMode.Impulse);
 
                 float projectileLifeTime = 7f;
                 StartCoroutine(_projectilePool.Destroy(projectile, projectileLifeTime));

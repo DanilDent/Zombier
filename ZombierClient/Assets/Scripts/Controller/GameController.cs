@@ -29,7 +29,7 @@ namespace Prototype.Controller
             EnemySpawnController enemySpawnController,
             PlayerAimController playerAimController,
             PlayerMovementController playerMovementController,
-            PlayerShootController playerShootController,
+            ShootingControllerBase playerShootController,
             PlayerLevelUpController playerLevelUpController,
             SpawnWorldCanvasUIText spawnDamageTextUIController,
             VFXController vfxController,
@@ -75,7 +75,7 @@ namespace Prototype.Controller
         private EnemySpawnController _enemySpawnController;
         private PlayerAimController _playerAimController;
         private PlayerMovementController _playerMovementController;
-        private PlayerShootController _playerShootController;
+        private ShootingControllerBase _playerShootController;
         private PlayerLevelUpController _playerLevelUpController;
         private SpawnWorldCanvasUIText _spawnDamageTextUIController;
         private VFXController _vfxController;

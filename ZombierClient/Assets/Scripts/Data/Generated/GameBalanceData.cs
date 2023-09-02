@@ -466,5 +466,8 @@
 
         [JsonProperty("Level")]
         public string Level { get; set; }
+
+        [JsonProperty("ShootingType")]
+        public ShootingTypeEnum ShootingType { get; set; }
     }
 }

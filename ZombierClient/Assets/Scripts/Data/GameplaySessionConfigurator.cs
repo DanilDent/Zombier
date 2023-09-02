@@ -108,6 +108,7 @@ namespace Prototype.Data
             weaponData.Thrust = (float)weaponLvlCfg.StoppingPower;
             weaponData.Recoil = (float)weaponLvlCfg.Recoil;
             weaponData.Damage = CreateDescDamage(weaponLvlCfg.Damage);
+            weaponData.ShootingType = weaponCfg.ShootingType;
 
             var projectileData = new ProjectileData();
             projectileData.PrefabAddress = weaponCfg.ProjectilePrefabAddress;

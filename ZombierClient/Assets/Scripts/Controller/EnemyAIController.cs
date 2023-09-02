@@ -65,6 +65,11 @@ namespace Prototype.Controller
         {
             foreach (var enemy in _enemies)
             {
+                if (!enemy.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
                 enemy.Agent.stoppingDistance = enemy.AttackRange;
                 enemy.Agent.radius = _obstacleAvoidanceRadius;
                 enemy.FSMOwner.UpdateBehaviour();

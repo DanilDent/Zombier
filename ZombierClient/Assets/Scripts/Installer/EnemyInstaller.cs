@@ -1,6 +1,7 @@
 ﻿using NodeCanvas.Framework;
 using NodeCanvas.StateMachines;
 using Prototype.Data;
+using Prototype.Misc;
 using Prototype.Model;
 using Prototype.Service;
 using Prototype.View;
@@ -16,6 +17,7 @@ namespace Prototype
         // Injected
         [Inject] private IdData _id;
         [Inject] private EnemyData _dataTemplate;
+        [Inject] private PlayerModel _player;
         // Resolved by installer
         private AssetLoader<GameObject> _assetLoader;
         private GameObject _contextGO;
@@ -45,6 +47,7 @@ namespace Prototype
                     {
                         _contextGO = model.transform.parent.gameObject;
                         _contextGO.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}Context";
+                        AddDisablingComponent();
                     })
                     .NonLazy();
 
@@ -68,6 +71,13 @@ namespace Prototype
         private void OnDestroy()
         {
             _assetLoader?.Release();
+        }
+
+        private void AddDisablingComponent()
+        {
+            var comp = _contextGO.AddComponent<DisableIfTargetNotInRange>();
+            comp.SetDistanceComp();
+            comp.Target = _player.transform;
         }
     }
 }

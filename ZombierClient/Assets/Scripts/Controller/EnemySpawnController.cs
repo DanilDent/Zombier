@@ -81,7 +81,12 @@ namespace Prototype.Controller
         NavMeshTriangulation _triangulation;
         private int _countLeftToSpawn;
         WeightedRandomSelector<EnemySpawnTypeData> _randomSelector;
+        private HashSet<Vector3Int> _occupiedPositions;
 
+        private void Awake()
+        {
+            _occupiedPositions = new HashSet<Vector3Int>();
+        }
 
         private void OnEnable()
         {
@@ -129,8 +134,16 @@ namespace Prototype.Controller
                 {
                     if (Vector3.Distance(newPosition, _player.transform.position) < _minDistanceFromPlayer)
                     {
+                        ++iteration;
                         continue;
                     }
+                    Vector3Int roundedPosition = new Vector3Int(Mathf.RoundToInt(newPosition.x), 0, Mathf.RoundToInt(newPosition.z));
+                    if (IsPositionOccupied(roundedPosition))
+                    {
+                        ++iteration;
+                        continue;
+                    }
+
                     EnemySpawnTypeData spawnTypeData = _randomSelector.GetRandomElement();
                     int enemyLevel = Random.Range(_level.EnemySpawnData.MinEnemyLevel, _level.EnemySpawnData.MaxEnemyLevel);
                     EnemyData enemyData = _sessionConfigurator.CreateEnemyData(spawnTypeData.EnemyId, enemyLevel);
@@ -141,12 +154,16 @@ namespace Prototype.Controller
                     enemy.gameObject.name = $"Enemy#{idStr.Substring(0, Math.Min(idStr.Length, nCharsToDisplay))}";
 
                     newPosition.y = 0f;
-                    enemy.transform.position = newPosition;
+                    enemy.transform.position = roundedPosition;
+                    MarkPositionAsOccupied(roundedPosition);
+
                     enemy.transform.rotation = Quaternion.Euler(0f, Random.Range(-180f, 180f), 0f);
                     enemy.Agent.Warp(newPosition);
                     enemy.Agent.SetDestination(enemy.transform.position);
                     enemy.Agent.enabled = true;
                     _enemies.Add(enemy);
+
+
 
                     --leftToSpawnInGroup;
                 }
@@ -274,6 +291,16 @@ namespace Prototype.Controller
                     });
                 }
             }
+        }
+
+        private bool IsPositionOccupied(Vector3Int pos)
+        {
+            return _occupiedPositions.Contains(pos);
+        }
+
+        private void MarkPositionAsOccupied(Vector3Int pos)
+        {
+            _occupiedPositions.Add(pos);
         }
 
         private void HandleEnemyDeathAnimationEvent(object sender, GameEventService.EnemyDeathAnimationEventArgs e)
